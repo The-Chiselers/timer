@@ -44,7 +44,20 @@ class Timer(p: BaseParams) extends Module {
         addr
       )
       val shiftAddr = addr - regs.COUNT_ADDR.U
-      regs.COUNT_ADDR :=
+      regs.COUNT :=
+        (io.apb.PWDATA(regs.TIMER_SIZE - 1, 0) <<
+          (shiftAddr(regs.COUNT_REG_SIZE - 1, 0) * 8.U))
+    }
+    when(
+      addr >= regs.VALUE_ADDR.U && addr <= regs.VALUE_ADDR_MAX.U
+    ) {
+      printf(
+        "Writing VALUE Register, data: %x, addr: %x\n",
+        io.apb.PWDATA,
+        addr
+      )
+      val shiftAddr = addr - regs.VALUE_ADDR_MAX.U
+      regs.COUNT :=
         (io.apb.PWDATA(regs.TIMER_SIZE - 1, 0) <<
           (shiftAddr(regs.COUNT_REG_SIZE - 1, 0) * 8.U))
     }

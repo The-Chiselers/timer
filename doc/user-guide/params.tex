@@ -1,0 +1,69 @@
+% chktex-file 44
+
+\section{Parameter Descriptions}
+
+The parameters for \textbf{Gpio} are shown below in
+Table 3.
+
+\renewcommand*{\arraystretch}{1.4}
+\begin{longtable}[H]{
+    | p{0.25\textwidth}
+    | p{0.10\textwidth}
+    | p{0.05\textwidth}
+    | p{0.05\textwidth}
+    | p{0.47\textwidth} |
+  }
+  \hline
+  \textbf{Name} &
+  \textbf{Type} &
+  \textbf{Min}  &
+  \textbf{Max}  &
+  \textbf{Description}            \\ \hline \hline
+
+  dataWidth   &
+  Int       &
+  1         &
+  $\leq$ 32          &
+  The data width of COUNT, MAX, MIN, PWDATA, and PRDATA. Can be 8, 16, or 32 bits wide \\ \hline
+
+  addrWidth     &
+  Int           &
+  1             &
+  $\leq$ 32       &
+  The APB address bus width  \\ \hline
+
+  mode     &
+  Int           &
+  1             &
+  $\leq$ 3       &
+  Configures the hardware mode. \newline
+  Timer/Counter: 1 \newline
+  WDT: 2 \newline
+  RTC: 3  \\ \hline
+
+  \caption{Parameter Descriptions}\label{table:params}
+\end{longtable}
+
+To instantiate a 16-bit Timer/Counter:
+
+\begin{lstlisting}[language=Scala]
+
+  // Valid Timer/Counter Instantiation Example
+  val myTimer = new Timer(
+    dataWidth = 16, 
+    addrWidth = 32,
+    mode = 1 ) 
+
+  \end{lstlisting}
+
+To instantiate a 16-bit Timer/Counter:
+
+\begin{lstlisting}[language=Scala]
+
+  // Valid Timer/Counter Instantiation Example
+  val myTimer = new Timer(
+    dataWidth = 16, 
+    addrWidth = 32,
+    mode = 1 ) 
+
+  \end{lstlisting}

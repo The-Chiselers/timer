@@ -1,0 +1,12 @@
+\contentsline {section}{\numberline {1}Errata and Known Issues}{3}{section.1}%
+\contentsline {subsection}{\numberline {1.1}Errata}{3}{subsection.1.1}%
+\contentsline {subsection}{\numberline {1.2}Known Issues}{3}{subsection.1.2}%
+\contentsline {section}{\numberline {2}Overview}{4}{section.2}%
+\contentsline {subsection}{\numberline {2.1}Features}{4}{subsection.2.1}%
+\contentsline {section}{\numberline {3}Introduction}{4}{section.3}%
+\contentsline {section}{\numberline {4}Port Descriptions}{5}{section.4}%
+\contentsline {subsection}{\numberline {4.1}Timer/Counter Mode}{5}{subsection.4.1}%
+\contentsline {subsection}{\numberline {4.2}Watchdog Timer Mode}{5}{subsection.4.2}%
+\contentsline {subsection}{\numberline {4.3}Real Time Clock Mode}{5}{subsection.4.3}%
+\contentsline {subsection}{\numberline {4.4}APB3 Interface}{5}{subsection.4.4}%
+\contentsline {section}{\numberline {5}Parameter Descriptions}{7}{section.5}%

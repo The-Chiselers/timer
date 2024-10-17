@@ -1,64 +1,90 @@
 \documentclass{article}
-\usepackage{amsmath}
-\usepackage{graphicx}
-\usepackage{booktabs}
-\usepackage{hyperref}
 
-\title{Summary of the Timer/Counter Module}
-\author{ROCKSAVAGE}
-\date{}
+\usepackage{geometry}
+\usepackage{longtable}
+\usepackage[dvipsnames,table]{xcolor}
+\usepackage{fancyhdr}
+\usepackage{xcolor}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{float}
+\usepackage{listings}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{enumitem}
+\usepackage{parskip}
+
+% Choose paper size
+\geometry{letterpaper, top=25.4mm, bottom=25.4mm, left=25.4mm, right=25.4mm}
+%\geometry{a4paper, top=25.4mm, bottom=25.4mm, left=25.4mm, right=25.4mm}
+
+\color{black}
+\fancyhf{}
+\renewcommand{\headrulewidth}{1pt}
+\renewcommand{\footrulewidth}{1pt}
+
+% Define standard IPF color palette
+\definecolor{soft-sky-blue}{HTML}{B7DAEB}
+\definecolor{orange}{HTML}{FF6633}
+\definecolor{cool-grey}{HTML}{91A1B0}
+\definecolor{black}{HTML}{000000}
+\definecolor{space-blue}{HTML}{003366}
+\definecolor{pigeon-blue}{HTML}{5F8396}
+\definecolor{sage-green}{HTML}{95A077}
+\definecolor{fire-yellow}{HTML}{F9A651}
+\definecolor{apple-red}{HTML}{CC4200}
+\definecolor{crockadile-green}{HTML}{718944}
+\definecolor{slate-grey}{HTML}{607587}
+\definecolor{fog-grey}{HTML}{E5E6E9}
+
+% Define certification colors
+\definecolor{cert-level-0}{HTML}{CC4200} % apple-red
+\definecolor{cert-level-1}{HTML}{FF6633} % orange
+\definecolor{cert-level-2}{HTML}{F9A651} % fire-yellow
+\definecolor{cert-level-3}{HTML}{B7DAEB} % soft-sky-blue
+\definecolor{cert-level-4}{HTML}{5F8396} % pigeon-blue
+\definecolor{cert-level-5}{HTML}{718944} % sage-green
+
+\hypersetup{hidelinks}
+\pagestyle{fancy}
+\pagenumbering{arabic}
+
+\title{
+\includegraphics[width=8cm] {images/Rocksavage_Tech_RGB_300.png}\vspace{50pt}
+\vspace{10pt} \\
+\textbf{Gpio \\
+  Product User Guide} \\
+{\small{\textcolor{slate-grey}{rocksavagetech.chiselWare.Gpio}}} \\
+\vspace{20pt} IPF certified to level:
+\textbf{\textcolor{cert-level-0}{0} }of 5 \\
+\vspace{5pt}
+\includegraphics[width=4cm] {images/uncertified.png}
+}
+
+\author{Abdelrahman Abbas, Ahmed Elmenshawi, Nick Allison, Jimmy Bright}
+
+\fancyhead[L]{Gpio Users Guide}
+\fancyhead[R]{\leftmark}
+\fancyfoot[C]{Rocksavage Technology, Inc.~\copyright~2023}
+\fancyfoot[R]{Page \thepage}
 
 \begin{document}
 
 \maketitle
+\newpage
+\tableofcontents
 
-\section{Features Brainstorming (To be removed before distribution)}
-\begin{itemize}
-    \item Daisy Chaining
-\end{itemize}
-
-\section{Introduction}
-Timer (SPI) is a synchronous, full-duplex communication protocol widely used to interface microcontrollers with peripheral devices such as sensors, ADCs, DACs, and memory devices. This document summarizes the operational behavior of the SPI protocol, including data transmission mechanisms, clock configurations, and multi-subnode communication methods.
-
-\section{Data Transmission}
-To initiate SPI communication, the master device (main) must generate the clock signal and select the slave device (subnode) by asserting the Chip Select (CS) signal. The CS signal is typically active low, requiring the main to send a logic 0 to select the subnode. During data transmission, both the main and the subnode can send and receive data simultaneously through the Master Out Slave In (MOSI) and Master In Slave Out (MISO) lines.
-
-The SPI protocol allows data to be transmitted serially on the MOSI line while simultaneously receiving data from the MISO line. The transmission and reception are synchronized to the clock signal, with the edge of the clock determining when data is shifted and sampled. The user can configure the clock edge for sampling and shifting as per the device requirements.
-
-\section{Clock Polarity and Clock Phase}
-The clock configuration in SPI can be defined by two parameters:
-\begin{itemize}
-    \item \textbf{Clock Polarity (CPOL):} Defines the idle state of the clock signal (high or low).
-    \item \textbf{Clock Phase (CPHA):} Determines which clock edge (rising or falling) is used for data sampling and shifting.
-\end{itemize}
-
-Based on the combinations of CPOL and CPHA, four SPI modes can be established, as shown in Table \ref{tab:spi_modes}.
-
-\begin{table}[h]
-    \centering
-    \caption{Clock Select}
-    \begin{tabular}{@{}ccc@{}}
-        \toprule
-        \textbf{SPI Mode} & \textbf{CPOL} & \textbf{CPHA} \\ \midrule
-        0                  & 0             & 0             \\
-        1                  & 0             & 1             \\
-        2                  & 1             & 0             \\
-        3                  & 1             & 1             \\ \bottomrule
-    \end{tabular}
-    \label{tab:spi_modes}
-\end{table}
+\include{./errata}
+\include{./introduction}
+\include{./ports}
+\include{./params}
+\include{./register_interface}
+\include{./operatingmodes}
+\include{./virtual}
+\include{./tops}
+\include{./sim}
+\include{./syn}
 
 
-\section{Multi-Subnode Configuration}
-SPI supports configurations with multiple subnodes connected to a single main device. This can be achieved in two ways: regular mode and daisy-chain mode.
-
-\subsection{Regular Mode}
-In regular mode, the main device requires an individual Chip Select (CS) signal for each subnode. When the CS signal is asserted (pulled low), the clock and data lines become active for the selected subnode. If multiple CS signals are active simultaneously, the data received on the MISO line may become corrupted.
-
-\subsection{Daisy-Chain Mode}
-In daisy-chain mode, all subnodes are connected such that they share a common CS signal. Data is transmitted from the main device to the first subnode, which forwards the data to the next subnode, and so forth. This configuration allows multiple subnodes to be addressed with fewer control lines.
-
-\section{Conclusion}
-SPI is a versatile and efficient protocol for serial communication between a master and one or more slave devices. Its ability to support high clock frequencies and full-duplex communication makes it suitable for various applications in embedded systems. For specific device implementations and timing specifications, users should refer to the corresponding product data sheets.
 
 \end{document}

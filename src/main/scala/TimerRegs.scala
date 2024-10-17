@@ -12,7 +12,7 @@ class TimerRegs(p: BaseParams) extends Bundle {
   // #####################################################################
   // REGS
   // #####################################################################
-  // User Accessible Control Registers
+  // Common Registers
 
   val COUNT    = RegInit(0.U(TIMER_SIZE.W))
   val VALUE    = RegInit(0.U(TIMER_SIZE.W))
