@@ -22,9 +22,11 @@ import chisel3.util._
   *   [[http://www.rocksavage.tech]] for more information
   */
 case class BaseParams(
-    wordWidth: Int = 8,
+    // wordWidth: Int = 8,
     dataWidth: Int = 16,
     addrWidth: Int = 16,
     mode: Int = 0,
-    coverage: Boolean = false
+    coverage: Boolean = false,
+    // ---
+    timer0: Int = 16
 )

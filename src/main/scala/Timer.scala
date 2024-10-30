@@ -1,6 +1,6 @@
 // (c) 2024 Rocksavage Technology, Inc.
 // This code is licensed under the Apache Software License 2.0 (see LICENSE.MD)
-package tech.rocksavage.chiselware.GPIO
+package tech.rocksavage.chiselware.Timer
 
 import java.io.File
 import java.io.PrintWriter
@@ -20,8 +20,13 @@ class Timer(p: BaseParams) extends Module {
 
   val regs = new TimerRegs(p)
 
+  // Temporary Initialization
+  io.apb.PSLVERR    := false.B
+  io.pins.irqOutput := false.B
+
   // APB
   io.apb.PRDATA := 0.U // Needs to be initialized
+
   when(io.apb.PSEL && io.apb.PENABLE) {
     when(io.apb.PWRITE) { // Write Operation
       registerDecodeWrite(io.apb.PADDR)
@@ -44,9 +49,7 @@ class Timer(p: BaseParams) extends Module {
         addr
       )
       val shiftAddr = addr - regs.COUNT_ADDR.U
-      regs.COUNT :=
-        (io.apb.PWDATA(regs.TIMER_SIZE - 1, 0) <<
-          (shiftAddr(regs.COUNT_REG_SIZE - 1, 0) * 8.U))
+      regs.COUNT(shiftAddr) := io.apb.PWDATA
     }
     when(
       addr >= regs.VALUE_ADDR.U && addr <= regs.VALUE_ADDR_MAX.U
@@ -57,9 +60,32 @@ class Timer(p: BaseParams) extends Module {
         addr
       )
       val shiftAddr = addr - regs.VALUE_ADDR_MAX.U
-      regs.COUNT :=
-        (io.apb.PWDATA(regs.TIMER_SIZE - 1, 0) <<
-          (shiftAddr(regs.COUNT_REG_SIZE - 1, 0) * 8.U))
+      regs.VALUE(shiftAddr) := io.apb.PWDATA
+    }
+  }
+
+  def registerDecodeRead(addr: UInt): Unit = {
+    when(
+      addr >= regs.COUNT_ADDR.U && addr <= regs.COUNT_ADDR_MAX.U
+    ) {
+      printf(
+        "Reading COUNT Register, data: %x, addr: %x\n",
+        regs.readCount(),
+        addr
+      )
+      val shiftAddr = addr - regs.COUNT_ADDR.U
+      io.apb.PRDATA := regs.COUNT(shiftAddr)
+    }
+    when(
+      addr >= regs.VALUE_ADDR.U && addr <= regs.VALUE_ADDR_MAX.U
+    ) {
+      printf(
+        "Reading VALUE Register, data: %x, addr: %x\n",
+        regs.readCount(),
+        addr
+      )
+      val shiftAddr = addr - regs.VALUE_ADDR.U
+      io.apb.PRDATA := regs.VALUE(shiftAddr)
     }
   }
 }
