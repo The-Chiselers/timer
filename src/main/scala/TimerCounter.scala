@@ -9,7 +9,7 @@ import _root_.circt.stage.ChiselStage
 import chisel3._
 import chisel3.util._
 
-class Counter(p: BaseParams) extends Module {
+class TimerCounter(p: BaseParams) extends Module {
   val io = IO(new Bundle {
     val increment       = Input(UInt(p.timer0.W))
     val set_count_value = Input(UInt(p.timer0.W))
