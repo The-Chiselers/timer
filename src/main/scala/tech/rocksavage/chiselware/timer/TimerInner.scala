@@ -88,6 +88,8 @@ class TimerInner(
   countOverflow := (countSum < countReg) || (countSum < prescalerReg)
 
   when(enReg) {
+    // If the countSum is greater than the maxCount, then reset the count to 0, the max has been reached
+    // also reset the count if the countSum overflows, this means that the maxMust be reached as well
     when(countSum >= maxCountReg || countOverflow) {
       nextCount := 0.U
       nextMaxReached := true.B
