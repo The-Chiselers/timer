@@ -3,6 +3,7 @@
 package tech.rocksavage.chiselware.timer
 
 import chisel3._
+import chiseltest.formal.past
 
 
 /** An address decoder that can be used to decode addresses into a set of ranges
@@ -38,23 +39,41 @@ class TimerInner(
     val maxReached = Output(Bool())
   })
 
+  // ###################
+  // Syncronizers for input / formal verify
+  // ###################
+  val enReg = RegInit(false.B)
+  val prescalerReg = RegInit(0.U(params.countWidth.W))
+  val maxCountReg = RegInit(0.U(params.countWidth.W))
+
+  // ###################
+  // Registers that hold the output values
+  // ###################
   val countReg = RegInit(0.U(params.countWidth.W))
   val maxReachedReg = RegInit(false.B)
 
+  // ###################
+  // Next state logic
+  // ###################
   val nextCount = WireInit(0.U(params.countWidth.W))
   val nextMaxReached = WireInit(false.B)
-
 
   // ###################
   // Instatiation
   // ###################
 
-  io.count := countReg
-  io.maxReached := maxReachedReg
+  enReg := io.en
+  prescalerReg := io.prescaler
+  maxCountReg := io.maxCount
 
   countReg := nextCount
   maxReachedReg := nextMaxReached
 
+  // ###################
+  // Output
+  // ###################
+  io.count := countReg
+  io.maxReached := maxReachedReg
 
 
 
@@ -62,18 +81,25 @@ class TimerInner(
   // Module implementation
   // ###################
 
-  when(io.en) {
-    when(countReg + io.prescaler >= io.maxCount) {
+  val countSum = WireInit(0.U((params.countWidth).W))
+  countSum := countReg + prescalerReg
+
+  val countOverflow = WireInit(false.B)
+  countOverflow := (countSum < countReg) || (countSum < prescalerReg)
+
+  when(enReg) {
+    when(countSum >= maxCountReg || countOverflow) {
       nextCount := 0.U
       nextMaxReached := true.B
     }.otherwise {
-      nextCount := countReg + io.prescaler
+      nextCount := countReg + prescalerReg
       nextMaxReached := false.B
     }
   }.otherwise {
-      countReg := countReg
-      nextMaxReached := maxReachedReg
-    }
+    nextCount := countReg
+    nextMaxReached := maxReachedReg
+  }
+
 
 
 
@@ -84,17 +110,19 @@ class TimerInner(
     // Formal Verification Vars
 
 
-    when(io.en) {
+    when(enReg) {
       // ######################
       // Liveness Specification
       // ######################
 
       // assert that every cycle,
       // (prescaler > 0) implies ((nextCount > countReg) or (nextMaxReached))
-      val madeProgress = (nextCount > countReg)
-      val maxReached = maxReachedReg
-      when(io.prescaler > 0.U) {
-        assert(madeProgress || maxReached)
+
+      val madeProgressFV = (nextCount > countReg)
+      val maxReachedFV = nextMaxReached
+
+      when(prescalerReg > 0.U) {
+        assert(madeProgressFV || maxReachedFV)
       }
     }
   }
