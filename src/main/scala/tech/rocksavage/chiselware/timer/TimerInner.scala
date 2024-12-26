@@ -4,6 +4,7 @@ package tech.rocksavage.chiselware.timer
 
 import chisel3._
 
+
 /** An address decoder that can be used to decode addresses into a set of ranges
   *
   * @constructor
@@ -37,7 +38,6 @@ class TimerInner(
     val maxReached = Output(Bool())
   })
 
-  val prescalerCount = RegInit(0.U(params.countWidth.W))
   val countReg = RegInit(0.U(params.countWidth.W))
   val maxReachedReg = RegInit(false.B)
 
@@ -55,9 +55,7 @@ class TimerInner(
   countReg := nextCount
   maxReachedReg := nextMaxReached
 
-  val prescalerModule = Module(new TimerPrescaler(params, formal))
-  prescalerModule.io.maxCount := io.prescaler
-  prescalerModule.io.en := io.en
+
 
 
   // ###################
@@ -69,15 +67,14 @@ class TimerInner(
       nextCount := 0.U
       nextMaxReached := true.B
     }.otherwise {
-      nextCount := countReg + prescalerModule.io.maxReached
+      nextCount := countReg + io.prescaler
       nextMaxReached := false.B
     }
-  }.otherwise(
-    {
+  }.otherwise {
       countReg := countReg
       nextMaxReached := maxReachedReg
     }
-  )
+
 
 
   // ###################
@@ -86,41 +83,19 @@ class TimerInner(
   if (formal) {
     // Formal Verification Vars
 
-    val cyclesSinceLastMaxReached = RegInit(0.U((2 * params.countWidth).W))
-    when(io.maxReached) {
-      cyclesSinceLastMaxReached := 0.U
-    }.otherwise {
-      cyclesSinceLastMaxReached := cyclesSinceLastMaxReached + 1.U
-    }
-
-    val prevPrescalerValues = RegInit(VecInit(Seq.fill(params.countWidth)(0.U(params.countWidth.W))))
-    val prevMaxCountValues = RegInit(VecInit(Seq.fill(params.countWidth)(0.U(params.countWidth.W))))
-    val prevCountValues = RegInit(VecInit(Seq.fill(params.countWidth)(0.U(params.countWidth.W))))
-    val prevMaxReachedValues = RegInit(VecInit(Seq.fill(params.countWidth)(false.B)))
 
     when(io.en) {
-      for (i <- 1 until params.countWidth) {
-        prevPrescalerValues(i) := prevPrescalerValues(i - 1)
-        prevMaxCountValues(i) := prevMaxCountValues(i - 1)
-        prevCountValues(i) := prevCountValues(i - 1)
-        prevMaxReachedValues(i) := prevMaxReachedValues(i - 1)
+      // ######################
+      // Liveness Specification
+      // ######################
+
+      // assert that every cycle,
+      // (prescaler > 0) implies ((nextCount > countReg) or (nextMaxReached))
+      val madeProgress = (nextCount > countReg)
+      val maxReached = maxReachedReg
+      when(io.prescaler > 0.U) {
+        assert(madeProgress || maxReached)
       }
-      prevPrescalerValues(0) := io.prescaler
-      prevMaxCountValues(0) := io.maxCount
-      prevCountValues(0) := io.count
-      prevMaxReachedValues(0) := io.maxReached
-    }
-
-
-    when(io.en) {
-      // ########
-      // Liveness
-      // ########
-
-      // assert that cycles since last max reached is always less than the max count (worst case scenario)
-      assert(cyclesSinceLastMaxReached < params.countWidth.U, "cyclesSinceLastMaxReached < io.maxCount")
-
-
     }
   }
 }

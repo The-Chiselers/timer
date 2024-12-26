@@ -14,7 +14,7 @@ lazy val synth = RootProject(uri("https://github.com/The-Chiselers/synth.git#mai
 lazy val addrdecode = RootProject(uri("https://github.com/The-Chiselers/addrdecode.git#main"))
 lazy val root = (project in file("."))
   .settings(
-    name                   := "gpio",
+    name                   := "timer",
     Test / publishArtifact := true,
     libraryDependencies ++= Seq(
       "org.chipsalliance" %% "chisel"     % chiselVersion,

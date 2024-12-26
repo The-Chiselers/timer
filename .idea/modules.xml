@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/addrdecode.iml" filepath="$PROJECT_DIR$/.idea/modules/addrdecode.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/addrdecode.addrdecode-build.iml" filepath="$PROJECT_DIR$/.idea/modules/addrdecode.addrdecode-build.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/synth.iml" filepath="$PROJECT_DIR$/.idea/modules/synth.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/synth.synth-build.iml" filepath="$PROJECT_DIR$/.idea/modules/synth.synth-build.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/timer.iml" filepath="$PROJECT_DIR$/.idea/modules/timer.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/timer.timer-build.iml" filepath="$PROJECT_DIR$/.idea/modules/timer.timer-build.iml" />
+    </modules>
+  </component>
+</project>

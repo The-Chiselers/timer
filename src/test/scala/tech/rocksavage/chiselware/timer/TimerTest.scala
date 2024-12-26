@@ -3,7 +3,6 @@ package tech.rocksavage.chiselware.timer
 import chiseltest.ChiselScalatestTester
 import chiseltest.formal.{BoundedCheck, Formal}
 import org.scalatest.flatspec.AnyFlatSpec
-import tech.rocksavage.chiselware.timer.{TimerInner, TimerParams}
 
 class TimerTest
     extends AnyFlatSpec
@@ -19,7 +18,7 @@ class TimerTest
 
     val p = TimerParams(dataWidth, addrWidth, countWidth)
 
-    verify(new TimerInner(p, true), Seq(BoundedCheck()))
+    verify(new TimerInner(p, true), Seq(BoundedCheck(100)))
 
   }
 }
