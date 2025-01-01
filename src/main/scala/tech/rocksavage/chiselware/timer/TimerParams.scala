@@ -28,6 +28,7 @@ case class TimerParams(
 
     // Parameters for the counter
     countWidth: Int = 8,
+
 ) {
 
   require(dataWidth >= 1, "Data Width must be greater than or equal 1")

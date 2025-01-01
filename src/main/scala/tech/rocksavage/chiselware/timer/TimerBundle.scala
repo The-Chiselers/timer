@@ -10,7 +10,9 @@ class TimerBundle(params: TimerParams) extends Bundle {
 
   val prescaler = Input(UInt(params.countWidth.W))
   val maxCount = Input(UInt(params.countWidth.W))
+  val pwmCeiling = Input(UInt(params.countWidth.W))
 
   val count = Output(UInt(params.countWidth.W))
   val maxReached = Output(Bool())
+  val pwm = Output(Bool())
 }

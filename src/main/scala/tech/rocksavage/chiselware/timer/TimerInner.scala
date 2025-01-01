@@ -36,18 +36,21 @@ class TimerInner(
   val enReg = RegInit(false.B)
   val prescalerReg = RegInit(0.U(params.countWidth.W))
   val maxCountReg = RegInit(0.U(params.countWidth.W))
+  val pwmCeilingReg = RegInit(0.U(params.countWidth.W))
 
   // ###################
   // Registers that hold the output values
   // ###################
   val countReg = RegInit(0.U(params.countWidth.W))
   val maxReachedReg = RegInit(false.B)
+  val pwmReg = RegInit(false.B)
 
   // ###################
   // Next state logic
   // ###################
   val nextCount = WireInit(0.U(params.countWidth.W))
   val nextMaxReached = WireInit(false.B)
+  val nextPwm = WireInit(false.B)
 
   // ###################
   // Instatiation
@@ -56,15 +59,19 @@ class TimerInner(
   enReg := io.en
   prescalerReg := io.prescaler
   maxCountReg := io.maxCount
+  pwmCeilingReg := io.pwmCeiling
 
   countReg := nextCount
   maxReachedReg := nextMaxReached
+  pwmReg := nextPwm
+
 
   // ###################
   // Output
   // ###################
   io.count := countReg
   io.maxReached := maxReachedReg
+  io.pwm := pwmReg
 
 
 
@@ -88,9 +95,12 @@ class TimerInner(
       nextCount := countReg + prescalerReg
       nextMaxReached := false.B
     }
+
+    nextPwm := countReg >= pwmCeilingReg
   }.otherwise {
     nextCount := countReg
     nextMaxReached := maxReachedReg
+    nextPwm := pwmReg
   }
 
 
