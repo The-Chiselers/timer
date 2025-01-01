@@ -18,8 +18,8 @@ import chiseltest.formal.past
   *   Warren Savage
   */
 class TimerInner(
-             params: TimerParams,
-             formal: Boolean = false
+  params: TimerParams,
+  formal: Boolean = false
 ) extends Module {
 
 
@@ -28,16 +28,7 @@ class TimerInner(
     * @return
     *   The width of the memory
     */
-  val io = IO(new Bundle {
-
-    val en = Input(Bool())
-
-    val prescaler = Input(UInt(params.countWidth.W))
-    val maxCount = Input(UInt(params.countWidth.W))
-
-    val count = Output(UInt(params.countWidth.W))
-    val maxReached = Output(Bool())
-  })
+  val io = IO(new TimerBundle(params))
 
   // ###################
   // Syncronizers for input / formal verify

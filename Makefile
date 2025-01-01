@@ -6,6 +6,11 @@ SBT = sbt
 # Default target
 default: verilog
 
+docs:
+	@echo Generating docs
+	mkdir -p $(BUILD_ROOT)/doc
+	cd doc/user-guide && pdflatex -output-directory=$(BUILD_ROOT)/doc timer.tex | tee -a $(BUILD_ROOT)/doc/doc.rpt
+
 # Start with a fresh directory
 clean:
 	@echo Cleaning...
