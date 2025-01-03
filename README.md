@@ -12,4 +12,7 @@ sbt dependencyUpdates
 
 # Todo
 
-- Add Verilator Test for PWM 
+- Add Verilator Test for PWM
+- Add Top Level Module with top level params and outputs
+  - interrupts
+  - addrdecode & regs

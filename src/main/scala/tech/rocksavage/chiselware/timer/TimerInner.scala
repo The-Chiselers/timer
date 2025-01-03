@@ -38,6 +38,9 @@ class TimerInner(
   val maxCountReg = RegInit(0.U(params.countWidth.W))
   val pwmCeilingReg = RegInit(0.U(params.countWidth.W))
 
+  val setClockValueReg = RegInit(0.U(params.countWidth.W))
+  val setClockReg = RegInit(false.B)
+
   // ###################
   // Registers that hold the output values
   // ###################
@@ -60,11 +63,12 @@ class TimerInner(
   prescalerReg := io.prescaler
   maxCountReg := io.maxCount
   pwmCeilingReg := io.pwmCeiling
+  setClockValueReg := io.setClockValue
+  setClockReg := io.setClock
 
   countReg := nextCount
   maxReachedReg := nextMaxReached
   pwmReg := nextPwm
-
 
   // ###################
   // Output
@@ -86,17 +90,24 @@ class TimerInner(
   countOverflow := (countSum < countReg) || (countSum < prescalerReg)
 
   when(enReg) {
-    // If the countSum is greater than the maxCount, then reset the count to 0, the max has been reached
-    // also reset the count if the countSum overflows, this means that the maxMust be reached as well
-    when(countSum >= maxCountReg || countOverflow) {
-      nextCount := 0.U
-      nextMaxReached := true.B
-    }.otherwise {
-      nextCount := countReg + prescalerReg
-      nextMaxReached := false.B
-    }
-
-    nextPwm := countReg >= pwmCeilingReg
+    when(setClockReg) {
+        nextCount := setClockValueReg
+        nextMaxReached := false.B
+        nextPwm := false.B
+    }.otherwise(
+      {
+        // If the countSum is greater than the maxCount, then reset the count to 0, the max has been reached
+        // also reset the count if the countSum overflows, this means that the maxMust be reached as well
+        when(countSum >= maxCountReg || countOverflow) {
+          nextCount := 0.U
+          nextMaxReached := true.B
+        }.otherwise {
+          nextCount := countReg + prescalerReg
+          nextMaxReached := false.B
+        }
+        nextPwm := countReg >= pwmCeilingReg
+      }
+    )
   }.otherwise {
     nextCount := countReg
     nextMaxReached := maxReachedReg
@@ -111,21 +122,25 @@ class TimerInner(
   // ###################
   if (formal) {
     // Formal Verification Vars
-
-
     when(enReg) {
       // ######################
       // Liveness Specification
       // ######################
-
       // assert that every cycle,
       // (prescaler > 0) implies ((nextCount > countReg) or (nextMaxReached))
-
       val madeProgressFV = (nextCount > countReg)
       val maxReachedFV = nextMaxReached
 
-      when(prescalerReg > 0.U) {
-        assert(madeProgressFV || maxReachedFV)
+      // When setClock is asserted, nextCount should be set to setClockValue
+      when(setClockReg) {
+        assert(nextCount === setClockValueReg)
+        assert(!nextMaxReached) // maxReached should be false when setting the clock
+        assert(!nextPwm)        // pwm should be false when setting the clock
+      }.otherwise {
+        // When setClock is not asserted, the timer should behave as expected
+        when(prescalerReg > 0.U) {
+          assert(madeProgressFV || maxReachedFV)
+        }
       }
     }
   }

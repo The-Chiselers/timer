@@ -12,6 +12,7 @@ val scalafmtVersion = "2.5.0"
 
 lazy val synth = RootProject(uri("https://github.com/The-Chiselers/synth.git#main"))
 lazy val addrdecode = RootProject(uri("https://github.com/The-Chiselers/addrdecode.git#main"))
+lazy val apbinterface = RootProject(uri("https://github.com/The-Chiselers/apbinterface.git#main"))
 lazy val root = (project in file("."))
   .settings(
     name                   := "timer",
@@ -34,6 +35,7 @@ lazy val root = (project in file("."))
   )
   .dependsOn(synth)
   .dependsOn(addrdecode)
+  .dependsOn(apbinterface)
 
 
 // Scala coverage settings
