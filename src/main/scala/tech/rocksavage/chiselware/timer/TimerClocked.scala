@@ -3,7 +3,10 @@
 package tech.rocksavage.chiselware.timer
 
 import chisel3._
-import tech.rocksavage.chiselware.clock.{ClockBundle, ClockParams}
+import tech.rocksavage.chiselware.clock.bundle.ClockBundle
+import tech.rocksavage.chiselware.clock.param.ClockParams
+import tech.rocksavage.chiselware.timer.bundle.TimerBundle
+import tech.rocksavage.chiselware.timer.param.TimerParams
 
 class TimerClocked(
   timerParams: TimerParams,

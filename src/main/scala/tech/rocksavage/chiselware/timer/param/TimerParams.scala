@@ -1,7 +1,7 @@
 // (c) 2024 Rocksavage Technology, Inc.
 // This code is licensed under the Apache Software License 2.0 (see LICENSE.MD)
 
-package  tech.rocksavage.chiselware.timer
+package tech.rocksavage.chiselware.timer.param
 
 /** Default parameter settings for the Timer
   *
@@ -23,11 +23,11 @@ package  tech.rocksavage.chiselware.timer
 
 case class TimerParams(
     // Parameters for addressing
-    dataWidth: Int = 8,
-    addressWidth: Int = 8,
+    dataWidth: Int = 32,
+    addressWidth: Int = 32,
 
     // Parameters for the counter
-    countWidth: Int = 8,
+    countWidth: Int = 32,
 
 ) {
 

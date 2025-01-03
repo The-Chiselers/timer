@@ -4,6 +4,8 @@ package tech.rocksavage.chiselware.timer
 
 import chisel3._
 import chiseltest.formal.past
+import tech.rocksavage.chiselware.timer.bundle.TimerBundle
+import tech.rocksavage.chiselware.timer.param.TimerParams
 
 
 /** An address decoder that can be used to decode addresses into a set of ranges
@@ -59,12 +61,12 @@ class TimerInner(
   // Instatiation
   // ###################
 
-  enReg := io.en
-  prescalerReg := io.prescaler
-  maxCountReg := io.maxCount
-  pwmCeilingReg := io.pwmCeiling
-  setClockValueReg := io.setClockValue
-  setClockReg := io.setClock
+  enReg := io.timerInputBundle.en
+  prescalerReg := io.timerInputBundle.prescaler
+  maxCountReg := io.timerInputBundle.maxCount
+  pwmCeilingReg := io.timerInputBundle.pwmCeiling
+  setClockValueReg := io.timerInputBundle.setClockValue
+  setClockReg := io.timerInputBundle.setClock
 
   countReg := nextCount
   maxReachedReg := nextMaxReached
@@ -73,9 +75,9 @@ class TimerInner(
   // ###################
   // Output
   // ###################
-  io.count := countReg
-  io.maxReached := maxReachedReg
-  io.pwm := pwmReg
+  io.timerOutputBundle.count := countReg
+  io.timerOutputBundle.maxReached := maxReachedReg
+  io.timerOutputBundle.pwm := pwmReg
 
 
 

@@ -3,6 +3,7 @@ package tech.rocksavage.chiselware.timer
 import chiseltest.ChiselScalatestTester
 import chiseltest.formal.{BoundedCheck, Formal}
 import org.scalatest.flatspec.AnyFlatSpec
+import tech.rocksavage.chiselware.timer.param.TimerParams
 
 class TimerTest
     extends AnyFlatSpec

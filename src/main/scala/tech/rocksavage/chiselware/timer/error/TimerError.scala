@@ -1,6 +1,6 @@
 // This code is licensed under the Apache Software License 2.0 (see LICENSE.MD)
 
-package tech.rocksavage.chiselware.timer
+package tech.rocksavage.chiselware.timer.error
 
 import chisel3._
 

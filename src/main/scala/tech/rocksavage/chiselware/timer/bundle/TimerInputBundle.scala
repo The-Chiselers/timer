@@ -1,16 +1,17 @@
 // (c) 2024 Rocksavage Technology, Inc.
 // This code is licensed under the Apache Software License 2.0 (see LICENSE.MD)
 
-package tech.rocksavage.chiselware.timer
+package tech.rocksavage.chiselware.timer.bundle
 
 import chisel3._
+import tech.rocksavage.chiselware.timer.param.TimerParams
 
 /**
- * A bundle representing the input and output signals for a timer module.
+ * A bundle representing the input signals for a timer module.
  *
  * @param params The configuration parameters for the timer, including the width of the count registers.
  */
-class TimerBundle(params: TimerParams) extends Bundle {
+class TimerInputBundle(params: TimerParams) extends Bundle {
 
   /** Enable signal for the timer. When high, the timer is active. */
   val en = Input(Bool())
@@ -29,13 +30,4 @@ class TimerBundle(params: TimerParams) extends Bundle {
 
   /** Signal to set the clock counter to `setClockValue`. */
   val setClock = Input(Bool())
-
-  /** Current count value of the timer. */
-  val count = Output(UInt(params.countWidth.W))
-
-  /** Signal indicating that the timer has reached its maximum count value. */
-  val maxReached = Output(Bool())
-
-  /** PWM output signal with a duty cycle controlled by `pwmCeiling`. */
-  val pwm = Output(Bool())
 }
