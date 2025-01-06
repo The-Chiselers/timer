@@ -4,6 +4,8 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/addrdecode.iml" filepath="$PROJECT_DIR$/.idea/modules/addrdecode.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/addrdecode.addrdecode-build.iml" filepath="$PROJECT_DIR$/.idea/modules/addrdecode.addrdecode-build.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/addressablemodule.iml" filepath="$PROJECT_DIR$/.idea/modules/addressablemodule.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/addressablemodule.addressablemodule-build.iml" filepath="$PROJECT_DIR$/.idea/modules/addressablemodule.addressablemodule-build.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/apbinterface.iml" filepath="$PROJECT_DIR$/.idea/modules/apbinterface.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/apbinterface.apbinterface-build.iml" filepath="$PROJECT_DIR$/.idea/modules/apbinterface.apbinterface-build.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/synth.iml" filepath="$PROJECT_DIR$/.idea/modules/synth.iml" />

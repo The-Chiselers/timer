@@ -1,3 +1,4 @@
+// Timer.scala
 package tech.rocksavage.chiselware.timer
 
 import chisel3._
@@ -6,10 +7,9 @@ import tech.rocksavage.chiselware.clock.bundle.ClockBundle
 import tech.rocksavage.chiselware.clock.param.ClockParams
 import tech.rocksavage.chiselware.apb.{ApbBundle, ApbInterface, ApbParams}
 import tech.rocksavage.chiselware.addrdecode.{AddrDecode, AddrDecodeError, AddrDecodeParams}
-import tech.rocksavage.chiselware.addressable.APBInterfaceGenerator.generateAPBInterface
 import tech.rocksavage.chiselware.timer.bundle.{TimerBundle, TimerInterruptBundle, TimerInterruptEnum, TimerOutputBundle}
 import tech.rocksavage.chiselware.timer.param.TimerParams
-import tech.rocksavage.chiselware.addressable.{AddressableModule, AddressableRegister}
+import tech.rocksavage.chiselware.addressable.{APBInterfaceGenerator, AddressableRegister}
 
 class Timer(
              val timerParams: TimerParams,
@@ -35,11 +35,16 @@ class Timer(
   @AddressableRegister
   val clockSelect = RegInit(0.U(log2Ceil(clockParams.numClocks).W))
 
-  @AddressableModule
-  val innerModule = Module(new TimerClocked(timerParams, clockParams))
+  val timerInner = Module(new TimerClocked(timerParams, clockParams))
+  timerInner.io.timerBundle.timerInputBundle.setClock := setClock
+  timerInner.io.timerBundle.timerInputBundle.prescaler := prescaler
+  timerInner.io.timerBundle.timerInputBundle.maxCount := maxCount
+  timerInner.io.timerBundle.timerInputBundle.pwmCeiling := pwmCeiling
+  timerInner.io.timerBundle.timerInputBundle.setClockValue := setClockValue
+  timerInner.io.clockBundle.clockSel := clockSelect
 
   // Generate APB interface and memorySizes using the macro
-  val (_, memorySizes) = generateAPBInterface(this)
+  val (_, memorySizes) = APBInterfaceGenerator.generateAPBInterface(this)
 
   // Derive AddrDecodeParams from memorySizes
   val addrDecodeParams = AddrDecodeParams(
@@ -73,11 +78,11 @@ class Timer(
   apbInterface.io.apb <> io.apb
 
   // Connect the TimerClocked outputs to the top-level outputs
-  io.timerOutput <> innerModule.io.timerBundle.timerOutputBundle
+  io.timerOutput <> timerInner.io.timerBundle.timerOutputBundle
 
   // Handle interrupts
   io.interrupt.interrupt := TimerInterruptEnum.None
-  when(innerModule.io.timerBundle.timerOutputBundle.maxReached) {
+  when(timerInner.io.timerBundle.timerOutputBundle.maxReached) {
     io.interrupt.interrupt := TimerInterruptEnum.MaxReached
   }
 
