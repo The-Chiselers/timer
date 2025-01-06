@@ -13,6 +13,7 @@ class Timer(
              val timerParams: TimerParams,
              val clockParams: ClockParams
            ) extends Module {
+
   // Define annotations for addressable registers and modules
   @AddressableRegister
   val setClock = RegInit(false.B)
@@ -36,35 +37,20 @@ class Timer(
   timerInner.io.clockBundle.clockSel := clockSelect
 
   // Generate APB interface and memorySizes using the macro
-
-  val (apbInterface, memorySizes) = APBInterfaceGenerator.generateAPBInterface(this)
-
-  // Derive AddrDecodeParams from memorySizes
-  val addrDecodeParams = AddrDecodeParams(
-    dataWidth = timerParams.dataWidth,
-    addressWidth = timerParams.addressWidth,
-    memorySizes = memorySizes
-  )
-
-  val apbParams = ApbParams(
-    PDATA_WIDTH = timerParams.dataWidth,
-    PADDR_WIDTH = timerParams.addressWidth
-  )
+  val (apbBundle, apbInterface, addrDecode) = APBInterfaceGenerator.generateAPBInterface(this, timerParams.dataWidth, timerParams.addressWidth)
 
   // Input/Output bundle for the Timer module
   val io = IO(new Bundle {
-    val apb = new ApbBundle(ApbParams(timerParams.dataWidth, timerParams.addressWidth))
+    val apb = apbBundle
     val timerOutput = new TimerOutputBundle(timerParams)
     val interrupt = new TimerInterruptBundle
     val clocks = Vec(clockParams.numClocks, Clock())
   })
 
-  // Instantiate the AddrDecode module
-  val addrDecode = Module(new AddrDecode(addrDecodeParams))
-  addrDecode.io.addr := io.apb.PADDR
-  addrDecode.io.addrOffset := 0.U
-  addrDecode.io.en := true.B
-  addrDecode.io.selInput := true.B
+  // Connect the APB interface to the top-level interface
+
+  /* Shouldn't need this, it should be done in the macro */
+  //  apbInterface.io.apb <> io.apb
 
   // Connect the TimerClocked outputs to the top-level outputs
   io.timerOutput <> timerInner.io.timerBundle.timerOutputBundle
