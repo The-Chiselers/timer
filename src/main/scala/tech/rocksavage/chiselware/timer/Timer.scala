@@ -1,6 +1,3 @@
-// Timer.scala
-package tech.rocksavage.chiselware.timer
-
 import chisel3._
 import chisel3.util._
 import tech.rocksavage.chiselware.clock.bundle.ClockBundle
@@ -10,28 +7,23 @@ import tech.rocksavage.chiselware.addrdecode.{AddrDecode, AddrDecodeError, AddrD
 import tech.rocksavage.chiselware.timer.bundle.{TimerBundle, TimerInterruptBundle, TimerInterruptEnum, TimerOutputBundle}
 import tech.rocksavage.chiselware.timer.param.TimerParams
 import tech.rocksavage.chiselware.addressable.{APBInterfaceGenerator, AddressableRegister}
+import tech.rocksavage.chiselware.timer.TimerClocked
 
 class Timer(
              val timerParams: TimerParams,
              val clockParams: ClockParams
            ) extends Module {
-
   // Define annotations for addressable registers and modules
   @AddressableRegister
   val setClock = RegInit(false.B)
-
   @AddressableRegister
   val prescaler = RegInit(0.U(timerParams.countWidth.W))
-
   @AddressableRegister
   val maxCount = RegInit(0.U(timerParams.countWidth.W))
-
   @AddressableRegister
   val pwmCeiling = RegInit(0.U(timerParams.countWidth.W))
-
   @AddressableRegister
   val setClockValue = RegInit(0.U(timerParams.countWidth.W))
-
   @AddressableRegister
   val clockSelect = RegInit(0.U(log2Ceil(clockParams.numClocks).W))
 
@@ -44,7 +36,8 @@ class Timer(
   timerInner.io.clockBundle.clockSel := clockSelect
 
   // Generate APB interface and memorySizes using the macro
-  val (_, memorySizes) = APBInterfaceGenerator.generateAPBInterface(this)
+
+  val (apbInterface, memorySizes) = APBInterfaceGenerator.generateAPBInterface(this)
 
   // Derive AddrDecodeParams from memorySizes
   val addrDecodeParams = AddrDecodeParams(
@@ -72,10 +65,6 @@ class Timer(
   addrDecode.io.addrOffset := 0.U
   addrDecode.io.en := true.B
   addrDecode.io.selInput := true.B
-
-  // Instantiate the ApbInterface module
-  val apbInterface = Module(new ApbInterface(apbParams))
-  apbInterface.io.apb <> io.apb
 
   // Connect the TimerClocked outputs to the top-level outputs
   io.timerOutput <> timerInner.io.timerBundle.timerOutputBundle
