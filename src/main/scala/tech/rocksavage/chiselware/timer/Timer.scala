@@ -23,7 +23,7 @@ class Timer(
     val apb = new ApbBundle(ApbParams(dataWidth, addressWidth))
     val timerOutput = new TimerOutputBundle(timerParams)
     val interrupt = new TimerInterruptBundle
-    val clocks = Vec(clockParams.numClocks, Clock())
+//    val clocks = Vec(clockParams.numClocks, Clock())
   })
 
   // Create a RegisterMap to manage the addressable registers
@@ -49,21 +49,15 @@ class Timer(
   val clockSelect: UInt = RegInit(0.U(log2Ceil(clockParams.numClocks).W))
 
   // Generate AddrDecode and ApbInterface
-  val addrDecodeParams = registerMap.getAddrDecodeParams
-  val addrDecode = Module(new AddrDecode(addrDecodeParams))
-  addrDecode.io.addr := io.apb.PADDR
-  addrDecode.io.addrOffset := 0.U
-  addrDecode.io.en := true.B
-  addrDecode.io.selInput := true.B
-
   val apbInterface = Module(new ApbInterface(ApbParams(dataWidth, addressWidth)))
   apbInterface.io.apb <> io.apb
 
-  // Connect the memory interface of ApbInterface to the registers
-  apbInterface.io.mem.addr := addrDecode.io.addrOut
-  apbInterface.io.mem.wdata := io.apb.PWDATA
-  apbInterface.io.mem.read := !io.apb.PWRITE
-  apbInterface.io.mem.write := io.apb.PWRITE
+  val addrDecodeParams = registerMap.getAddrDecodeParams
+  val addrDecode = Module(new AddrDecode(addrDecodeParams))
+  addrDecode.io.addr := apbInterface.io.mem.addr
+  addrDecode.io.addrOffset := 0.U
+  addrDecode.io.en := true.B
+  addrDecode.io.selInput := true.B
 
   // Handle writes to the registers
   when(apbInterface.io.mem.write) {
@@ -103,9 +97,5 @@ class Timer(
   }
 
   // Handle APB error conditions
-  when(addrDecode.io.errorCode === AddrDecodeError.AddressOutOfRange) {
-    apbInterface.io.apb.PSLVERR := true.B
-  }.otherwise {
-    apbInterface.io.apb.PSLVERR := false.B
-  }
+  apbInterface.io.mem.error := addrDecode.io.errorCode === AddrDecodeError.AddressOutOfRange
 }
