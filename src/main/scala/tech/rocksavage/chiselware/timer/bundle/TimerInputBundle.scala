@@ -25,9 +25,10 @@ class TimerInputBundle(params: TimerParams) extends Bundle {
   /** PWM ceiling value to control the duty cycle of the PWM signal. */
   val pwmCeiling = Input(UInt(params.countWidth.W))
 
-  /** Value to set the clock counter to when `setClock` is asserted. */
-  val setClockValue = Input(UInt(params.countWidth.W))
+  /** Value to set the counter to when `setCount` is asserted. */
+  val setCountValue = Input(UInt(params.countWidth.W))
 
-  /** Signal to set the clock counter to `setClockValue`. */
-  val setClock = Input(Bool())
+  /** Signal to set the counter to `setCountValue`. */
+  val setCount = Input(Bool())
+
 }

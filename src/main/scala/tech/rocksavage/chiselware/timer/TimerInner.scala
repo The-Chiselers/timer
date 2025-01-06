@@ -39,9 +39,8 @@ class TimerInner(
   val prescalerReg = RegInit(0.U(params.countWidth.W))
   val maxCountReg = RegInit(0.U(params.countWidth.W))
   val pwmCeilingReg = RegInit(0.U(params.countWidth.W))
-
-  val setClockValueReg = RegInit(0.U(params.countWidth.W))
-  val setClockReg = RegInit(false.B)
+  val setCountValueReg = RegInit(0.U(params.countWidth.W))
+  val setCountReg = RegInit(false.B)
 
   // ###################
   // Registers that hold the output values
@@ -65,8 +64,8 @@ class TimerInner(
   prescalerReg := io.timerInputBundle.prescaler
   maxCountReg := io.timerInputBundle.maxCount
   pwmCeilingReg := io.timerInputBundle.pwmCeiling
-  setClockValueReg := io.timerInputBundle.setClockValue
-  setClockReg := io.timerInputBundle.setClock
+  setCountValueReg := io.timerInputBundle.setCountValue
+  setCountReg := io.timerInputBundle.setCount
 
   countReg := nextCount
   maxReachedReg := nextMaxReached
@@ -95,15 +94,15 @@ class TimerInner(
   when(enReg) {
 
     val countSum = WireInit(0.U((params.countWidth).W))
-    when(setClockReg) {
-      countSum := setClockValueReg
+    when(setCountReg) {
+      countSum := setCountValueReg
     }.otherwise {
       countSum := countReg + prescalerReg
     }
 
 
     val countOverflow = WireInit(false.B)
-    when(setClockReg) {
+    when(setCountReg) {
       countOverflow := false.B
     }.otherwise {
       countOverflow := (countSum < countReg) || (countSum < prescalerReg)
@@ -144,7 +143,7 @@ class TimerInner(
       val madeProgressFV = (nextCount > countReg)
       val maxReachedFV = nextMaxReached
 
-      when(prescalerReg > 0.U && !setClockReg) {
+      when(prescalerReg > 0.U && !setCountReg) {
         assert(madeProgressFV || maxReachedFV)
       }
     }
