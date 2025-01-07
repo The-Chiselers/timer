@@ -37,7 +37,7 @@ lazy val root = (project in file("."))
   .dependsOn(registermap)
   .dependsOn(synth)
   .dependsOn(addrdecode)
-  .dependsOn(apbinterface)
+  .dependsOn(apb)
 
 
 // Scala coverage settings
