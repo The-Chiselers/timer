@@ -4,7 +4,7 @@ import tech.rocksavage.chiselware.apb.{ApbBundle, ApbInterface, ApbParams}
 import tech.rocksavage.chiselware.addrdecode.{AddrDecode, AddrDecodeError, AddrDecodeParams}
 import tech.rocksavage.chiselware.timer.bundle.{TimerBundle, TimerInterruptBundle, TimerInterruptEnum, TimerOutputBundle}
 import tech.rocksavage.chiselware.timer.param.TimerParams
-import tech.rocksavage.chiselware.addressable.{AddressableRegister, RegisterMap}
+import tech.rocksavage.chiselware.addressable.RegisterMap
 import tech.rocksavage.chiselware.timer.TimerInner
 
 class Timer(val timerParams: TimerParams) extends Module {
@@ -57,7 +57,7 @@ class Timer(val timerParams: TimerParams) extends Module {
   when(apbInterface.io.mem.write) {
     for (reg <- registerMap.getRegisters) {
       when(addrDecode.io.sel(reg.id)) {
-        reg.writeCallback(addrDecode.io.addrOffset, dataWidth, apbInterface.io.mem.wdata)
+        reg.writeCallback(addrDecode.io.addrOffset, apbInterface.io.mem.wdata)
       }
     }
   }
@@ -67,7 +67,7 @@ class Timer(val timerParams: TimerParams) extends Module {
     apbInterface.io.mem.rdata := 0.U
     for (reg <- registerMap.getRegisters) {
       when(addrDecode.io.sel(reg.id)) {
-        apbInterface.io.mem.rdata := reg.readCallback(addrDecode.io.addrOffset, dataWidth)
+        apbInterface.io.mem.rdata := reg.readCallback(addrDecode.io.addrOffset)
       }
     }
   }
