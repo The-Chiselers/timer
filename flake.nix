@@ -49,6 +49,7 @@
                     python3
                     nodePackages_latest.wavedrom-cli
 
+
                     # OpenSTA
                     (pkgs.stdenv.mkDerivation {
                         pname = "opensta";

@@ -17,7 +17,7 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="sbt: scala-sdk-2.13.15" level="project" />
     <orderEntry type="module" module-name="addrdecode" />
-    <orderEntry type="module" module-name="apbinterface" />
+    <orderEntry type="module" module-name="apb" />
     <orderEntry type="module" module-name="registermap" />
     <orderEntry type="module" module-name="synth" />
     <orderEntry type="library" name="sbt: com.github.luben:zstd-jni:1.5.5-10:jar" level="project" />

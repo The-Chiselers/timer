@@ -1,16 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<module external.linked.project.id="apbinterface-build" external.linked.project.path="$USER_HOME$/.sbt/1.0/staging/be5084f5b2fd0a67ffb3/apbinterface/project" external.root.project.path="$MODULE_DIR$/../.." external.system.id="SBT" external.system.module.type="nestedProject" type="SBT_MODULE" version="4">
-  <component name="DisplayModuleName">
-    <option name="name" value="apbinterface-build" />
-  </component>
+<module external.linked.project.id="apb-build" external.linked.project.path="$USER_HOME$/.sbt/1.0/staging/4a74ca8ef9c0d9245091/apb/project" external.root.project.path="$MODULE_DIR$/../.." external.system.id="SBT" external.system.module.type="nestedProject" type="SBT_MODULE" version="4">
   <component name="NewModuleRootManager">
-    <output url="file://$USER_HOME$/.sbt/1.0/staging/be5084f5b2fd0a67ffb3/apbinterface/project/target/idea-classes" />
-    <output-test url="file://$USER_HOME$/.sbt/1.0/staging/be5084f5b2fd0a67ffb3/apbinterface/project/target/idea-test-classes" />
+    <output url="file://$USER_HOME$/.sbt/1.0/staging/4a74ca8ef9c0d9245091/apb/project/target/idea-classes" />
+    <output-test url="file://$USER_HOME$/.sbt/1.0/staging/4a74ca8ef9c0d9245091/apb/project/target/idea-test-classes" />
     <exclude-output />
-    <content url="file://$USER_HOME$/.sbt/1.0/staging/be5084f5b2fd0a67ffb3/apbinterface/project">
-      <sourceFolder url="file://$USER_HOME$/.sbt/1.0/staging/be5084f5b2fd0a67ffb3/apbinterface/project" isTestSource="false" />
-      <excludeFolder url="file://$USER_HOME$/.sbt/1.0/staging/be5084f5b2fd0a67ffb3/apbinterface/project/project/target" />
-      <excludeFolder url="file://$USER_HOME$/.sbt/1.0/staging/be5084f5b2fd0a67ffb3/apbinterface/project/target" />
+    <content url="file://$USER_HOME$/.sbt/1.0/staging/4a74ca8ef9c0d9245091/apb/project">
+      <sourceFolder url="file://$USER_HOME$/.sbt/1.0/staging/4a74ca8ef9c0d9245091/apb/project" isTestSource="false" />
+      <excludeFolder url="file://$USER_HOME$/.sbt/1.0/staging/4a74ca8ef9c0d9245091/apb/project/project/target" />
+      <excludeFolder url="file://$USER_HOME$/.sbt/1.0/staging/4a74ca8ef9c0d9245091/apb/project/target" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
@@ -150,8 +147,8 @@
     </orderEntry>
   </component>
   <component name="SbtModule">
-    <option name="buildForURI" value="https://github.com/The-Chiselers/apbinterface.git#main" />
-    <option name="imports" value="SUB:DOLLAR70d4f74a43ad2e5811c4.`root`, _root_.sbt.Keys._, _root_.sbt.ScriptedPlugin.autoImport._, _root_.sbt.plugins.JUnitXmlReportPlugin.autoImport._, _root_.sbt.plugins.MiniDependencyTreePlugin.autoImport._, _root_.scoverage.ScoverageSbtPlugin.autoImport._, _root_.org.jmotor.sbt.plugin.DependencyUpdatesPlugin.autoImport._, _root_.sbt._, _root_.sbt.nio.Keys._, _root_.sbt.plugins.IvyPlugin, _root_.sbt.plugins.JvmPlugin, _root_.sbt.plugins.CorePlugin, _root_.sbt.ScriptedPlugin, _root_.sbt.plugins.SbtPlugin, _root_.sbt.plugins.SemanticdbPlugin, _root_.sbt.plugins.JUnitXmlReportPlugin, _root_.sbt.plugins.Giter8TemplatePlugin, _root_.sbt.plugins.MiniDependencyTreePlugin, _root_.scoverage.ScoverageSbtPlugin, _root_.org.jmotor.sbt.plugin.DependencyUpdatesPlugin, _root_.scala.xml.{TopScope=&gt;SUB:DOLLARscope}" />
+    <option name="buildForURI" value="https://github.com/The-Chiselers/apb.git#main" />
+    <option name="imports" value="SUB:DOLLARe9fb44b6bef5f142d874.`root`, _root_.sbt.Keys._, _root_.sbt.ScriptedPlugin.autoImport._, _root_.sbt.plugins.JUnitXmlReportPlugin.autoImport._, _root_.sbt.plugins.MiniDependencyTreePlugin.autoImport._, _root_.scoverage.ScoverageSbtPlugin.autoImport._, _root_.org.jmotor.sbt.plugin.DependencyUpdatesPlugin.autoImport._, _root_.sbt._, _root_.sbt.nio.Keys._, _root_.sbt.plugins.IvyPlugin, _root_.sbt.plugins.JvmPlugin, _root_.sbt.plugins.CorePlugin, _root_.sbt.ScriptedPlugin, _root_.sbt.plugins.SbtPlugin, _root_.sbt.plugins.SemanticdbPlugin, _root_.sbt.plugins.JUnitXmlReportPlugin, _root_.sbt.plugins.Giter8TemplatePlugin, _root_.sbt.plugins.MiniDependencyTreePlugin, _root_.scoverage.ScoverageSbtPlugin, _root_.org.jmotor.sbt.plugin.DependencyUpdatesPlugin, _root_.scala.xml.{TopScope=&gt;SUB:DOLLARscope}" />
     <option name="resolvers" value="$USER_HOME$/.ivy2/cache|ivy|true|Local cache, https://repo1.maven.org/maven2/|maven|public" />
   </component>
 </module>
