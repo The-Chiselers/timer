@@ -1,6 +1,10 @@
+// (c) 2024 Rocksavage Technology, Inc.
+// This code is licensed under the Apache Software License 2.0 (see LICENSE.MD)
+package tech.rocksavage.chiselware.timer
+
 import chisel3._
 import chisel3.util._
-import tech.rocksavage.chiselware.apb.{ApbBundle, ApbInterface, ApbParams}
+import tech.rocksavage.chiselware.apb.{ApbBundle, ApbParams}
 import tech.rocksavage.chiselware.addrdecode.{AddrDecode, AddrDecodeError, AddrDecodeParams}
 import tech.rocksavage.chiselware.timer.bundle.{TimerBundle, TimerInterruptBundle, TimerInterruptEnum, TimerOutputBundle}
 import tech.rocksavage.chiselware.timer.param.TimerParams
@@ -42,35 +46,35 @@ class Timer(val timerParams: TimerParams) extends Module {
   val setCount: Bool = RegInit(false.B)
   registerMap.createAddressableRegister(setCount, "setCount")
 
-  // Generate AddrDecode and ApbInterface
-  val apbInterface = Module(new ApbInterface(ApbParams(dataWidth, addressWidth)))
-  apbInterface.io.apb <> io.apb
+  // Generate AddrDecode
   val addrDecodeParams = registerMap.getAddrDecodeParams
   val addrDecode = Module(new AddrDecode(addrDecodeParams))
-  addrDecode.io.addr := apbInterface.io.mem.addr
+  addrDecode.io.addr := io.apb.PADDR
   addrDecode.io.addrOffset := 0.U
   addrDecode.io.en := true.B
   addrDecode.io.selInput := true.B
-  apbInterface.io.mem.error := addrDecode.io.errorCode === AddrDecodeError.AddressOutOfRange
-  apbInterface.io.mem.rdata := 0.U
-  // Handle writes to the registers
-  when(apbInterface.io.mem.write) {
-    for (reg <- registerMap.getRegisters) {
-      when(addrDecode.io.sel(reg.id)) {
-        reg.writeCallback(addrDecode.io.addrOffset, apbInterface.io.mem.wdata)
+
+  io.apb.PREADY := (io.apb.PENABLE && io.apb.PSEL)
+  io.apb.PSLVERR := addrDecode.io.errorCode === AddrDecodeError.AddressOutOfRange
+
+  io.apb.PRDATA := 0.U
+  // Control Register Read/Write
+  when(io.apb.PSEL && io.apb.PENABLE) {
+    when(io.apb.PWRITE) {
+      for (reg <- registerMap.getRegisters) {
+        when(addrDecode.io.sel(reg.id)) {
+          reg.writeCallback(addrDecode.io.addrOffset, io.apb.PWDATA)
+        }
+      }
+    }.otherwise {
+      for (reg <- registerMap.getRegisters) {
+        when(addrDecode.io.sel(reg.id)) {
+          io.apb.PRDATA := reg.readCallback(addrDecode.io.addrOffset)
+        }
       }
     }
   }
 
-  // Handle reads from the registers
-  when(apbInterface.io.mem.read) {
-    apbInterface.io.mem.rdata := 0.U
-    for (reg <- registerMap.getRegisters) {
-      when(addrDecode.io.sel(reg.id)) {
-        apbInterface.io.mem.rdata := reg.readCallback(addrDecode.io.addrOffset)
-      }
-    }
-  }
   // Instantiate the TimerInner module
   val timerInner = Module(new TimerInner(timerParams))
   timerInner.io.timerInputBundle.en := en // Add this line
