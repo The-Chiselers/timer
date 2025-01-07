@@ -7,34 +7,41 @@ import tech.rocksavage.chiselware.timer.param.TimerParams
 import tech.rocksavage.chiselware.addressable.{AddressableRegister, RegisterMap}
 import tech.rocksavage.chiselware.timer.TimerInner
 
-class Timer(
-             val timerParams: TimerParams,
-           ) extends Module {
+class Timer(val timerParams: TimerParams) extends Module {
   // Default Constructor
   def this() = this(TimerParams())
   val dataWidth = timerParams.dataWidth
   val addressWidth = timerParams.addressWidth
+
   // Input/Output bundle for the Timer module
   val io = IO(new Bundle {
     val apb = new ApbBundle(ApbParams(dataWidth, addressWidth))
     val timerOutput = new TimerOutputBundle(timerParams)
     val interrupt = new TimerInterruptBundle
   })
+
   // Create a RegisterMap to manage the addressable registers
   val registerMap = new RegisterMap(dataWidth, addressWidth)
-  // Define addressable registers using the macro annotation
-  @AddressableRegister
-  val en: Bool = RegInit(false.B) // Add this line
-  @AddressableRegister
+
+  // Now define your registers without the macro
+  val en: Bool = RegInit(false.B)
+  registerMap.createAddressableRegister(en, "en")
+
   val prescaler: UInt = RegInit(0.U(timerParams.countWidth.W))
-  @AddressableRegister
+  registerMap.createAddressableRegister(prescaler, "prescaler")
+
   val maxCount: UInt = RegInit(0.U(timerParams.countWidth.W))
-  @AddressableRegister
+  registerMap.createAddressableRegister(maxCount, "maxCount")
+
   val pwmCeiling: UInt = RegInit(0.U(timerParams.countWidth.W))
-  @AddressableRegister
+  registerMap.createAddressableRegister(pwmCeiling, "pwmCeiling")
+
   val setCountValue: UInt = RegInit(0.U(timerParams.countWidth.W))
-  @AddressableRegister
+  registerMap.createAddressableRegister(setCountValue, "setCountValue")
+
   val setCount: Bool = RegInit(false.B)
+  registerMap.createAddressableRegister(setCount, "setCount")
+
   // Generate AddrDecode and ApbInterface
   val apbInterface = Module(new ApbInterface(ApbParams(dataWidth, addressWidth)))
   apbInterface.io.apb <> io.apb
@@ -50,16 +57,17 @@ class Timer(
   when(apbInterface.io.mem.write) {
     for (reg <- registerMap.getRegisters) {
       when(addrDecode.io.sel(reg.id)) {
-        reg.writeCallback(apbInterface.io.mem.wdata)
+        reg.writeCallback(addrDecode.io.addrOffset, dataWidth, apbInterface.io.mem.wdata)
       }
     }
   }
+
   // Handle reads from the registers
   when(apbInterface.io.mem.read) {
     apbInterface.io.mem.rdata := 0.U
     for (reg <- registerMap.getRegisters) {
       when(addrDecode.io.sel(reg.id)) {
-        apbInterface.io.mem.rdata := reg.readCallback()
+        apbInterface.io.mem.rdata := reg.readCallback(addrDecode.io.addrOffset, dataWidth)
       }
     }
   }
