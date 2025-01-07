@@ -1,128 +1,115 @@
-# APB Library
+# Timer Module
 
 ## Overview
 
-The `APB Library` provides a set of tools and modules for implementing Advanced Peripheral Bus (APB) interfaces in hardware designs using Chisel. The library includes modules for defining APB bundles, managing address decoding, and integrating with other hardware components. It simplifies the process of creating memory-mapped I/O systems and ensures compliance with the APB protocol.
+The `Timer` module is a configurable hardware timer designed for use in embedded systems and other applications requiring precise timing control. Implemented in Chisel, a hardware design language, the module offers a flexible and scalable solution for managing timers with features such as PWM (Pulse Width Modulation), interrupt generation, and configurable count widths. The module is designed to integrate seamlessly with APB (Advanced Peripheral Bus) interfaces, making it suitable for memory-mapped I/O operations.
 
 ## Features
 
-- **APB Bundle Definition**: Easily define APB bundles with configurable data and address widths.
-- **Address Decoding**: Automatically decode memory addresses and manage memory ranges.
-- **Error Handling**: Detect and handle address out-of-range errors.
-- **Integration with RegisterMap**: Seamlessly integrate with the `RegisterMap` module for managing addressable registers.
+- **Configurable Timer Parameters**: Define data width, address width, and count width to suit your application.
+- **PWM Generation**: Generate PWM signals with configurable duty cycles.
+- **Interrupt Support**: Generate interrupts when the timer reaches its maximum count.
+- **APB Integration**: Easily integrate with APB interfaces for memory-mapped I/O.
+- **Formal Verification Support**: Enable formal verification to ensure the correctness of the timer logic.
 
 ## Usage
 
-### Defining APB Bundles
+### Defining Timer Parameters
 
-To define an APB bundle, use the `ApbBundle` class. This class takes an `ApbParams` object as a parameter, which specifies the data and address widths.
+To configure the timer, create an instance of `TimerParams` with the desired data width, address width, and count width. These parameters define the size of the registers and the range of the timer.
 
 ```scala
-class ApbBundle(p: ApbParams) extends Bundle {
-  val PSEL    = Input(Bool())                 // Peripheral select
-  val PENABLE = Input(Bool())                 // Enable signal
-  val PWRITE  = Input(Bool())                 // Read/Write signal
-  val PADDR   = Input(UInt(p.PADDR_WIDTH.W))  // Address
-  val PWDATA  = Input(UInt(p.PDATA_WIDTH.W))  // Write data
-  val PRDATA  = Output(UInt(p.PDATA_WIDTH.W)) // Read data
-  val PREADY  = Output(Bool())                // Ready signal
-  val PSLVERR = Output(Bool())                // Slave error signal
+val timerParams = TimerParams(
+  dataWidth = 32,
+  addressWidth = 32,
+  countWidth = 32
+)
+```
+
+### Instantiating the Timer Module
+
+Instantiate the `Timer` module with the defined parameters. The module will automatically configure the timer registers and handle the timing logic.
+
+```scala
+val timer = Module(new Timer(timerParams))
+```
+
+### Connecting Inputs and Outputs
+
+Connect the APB interface, timer outputs, and interrupt signals to the `Timer` module. The module will manage the timer logic and generate the appropriate outputs.
+
+```scala
+timer.io.apb <> io.apb
+timer.io.timerOutput <> io.timerOutput
+timer.io.interrupt <> io.interrupt
+```
+
+### Configuring Timer Registers
+
+The `Timer` module provides several configurable registers, including:
+
+- **Enable (`en`)**: Enable or disable the timer.
+- **Prescaler (`prescaler`)**: Divide the clock frequency to control the timer speed.
+- **Max Count (`maxCount`)**: Define the maximum count value before the timer resets.
+- **PWM Ceiling (`pwmCeiling`)**: Control the duty cycle of the PWM signal.
+- **Set Count Value (`setCountValue`)**: Set the counter to a specific value.
+- **Set Count (`setCount`)**: Signal to set the counter to `setCountValue`.
+
+These registers can be accessed via the APB interface.
+
+### Handling Interrupts
+
+The `Timer` module generates an interrupt when the timer reaches its maximum count. The interrupt signal can be used to trigger other actions in your design.
+
+```scala
+when(timer.io.interrupt.interrupt === TimerInterruptEnum.MaxReached) {
+  // Handle timer interrupt
 }
 ```
 
-### Configuring APB Parameters
+### Formal Verification
 
-The `ApbParams` case class allows you to configure the data and address widths for the APB bus.
+Enable formal verification by setting the `formal` parameter to `true` when instantiating the `TimerInner` module. This will add assertions to verify the correctness of the timer logic.
 
 ```scala
-case class ApbParams(
-  PDATA_WIDTH: Int = 32,
-  PADDR_WIDTH: Int = 32
-) {
-  require(PDATA_WIDTH >= 1, "PDATA_WIDTH must be at least 1 bit")
-  require(PADDR_WIDTH >= 1, "PADDR_WIDTH must be at least 1 bit")
-}
+val timerInner = Module(new TimerInner(timerParams, formal = true))
 ```
 
 ## Example
 
-The following example demonstrates how to use the APB library in a timer design.
+The following example demonstrates how to use the `Timer` module in a design with an APB interface.
 
 ```scala
-class Timer(val timerParams: TimerParams) extends Module {
-  val dataWidth = timerParams.dataWidth
-  val addressWidth = timerParams.addressWidth
-
+class TimerTop(val timerParams: TimerParams) extends Module {
   val io = IO(new Bundle {
-    val apb = new ApbBundle(ApbParams(dataWidth, addressWidth))
+    val apb = new ApbBundle(ApbParams(timerParams.dataWidth, timerParams.addressWidth))
     val timerOutput = new TimerOutputBundle(timerParams)
     val interrupt = new TimerInterruptBundle
   })
 
-  val registerMap = new RegisterMap(dataWidth, addressWidth)
+  // Instantiate the Timer module
+  val timer = Module(new Timer(timerParams))
+  timer.io.apb <> io.apb
+  timer.io.timerOutput <> io.timerOutput
+  timer.io.interrupt <> io.interrupt
 
-  val en: Bool = RegInit(false.B)
-  registerMap.createAddressableRegister(en, "en")
-
-  val prescaler: UInt = RegInit(0.U(timerParams.countWidth.W))
-  registerMap.createAddressableRegister(prescaler, "prescaler")
-
-  val maxCount: UInt = RegInit(0.U(timerParams.countWidth.W))
-  registerMap.createAddressableRegister(maxCount, "maxCount")
-
-  val pwmCeiling: UInt = RegInit(0.U(timerParams.countWidth.W))
-  registerMap.createAddressableRegister(pwmCeiling, "pwmCeiling")
-
-  val setCountValue: UInt = RegInit(0.U(timerParams.countWidth.W))
-  registerMap.createAddressableRegister(setCountValue, "setCountValue")
-
-  val setCount: Bool = RegInit(false.B)
-  registerMap.createAddressableRegister(setCount, "setCount")
-
-  val addrDecodeParams = registerMap.getAddrDecodeParams
-  val addrDecode = Module(new AddrDecode(addrDecodeParams))
-  addrDecode.io.addr := io.apb.PADDR
-  addrDecode.io.addrOffset := 0.U
-  addrDecode.io.en := true.B
-  addrDecode.io.selInput := true.B
-
-  io.apb.PREADY := (io.apb.PENABLE && io.apb.PSEL)
-  io.apb.PSLVERR := addrDecode.io.errorCode === AddrDecodeError.AddressOutOfRange
-
-  io.apb.PRDATA := 0.U
-  when(io.apb.PSEL && io.apb.PENABLE) {
-    when(io.apb.PWRITE) {
-      for (reg <registerMap.getRegisters) {
-        when(addrDecode.io.sel(reg.id)) {
-          reg.writeCallback(addrDecode.io.addrOffset, io.apb.PWDATA)
-        }
-      }
-    }.otherwise {
-      for (reg <registerMap.getRegisters) {
-        when(addrDecode.io.sel(reg.id)) {
-          io.apb.PRDATA := reg.readCallback(addrDecode.io.addrOffset)
-        }
-      }
-    }
+  // Handle APB writes to timer registers
+  when(io.apb.PSEL && io.apb.PENABLE && io.apb.PWRITE) {
+    // Write to the appropriate timer register based on the address
   }
 
-  val timerInner = Module(new TimerInner(timerParams))
-  timerInner.io.timerInputBundle.en := en
-  timerInner.io.timerInputBundle.setCount := setCount
-  timerInner.io.timerInputBundle.prescaler := prescaler
-  timerInner.io.timerInputBundle.maxCount := maxCount
-  timerInner.io.timerInputBundle.pwmCeiling := pwmCeiling
-  timerInner.io.timerInputBundle.setCountValue := setCountValue
+  // Handle APB reads from timer registers
+  when(io.apb.PSEL && io.apb.PENABLE && !io.apb.PWRITE) {
+    // Read from the appropriate timer register based on the address
+  }
 
-  io.timerOutput <> timerInner.io.timerOutputBundle
-
-  io.interrupt.interrupt := TimerInterruptEnum.None
-  when(timerInner.io.timerOutputBundle.maxReached) {
-    io.interrupt.interrupt := TimerInterruptEnum.MaxReached
+  // Handle timer interrupts
+  when(timer.io.interrupt.interrupt === TimerInterruptEnum.MaxReached) {
+    // Handle timer interrupt
   }
 }
 ```
 
 ## Conclusion
 
-The `APB Library` is a powerful tool for implementing APB interfaces in Chisel-based hardware designs. It simplifies the process of defining APB bundles, managing address decoding, and integrating with other hardware components. The library ensures compliance with the APB protocol and provides robust error handling for memory-mapped I/O operations.
+The `Timer` module is a versatile and configurable solution for managing timers in Chisel-based hardware designs. With features such as PWM generation, interrupt support, and seamless APB integration, the module is well-suited for a wide range of applications requiring precise timing control. The inclusion of formal verification support ensures the correctness and reliability of the timer logic, making it a robust choice for complex systems.
