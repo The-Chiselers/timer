@@ -105,12 +105,12 @@
           <root url="jar://$USER_HOME$/.sbt/boot/scala-2.12.20/org.scala-sbt/sbt/1.10.3/zinc-persist-core-assembly-1.10.3.jar!/" />
           <root url="jar://$USER_HOME$/.sbt/boot/scala-2.12.20/org.scala-sbt/sbt/1.10.3/zinc-persist_2.12-1.10.3.jar!/" />
           <root url="jar://$USER_HOME$/.sbt/boot/scala-2.12.20/org.scala-sbt/sbt/1.10.3/zinc_2.12-1.10.3.jar!/" />
-          <root url="jar://$USER_HOME$/AppData/Local/Coursier/cache/v1/https/repo1.maven.org/maven2/org/scala-lang/modules/scala-xml_2.12/2.2.0/scala-xml_2.12-2.2.0.jar!/" />
-          <root url="jar://$USER_HOME$/AppData/Local/Coursier/cache/v1/https/repo1.maven.org/maven2/org/scoverage/sbt-scoverage_2.12_1.0/2.0.11/sbt-scoverage_2.12_1.0-2.0.11.jar!/" />
-          <root url="jar://$USER_HOME$/AppData/Local/Coursier/cache/v1/https/repo1.maven.org/maven2/org/scoverage/scalac-scoverage-domain_2.12/2.1.0/scalac-scoverage-domain_2.12-2.1.0.jar!/" />
-          <root url="jar://$USER_HOME$/AppData/Local/Coursier/cache/v1/https/repo1.maven.org/maven2/org/scoverage/scalac-scoverage-plugin_2.12.19/2.1.0/scalac-scoverage-plugin_2.12.19-2.1.0.jar!/" />
-          <root url="jar://$USER_HOME$/AppData/Local/Coursier/cache/v1/https/repo1.maven.org/maven2/org/scoverage/scalac-scoverage-reporter_2.12/2.1.0/scalac-scoverage-reporter_2.12-2.1.0.jar!/" />
-          <root url="jar://$USER_HOME$/AppData/Local/Coursier/cache/v1/https/repo1.maven.org/maven2/org/scoverage/scalac-scoverage-serializer_2.12/2.1.0/scalac-scoverage-serializer_2.12-2.1.0.jar!/" />
+          <root url="jar://$USER_HOME$/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/org/scala-lang/modules/scala-xml_2.12/2.2.0/scala-xml_2.12-2.2.0.jar!/" />
+          <root url="jar://$USER_HOME$/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/org/scoverage/sbt-scoverage_2.12_1.0/2.0.11/sbt-scoverage_2.12_1.0-2.0.11.jar!/" />
+          <root url="jar://$USER_HOME$/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/org/scoverage/scalac-scoverage-domain_2.12/2.1.0/scalac-scoverage-domain_2.12-2.1.0.jar!/" />
+          <root url="jar://$USER_HOME$/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/org/scoverage/scalac-scoverage-plugin_2.12.19/2.1.0/scalac-scoverage-plugin_2.12.19-2.1.0.jar!/" />
+          <root url="jar://$USER_HOME$/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/org/scoverage/scalac-scoverage-reporter_2.12/2.1.0/scalac-scoverage-reporter_2.12-2.1.0.jar!/" />
+          <root url="jar://$USER_HOME$/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/org/scoverage/scalac-scoverage-serializer_2.12/2.1.0/scalac-scoverage-serializer_2.12-2.1.0.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -119,7 +119,7 @@
   </component>
   <component name="SbtModule">
     <option name="buildForURI" value="https://github.com/The-Chiselers/synth.git#main" />
-    <option name="imports" value="SUB:DOLLAR7131b4141af26c1a81cd.`root`, _root_.sbt.Keys._, _root_.sbt.ScriptedPlugin.autoImport._, _root_.sbt.plugins.JUnitXmlReportPlugin.autoImport._, _root_.sbt.plugins.MiniDependencyTreePlugin.autoImport._, _root_.scoverage.ScoverageSbtPlugin.autoImport._, _root_.sbt._, _root_.sbt.nio.Keys._, _root_.sbt.plugins.IvyPlugin, _root_.sbt.plugins.JvmPlugin, _root_.sbt.plugins.CorePlugin, _root_.sbt.ScriptedPlugin, _root_.sbt.plugins.SbtPlugin, _root_.sbt.plugins.SemanticdbPlugin, _root_.sbt.plugins.JUnitXmlReportPlugin, _root_.sbt.plugins.Giter8TemplatePlugin, _root_.sbt.plugins.MiniDependencyTreePlugin, _root_.scoverage.ScoverageSbtPlugin, _root_.scala.xml.{TopScope=&gt;SUB:DOLLARscope}" />
-    <option name="resolvers" value="https://repo1.maven.org/maven2/|maven|public, C:\Users\Nick\.ivy2\cache|ivy|true|Local cache" />
+    <option name="imports" value="SUB:DOLLARb8cb0579975fc3fccb99.`root`, _root_.sbt.Keys._, _root_.sbt.ScriptedPlugin.autoImport._, _root_.sbt.plugins.JUnitXmlReportPlugin.autoImport._, _root_.sbt.plugins.MiniDependencyTreePlugin.autoImport._, _root_.scoverage.ScoverageSbtPlugin.autoImport._, _root_.sbt._, _root_.sbt.nio.Keys._, _root_.sbt.plugins.IvyPlugin, _root_.sbt.plugins.JvmPlugin, _root_.sbt.plugins.CorePlugin, _root_.sbt.ScriptedPlugin, _root_.sbt.plugins.SbtPlugin, _root_.sbt.plugins.SemanticdbPlugin, _root_.sbt.plugins.JUnitXmlReportPlugin, _root_.sbt.plugins.Giter8TemplatePlugin, _root_.sbt.plugins.MiniDependencyTreePlugin, _root_.scoverage.ScoverageSbtPlugin, _root_.scala.xml.{TopScope=&gt;SUB:DOLLARscope}" />
+    <option name="resolvers" value="$USER_HOME$/.ivy2/cache|ivy|true|Local cache, https://repo1.maven.org/maven2/|maven|public" />
   </component>
 </module>
