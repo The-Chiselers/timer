@@ -1,16 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<module external.linked.project.id="timer-build" external.linked.project.path="$MODULE_DIR$/../../project" external.root.project.path="$MODULE_DIR$/../.." external.system.id="SBT" external.system.module.type="nestedProject" type="SBT_MODULE" version="4">
-  <component name="DisplayModuleName">
-    <option name="name" value="timer-build" />
-  </component>
+<module external.linked.project.id="addressablemodule-build" external.linked.project.path="$USER_HOME$/.sbt/1.0/staging/c645cd57a1f44326eb81/addressablemodule/project" external.root.project.path="$MODULE_DIR$/../.." external.system.id="SBT" external.system.module.type="nestedProject" type="SBT_MODULE" version="4">
   <component name="NewModuleRootManager">
-    <output url="file://$MODULE_DIR$/../../project/target/idea-classes" />
-    <output-test url="file://$MODULE_DIR$/../../project/target/idea-test-classes" />
+    <output url="file://$USER_HOME$/.sbt/1.0/staging/c645cd57a1f44326eb81/addressablemodule/project/target/idea-classes" />
+    <output-test url="file://$USER_HOME$/.sbt/1.0/staging/c645cd57a1f44326eb81/addressablemodule/project/target/idea-test-classes" />
     <exclude-output />
-    <content url="file://$MODULE_DIR$/../../project">
-      <sourceFolder url="file://$MODULE_DIR$/../../project" isTestSource="false" />
-      <excludeFolder url="file://$MODULE_DIR$/../../project/project/target" />
-      <excludeFolder url="file://$MODULE_DIR$/../../project/target" />
+    <content url="file://$USER_HOME$/.sbt/1.0/staging/c645cd57a1f44326eb81/addressablemodule/project">
+      <sourceFolder url="file://$USER_HOME$/.sbt/1.0/staging/c645cd57a1f44326eb81/addressablemodule/project" isTestSource="false" />
+      <excludeFolder url="file://$USER_HOME$/.sbt/1.0/staging/c645cd57a1f44326eb81/addressablemodule/project/project/target" />
+      <excludeFolder url="file://$USER_HOME$/.sbt/1.0/staging/c645cd57a1f44326eb81/addressablemodule/project/target" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
@@ -150,8 +147,8 @@
     </orderEntry>
   </component>
   <component name="SbtModule">
-    <option name="buildForURI" value="file:$MODULE_DIR$/../../" />
-    <option name="imports" value="SUB:DOLLARacafd10a98a9936e1ded.`root`, _root_.sbt.Keys._, _root_.sbt.ScriptedPlugin.autoImport._, _root_.sbt.plugins.JUnitXmlReportPlugin.autoImport._, _root_.sbt.plugins.MiniDependencyTreePlugin.autoImport._, _root_.scoverage.ScoverageSbtPlugin.autoImport._, _root_.org.jmotor.sbt.plugin.DependencyUpdatesPlugin.autoImport._, _root_.sbt._, _root_.sbt.nio.Keys._, _root_.sbt.plugins.IvyPlugin, _root_.sbt.plugins.JvmPlugin, _root_.sbt.plugins.CorePlugin, _root_.sbt.ScriptedPlugin, _root_.sbt.plugins.SbtPlugin, _root_.sbt.plugins.SemanticdbPlugin, _root_.sbt.plugins.JUnitXmlReportPlugin, _root_.sbt.plugins.Giter8TemplatePlugin, _root_.sbt.plugins.MiniDependencyTreePlugin, _root_.scoverage.ScoverageSbtPlugin, _root_.org.jmotor.sbt.plugin.DependencyUpdatesPlugin, _root_.scala.xml.{TopScope=&gt;SUB:DOLLARscope}" />
+    <option name="buildForURI" value="https://github.com/The-Chiselers/addressablemodule.git#main" />
+    <option name="imports" value="SUB:DOLLAR2737d0de48f12a8c22f1.`root`, _root_.sbt.Keys._, _root_.sbt.ScriptedPlugin.autoImport._, _root_.sbt.plugins.JUnitXmlReportPlugin.autoImport._, _root_.sbt.plugins.MiniDependencyTreePlugin.autoImport._, _root_.scoverage.ScoverageSbtPlugin.autoImport._, _root_.org.jmotor.sbt.plugin.DependencyUpdatesPlugin.autoImport._, _root_.sbt._, _root_.sbt.nio.Keys._, _root_.sbt.plugins.IvyPlugin, _root_.sbt.plugins.JvmPlugin, _root_.sbt.plugins.CorePlugin, _root_.sbt.ScriptedPlugin, _root_.sbt.plugins.SbtPlugin, _root_.sbt.plugins.SemanticdbPlugin, _root_.sbt.plugins.JUnitXmlReportPlugin, _root_.sbt.plugins.Giter8TemplatePlugin, _root_.sbt.plugins.MiniDependencyTreePlugin, _root_.scoverage.ScoverageSbtPlugin, _root_.org.jmotor.sbt.plugin.DependencyUpdatesPlugin, _root_.scala.xml.{TopScope=&gt;SUB:DOLLARscope}" />
     <option name="resolvers" value="$USER_HOME$/.ivy2/cache|ivy|true|Local cache, https://repo1.maven.org/maven2/|maven|public" />
   </component>
 </module>

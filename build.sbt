@@ -13,6 +13,7 @@ val scalafmtVersion = "2.5.0"
 lazy val synth = RootProject(uri("https://github.com/The-Chiselers/synth.git#main"))
 lazy val addrdecode = RootProject(uri("https://github.com/The-Chiselers/addrdecode.git#main"))
 lazy val apbinterface = RootProject(uri("https://github.com/The-Chiselers/apbinterface.git#main"))
+lazy val addressablemodule = RootProject(uri("https://github.com/The-Chiselers/addressablemodule.git#main"))
 lazy val root = (project in file("."))
   .settings(
     name                   := "timer",
@@ -33,6 +34,7 @@ lazy val root = (project in file("."))
       "org.chipsalliance" % "chisel-plugin" % chiselVersion cross CrossVersion.full
     )
   )
+  .dependsOn(addressablemodule)
   .dependsOn(synth)
   .dependsOn(addrdecode)
   .dependsOn(apbinterface)
