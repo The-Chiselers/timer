@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ScalaCompilerConfiguration">
     <profile name="sbt 1" modules="timer_2368" />
-    <profile name="sbt 2" modules="gpio">
+    <profile name="sbt 2" modules="addrdecode,apb,gpio,registermap,synth,timer">
       <option name="reflectiveCalls" value="true" />
       <option name="deprecationWarnings" value="true" />
       <option name="featureWarnings" value="true" />
@@ -14,7 +14,7 @@
         <plugin path="C:\Users\Nick\AppData\Local\Coursier\Cache\v1\https\repo1.maven.org\maven2\org\chipsalliance\chisel-plugin_2.13.15\6.6.0\chisel-plugin_2.13.15-6.6.0.jar" />
       </plugins>
     </profile>
-    <profile name="sbt 3" modules="addrdecode,addressablemodule,apb,apbinterface,registermap,synth,timer">
+    <profile name="sbt 3" modules="addressablemodule,apbinterface">
       <option name="reflectiveCalls" value="true" />
       <option name="deprecationWarnings" value="true" />
       <option name="featureWarnings" value="true" />
