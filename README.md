@@ -26,6 +26,8 @@ sbt "runMain tech.rocksavage.Main verilog --mode print --module tech.rocksavage.
 sbt "runMain tech.rocksavage.Main synthesis --module tech.rocksavage.chiselware.timer.Timer --techlib synth/stdcells.lib"
 ```
 
+The results are written to the `./out/synth/$config` directories for each configuration.
+
 ## Usage
 
 ### Defining Timer Parameters

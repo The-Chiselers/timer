@@ -80,6 +80,12 @@ object Main {
           val log_bw = new java.io.BufferedWriter(new java.io.FileWriter(log_file))
           log_bw.write(synth.getStdout)
 
+          // write $build_folder/synth/$name/gates.txt
+          val gates_file = new File(s"$build_folder/synth/$name/gates.txt")
+          gates_file.createNewFile()
+          val gates_bw = new java.io.BufferedWriter(new java.io.FileWriter(gates_file))
+          gates_bw.write(synth.getGates)
+
         }
       }
       case _ => {
