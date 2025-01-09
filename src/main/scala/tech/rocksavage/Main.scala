@@ -52,8 +52,8 @@ object Main {
             tech.rocksavage.synth.SynthCommand.Flatten,
             tech.rocksavage.synth.SynthCommand.Dfflibmap,
             tech.rocksavage.synth.SynthCommand.Abc,
-            tech.rocksavage.synth.SynthCommand.Opt,
-            tech.rocksavage.synth.SynthCommand.Clean,
+            tech.rocksavage.synth.SynthCommand.OptCleanPurge,
+            tech.rocksavage.synth.SynthCommand.Write,
             tech.rocksavage.synth.SynthCommand.Stat
           )
           val synthConfig = new tech.rocksavage.synth.SynthConfig(
