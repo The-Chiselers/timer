@@ -12,6 +12,20 @@ The `Timer` module is a configurable hardware timer designed for use in embedded
 - **APB Integration**: Easily integrate with APB interfaces for memory-mapped I/O.
 - **Formal Verification Support**: Enable formal verification to ensure the correctness of the timer logic.
 
+## Run Directions
+
+To run this project, use the following commands:
+
+### Serialize to Verilog
+```bash
+sbt "runMain tech.rocksavage.Main verilog --mode print --module tech.rocksavage.chiselware.timer.Timer"
+```
+
+### Synthesis
+```bash
+sbt "runMain tech.rocksavage.Main synthesis --module tech.rocksavage.chiselware.timer.Timer --techlib synth/stdcells.lib"
+```
+
 ## Usage
 
 ### Defining Timer Parameters
