@@ -21,6 +21,8 @@ object Main {
       "config4" -> TimerParams(dataWidth = 8, addressWidth = 8, countWidth = 8)
     )
 
+    val build_folder = new File("out")
+
     conf.subcommand match {
       case Some(conf.verilog) => {
         // Run Verilog generation for each configuration
@@ -61,6 +63,23 @@ object Main {
           val synth = synthesizeFromModuleName(synthConfig, conf.synth.module(), params)
           println(synth.getStdout)
           println(synth.getSynthString)
+
+          // mkdir $build_folder/synth/$name
+          val synth_folder = new File(s"$build_folder/synth/$name")
+          synth_folder.mkdirs()
+
+          // write $build_folder/synth/$name/$module_net.v
+          val net_file = new File(s"$build_folder/synth/$name/${conf.synth.module()}_net.v")
+          net_file.createNewFile()
+          val net_bw = new java.io.BufferedWriter(new java.io.FileWriter(net_file))
+          net_bw.write(synth.getSynthString)
+
+          // write $build_folder/synth/$name/log.txt
+          val log_file = new File(s"$build_folder/synth/$name/log.txt")
+          log_file.createNewFile()
+          val log_bw = new java.io.BufferedWriter(new java.io.FileWriter(log_file))
+          log_bw.write(synth.getStdout)
+
         }
       }
       case _ => {

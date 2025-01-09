@@ -9,7 +9,6 @@ import tech.rocksavage.chiselware.addrdecode.{AddrDecode, AddrDecodeError, AddrD
 import tech.rocksavage.chiselware.timer.bundle.{TimerBundle, TimerInterruptBundle, TimerInterruptEnum, TimerOutputBundle}
 import tech.rocksavage.chiselware.timer.param.TimerParams
 import tech.rocksavage.chiselware.addressable.RegisterMap
-import tech.rocksavage.chiselware.timer.TimerInner
 
 class Timer(val timerParams: TimerParams) extends Module {
   // Default Constructor
