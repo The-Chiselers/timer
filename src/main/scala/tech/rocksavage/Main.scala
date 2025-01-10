@@ -15,10 +15,10 @@ object Main {
 
     // Define multiple default configurations
     val defaultConfigs = Map(
-      "config1" -> TimerParams(dataWidth = 32, addressWidth = 32, countWidth = 32),
+      "config1" -> TimerParams(dataWidth = 8, addressWidth = 8, countWidth = 8),
       "config2" -> TimerParams(dataWidth = 16, addressWidth = 16, countWidth = 16),
-      "config3" -> TimerParams(dataWidth = 64, addressWidth = 64, countWidth = 64),
-      "config4" -> TimerParams(dataWidth = 8, addressWidth = 8, countWidth = 8)
+      "config3" -> TimerParams(dataWidth = 32, addressWidth = 32, countWidth = 32),
+      "config4" -> TimerParams(dataWidth = 64, addressWidth = 64, countWidth = 64),
     )
 
     val build_folder = new File("out")
@@ -52,8 +52,8 @@ object Main {
             tech.rocksavage.synth.SynthCommand.Flatten,
             tech.rocksavage.synth.SynthCommand.Dfflibmap,
             tech.rocksavage.synth.SynthCommand.Abc,
-            tech.rocksavage.synth.SynthCommand.Opt,
-            tech.rocksavage.synth.SynthCommand.Clean,
+            tech.rocksavage.synth.SynthCommand.OptCleanPurge,
+            tech.rocksavage.synth.SynthCommand.Write,
             tech.rocksavage.synth.SynthCommand.Stat
           )
           val synthConfig = new tech.rocksavage.synth.SynthConfig(
@@ -61,8 +61,7 @@ object Main {
             synthCommands
           )
           val synth = synthesizeFromModuleName(synthConfig, conf.synth.module(), params)
-          println(synth.getStdout)
-          println(synth.getSynthString)
+
 
           // mkdir $build_folder/synth/$name
           val synth_folder = new File(s"$build_folder/synth/$name")
@@ -71,21 +70,28 @@ object Main {
           // write $build_folder/synth/$name/$module_net.v
           val net_file = new File(s"$build_folder/synth/$name/${conf.synth.module()}_net.v")
           net_file.createNewFile()
+
           val net_bw = new java.io.BufferedWriter(new java.io.FileWriter(net_file))
           net_bw.write(synth.getSynthString)
+          net_bw.close()
 
           // write $build_folder/synth/$name/log.txt
           val log_file = new File(s"$build_folder/synth/$name/log.txt")
           log_file.createNewFile()
           val log_bw = new java.io.BufferedWriter(new java.io.FileWriter(log_file))
           log_bw.write(synth.getStdout)
+          log_bw.close()
 
           // write $build_folder/synth/$name/gates.txt
           val gates_file = new File(s"$build_folder/synth/$name/gates.txt")
           gates_file.createNewFile()
           val gates_bw = new java.io.BufferedWriter(new java.io.FileWriter(gates_file))
-          gates_bw.write(synth.getGates)
-
+          val gates_str: String = synth.getGates match {
+            case Some(gates) => gates.toString
+            case None => "No gates found"
+          }
+          gates_bw.write(gates_str)
+          gates_bw.close()
         }
       }
       case _ => {
