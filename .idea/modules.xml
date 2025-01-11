@@ -14,8 +14,10 @@
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/main.main-build.iml" filepath="$PROJECT_DIR$/.idea/modules/main.main-build.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/stdlib.iml" filepath="$PROJECT_DIR$/.idea/modules/stdlib.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/stdlib.stdlib-build.iml" filepath="$PROJECT_DIR$/.idea/modules/stdlib.stdlib-build.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/synth.iml" filepath="$PROJECT_DIR$/.idea/modules/synth.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/synth.synth-build.iml" filepath="$PROJECT_DIR$/.idea/modules/synth.synth-build.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/synth~1.iml" filepath="$PROJECT_DIR$/.idea/modules/synth~1.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/synth~1.synth-build.iml" filepath="$PROJECT_DIR$/.idea/modules/synth~1.synth-build.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/synth~1.synth~1-build.iml" filepath="$PROJECT_DIR$/.idea/modules/synth~1.synth~1-build.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/timer.iml" filepath="$PROJECT_DIR$/.idea/modules/timer.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/timer.timer-build.iml" filepath="$PROJECT_DIR$/.idea/modules/timer.timer-build.iml" />
     </modules>

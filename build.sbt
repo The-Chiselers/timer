@@ -7,15 +7,22 @@ ThisBuild / organizationName := "Rocksavage Technology"
 
 //Test / parallelExecution := false
 
-val chiselVersion   = "6.6.0"
-val scalafmtVersion = "2.5.0"
-
-lazy val main = RootProject(uri("https://github.com/The-Chiselers/main.git#dev"))
-lazy val stdlib = RootProject(uri("https://github.com/The-Chiselers/stdlib.git#dev"))
-lazy val addrdecode = RootProject(uri("https://github.com/The-Chiselers/addrdecode.git#dev"))
+lazy val main = RootProject(
+  uri("https://github.com/The-Chiselers/main.git#dev")
+)
+lazy val stdlib = RootProject(
+  uri("https://github.com/The-Chiselers/stdlib.git#dev")
+)
+lazy val synth = RootProject(
+  uri("https://github.com/The-Chiselers/synth.git#dev")
+)
+lazy val addrdecode = RootProject(
+  uri("https://github.com/The-Chiselers/addrdecode.git#dev")
+)
 lazy val apb = RootProject(uri("https://github.com/The-Chiselers/apb.git#dev"))
-lazy val registermap = RootProject(uri("https://github.com/The-Chiselers/registermap.git#dev"))
-
+lazy val registermap = RootProject(
+  uri("https://github.com/The-Chiselers/registermap.git#dev")
+)
 lazy val root = (project in file("."))
   .settings(
     name                   := "timer",
@@ -36,8 +43,9 @@ lazy val root = (project in file("."))
       "org.chipsalliance" % "chisel-plugin" % chiselVersion cross CrossVersion.full
     )
   )
-  .dependsOn(main, stdlib, addrdecode, apb, registermap)
-
+  .dependsOn(main, stdlib, synth, addrdecode, apb, registermap)
+val chiselVersion   = "6.6.0"
+val scalafmtVersion = "2.5.0"
 
 // Scala coverage settings
 coverageDataDir            := target.value / "../generated/scalaCoverage"
