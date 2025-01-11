@@ -1,4 +1,4 @@
-package tech.rocksavage.chiselware.timer.config
+package tech.rocksavage.chiselware.timer
 
 import tech.rocksavage.config.ConfigTrait
 import tech.rocksavage.chiselware.timer.param.TimerParams
