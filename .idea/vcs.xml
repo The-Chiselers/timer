@@ -5,9 +5,9 @@
     <mapping directory="$USER_HOME$/.sbt/1.0/staging/20590224f33fad500c90/synth" vcs="Git" />
     <mapping directory="$USER_HOME$/.sbt/1.0/staging/2abadf25ad436b2513bb/addrdecode" vcs="Git" />
     <mapping directory="$USER_HOME$/.sbt/1.0/staging/4aeaf299b4b5cddc7729/stdlib" vcs="Git" />
-    <mapping directory="$USER_HOME$/.sbt/1.0/staging/4f5b96f37ef378c61dc1/synth" vcs="Git" />
     <mapping directory="$USER_HOME$/.sbt/1.0/staging/5c412617bcae77959581/registermap" vcs="Git" />
     <mapping directory="$USER_HOME$/.sbt/1.0/staging/6347d5bfc376f1ec18be/apb" vcs="Git" />
+    <mapping directory="$USER_HOME$/.sbt/1.0/staging/73d8ef2ef3d54d1d35b9/main" vcs="Git" />
     <mapping directory="$PROJECT_DIR$" vcs="Git" />
   </component>
 </project>

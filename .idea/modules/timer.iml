@@ -19,9 +19,9 @@
     <orderEntry type="module" module-name="2abadf25ad436b2513bb.addrdecode" />
     <orderEntry type="module" module-name="addrdecode~1" />
     <orderEntry type="module" module-name="6347d5bfc376f1ec18be.apb" />
+    <orderEntry type="module" module-name="main" />
     <orderEntry type="module" module-name="5c412617bcae77959581.registermap" />
     <orderEntry type="module" module-name="stdlib" />
-    <orderEntry type="module" module-name="4f5b96f37ef378c61dc1.synth" />
     <orderEntry type="module" module-name="synth~1" />
     <orderEntry type="library" name="sbt: org.scala-lang:scala-library:2.13.15:jar" level="project" />
     <orderEntry type="library" name="sbt: org.chipsalliance:chisel_2.13:6.6.0:jar" level="project" />

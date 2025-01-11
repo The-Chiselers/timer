@@ -4,18 +4,18 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/2abadf25ad436b2513bb.addrdecode.iml" filepath="$PROJECT_DIR$/.idea/modules/2abadf25ad436b2513bb.addrdecode.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/2abadf25ad436b2513bb.addrdecode.addrdecode-build.iml" filepath="$PROJECT_DIR$/.idea/modules/2abadf25ad436b2513bb.addrdecode.addrdecode-build.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/4f5b96f37ef378c61dc1.synth.iml" filepath="$PROJECT_DIR$/.idea/modules/4f5b96f37ef378c61dc1.synth.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/4f5b96f37ef378c61dc1.synth.synth-build.iml" filepath="$PROJECT_DIR$/.idea/modules/4f5b96f37ef378c61dc1.synth.synth-build.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/5c412617bcae77959581.registermap.iml" filepath="$PROJECT_DIR$/.idea/modules/5c412617bcae77959581.registermap.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/5c412617bcae77959581.registermap.registermap-build.iml" filepath="$PROJECT_DIR$/.idea/modules/5c412617bcae77959581.registermap.registermap-build.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/6347d5bfc376f1ec18be.apb.iml" filepath="$PROJECT_DIR$/.idea/modules/6347d5bfc376f1ec18be.apb.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/6347d5bfc376f1ec18be.apb.apb-build.iml" filepath="$PROJECT_DIR$/.idea/modules/6347d5bfc376f1ec18be.apb.apb-build.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/addrdecode~1.iml" filepath="$PROJECT_DIR$/.idea/modules/addrdecode~1.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/addrdecode~1.addrdecode~1-build.iml" filepath="$PROJECT_DIR$/.idea/modules/addrdecode~1.addrdecode~1-build.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/main.iml" filepath="$PROJECT_DIR$/.idea/modules/main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/main.main-build.iml" filepath="$PROJECT_DIR$/.idea/modules/main.main-build.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/stdlib.iml" filepath="$PROJECT_DIR$/.idea/modules/stdlib.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/stdlib.stdlib-build.iml" filepath="$PROJECT_DIR$/.idea/modules/stdlib.stdlib-build.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/synth~1.iml" filepath="$PROJECT_DIR$/.idea/modules/synth~1.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/synth~1.synth~1-build.iml" filepath="$PROJECT_DIR$/.idea/modules/synth~1.synth~1-build.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/synth~1.synth-build.iml" filepath="$PROJECT_DIR$/.idea/modules/synth~1.synth-build.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/timer.iml" filepath="$PROJECT_DIR$/.idea/modules/timer.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/timer.timer-build.iml" filepath="$PROJECT_DIR$/.idea/modules/timer.timer-build.iml" />
     </modules>

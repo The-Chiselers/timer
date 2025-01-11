@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<module external.linked.project.id="synth~1-build" external.linked.project.path="$USER_HOME$/.sbt/1.0/staging/20590224f33fad500c90/synth/project" external.root.project.path="$MODULE_DIR$/../.." external.system.id="SBT" external.system.module.type="nestedProject" type="SBT_MODULE" version="4">
+<module external.linked.project.id="synth-build" external.linked.project.path="$USER_HOME$/.sbt/1.0/staging/20590224f33fad500c90/synth/project" external.root.project.path="$MODULE_DIR$/../.." external.system.id="SBT" external.system.module.type="nestedProject" type="SBT_MODULE" version="4">
   <component name="DisplayModuleName">
-    <option name="name" value="synth~1-build" />
+    <option name="name" value="synth-build" />
   </component>
   <component name="NewModuleRootManager">
     <output url="file://$USER_HOME$/.sbt/1.0/staging/20590224f33fad500c90/synth/project/target/idea-classes" />

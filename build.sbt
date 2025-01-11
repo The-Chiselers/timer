@@ -10,6 +10,7 @@ ThisBuild / organizationName := "Rocksavage Technology"
 val chiselVersion   = "6.6.0"
 val scalafmtVersion = "2.5.0"
 
+lazy val main = RootProject(uri("https://github.com/The-Chiselers/main.git#dev"))
 lazy val stdlib = RootProject(uri("https://github.com/The-Chiselers/stdlib.git#dev"))
 lazy val addrdecode = RootProject(uri("https://github.com/The-Chiselers/addrdecode.git#dev"))
 lazy val apb = RootProject(uri("https://github.com/The-Chiselers/apb.git#dev"))
@@ -35,7 +36,7 @@ lazy val root = (project in file("."))
       "org.chipsalliance" % "chisel-plugin" % chiselVersion cross CrossVersion.full
     )
   )
-  .dependsOn(stdlib, addrdecode, apb, registermap)
+  .dependsOn(main, stdlib, addrdecode, apb, registermap)
 
 
 // Scala coverage settings

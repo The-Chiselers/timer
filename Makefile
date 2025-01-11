@@ -11,6 +11,13 @@ docs:
 	mkdir -p $(BUILD_ROOT)/doc
 	cd doc/user-guide && pdflatex -output-directory=$(BUILD_ROOT)/doc timer.tex | tee -a $(BUILD_ROOT)/doc/doc.rpt
 
+update:
+	@echo Updating...
+	rm -rf ~/.sbt
+	rm -rf ~/.ivy2
+	sbt clean
+	sbt dependencyUpdates
+
 # Start with a fresh directory
 clean:
 	@echo Cleaning...
@@ -29,7 +36,7 @@ clean:
 # Generate verilog from the Chisel code
 verilog:
 	@echo Generating Verilog...
-	$(SBT) "runMain tech.rocksavage.Main verilog --mode print --module tech.rocksavage.chiselware.timer.Timer"
+	@$(SBT) "runMain tech.rocksavage.Main verilog --mode print --module tech.rocksavage.chiselware.timer.Timer --config-class tech.rocksavage.chiselware.timer.TimerConfig"
 
 # Run the tests
 test:
@@ -39,7 +46,7 @@ test:
 # Synthesize the design
 synth: verilog
 	@echo Synthesizing...
-	@$(SBT) "runMain tech.rocksavage.Main synth --module tech.rocksavage.chiselware.timer.Timer --techlib synth/stdcells.lib"
+	@$(SBT) "runMain tech.rocksavage.Main synth --module tech.rocksavage.chiselware.timer.Timer --techlib synth/stdcells.lib --config-class tech.rocksavage.chiselware.timer.TimerConfig"
 
 sta:
 	# Uses a python script to generate the SDC file
