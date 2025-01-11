@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ScalaCompilerConfiguration">
     <profile name="sbt 1" modules="timer_2368" />
-    <profile name="sbt 2" modules="addrdecode,apb,gpio,registermap,stdlib,synth,timer">
+    <profile name="sbt 2" modules="2abadf25ad436b2513bb.addrdecode,4f5b96f37ef378c61dc1.synth,5c412617bcae77959581.registermap,6347d5bfc376f1ec18be.apb,addrdecode,addrdecode~1,apb,gpio,registermap,stdlib,synth,synth~1,timer">
       <option name="reflectiveCalls" value="true" />
       <option name="deprecationWarnings" value="true" />
       <option name="featureWarnings" value="true" />
