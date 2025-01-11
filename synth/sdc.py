@@ -8,6 +8,7 @@ def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument("--top", required=True, help="Top module name")
     parser.add_argument("--out", required=True, help="Output SDC file")
+    parser.add_argument("--net", required=True, help="Top netlist")
 
     # Optional and use as many as needed
     example_clock = """
@@ -31,13 +32,13 @@ def main():
     args = parse_args()
     top = args.top
     out = args.out
+    netlist_path = args.net
 
     build_root = os.environ["BUILD_ROOT"]
     synth_build_root = os.path.join(build_root, "synth")
 
     clocks = args.clock
 
-    netlist_path = os.path.join(synth_build_root, f"{top}_net.v")
     netlist = open(netlist_path, "r").read()
 
     

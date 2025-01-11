@@ -40,3 +40,8 @@ test:
 synth: verilog
 	@echo Synthesizing...
 	@$(SBT) "runMain tech.rocksavage.Main synth --module tech.rocksavage.chiselware.timer.Timer --techlib synth/stdcells.lib"
+
+sta:
+	# Uses a python script to generate the SDC file
+	mkdir -p $(BUILD_ROOT)/sta
+	sh $(PROJECT_ROOT)/synth/sta.sh
