@@ -1,9 +1,6 @@
-% chktex-file 44
-
 \section{Parameter Descriptions}
 
-The parameters for \textbf{Timer} are shown below in
-Table 3.
+The parameters for \textbf{Timer} are shown below in Table~\ref{table:params}.
 
 \renewcommand*{\arraystretch}{1.4}
 \begin{longtable}[H]{
@@ -20,50 +17,34 @@ Table 3.
   \textbf{Max}  &
   \textbf{Description}            \\ \hline \hline
 
-  dataWidth   &
-  Int       &
-  1         &
-  $\leq$ 32          &
-  The data width of COUNT, MAX, MIN, PWDATA, and PRDATA. Can be 8, 16, or 32 bits wide \\ \hline
-
-  addrWidth     &
+  dataWidth     &
   Int           &
   1             &
-  $\leq$ 32       &
-  The APB address bus width  \\ \hline
+  $\ge$ 1       &
+  The width of the data bus in bits      \\ \hline
 
-  mode     &
+  addressWidth  &
   Int           &
   1             &
-  $\leq$ 3       &
-  Configures the hardware mode. \newline
-  Timer/Counter: 1 \newline
-  WDT: 2 \newline
-  RTC: 3  \\ \hline
+  $\ge$ 1       &
+  The width of the address bus in bits   \\ \hline
+
+  countWidth    &
+  Int           &
+  1             &
+  $\ge$ 1       &
+  The width of the counter in bits       \\ \hline
 
   \caption{Parameter Descriptions}\label{table:params}
 \end{longtable}
 
-To instantiate a 16-bit Timer/Counter:
+The Timer is instantiated into a design as follows:
 
 \begin{lstlisting}[language=Scala]
-
-  // Valid Timer/Counter Instantiation Example
-  val myTimer = new Timer(
-    dataWidth = 16, 
-    addrWidth = 32,
-    mode = 1 ) 
-
-  \end{lstlisting}
-
-To instantiate a 16-bit Timer/Counter:
-
-\begin{lstlisting}[language=Scala]
-
-  // Valid Timer/Counter Instantiation Example
-  val myTimer = new Timer(
-    dataWidth = 16, 
-    addrWidth = 32,
-    mode = 1 ) 
-
-  \end{lstlisting}
+  // Instantiate Timer with default parameters
+  val myTimer = new Timer(TimerParams(
+    dataWidth = 32,
+    addressWidth = 32,
+    countWidth = 64
+  ))
+\end{lstlisting}

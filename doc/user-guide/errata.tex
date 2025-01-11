@@ -1,7 +1,14 @@
 \section{Errata and Known Issues}
 
 \subsection{Errata}
-None.
+\begin{itemize}
+      \item{
+            Care should be taken when configuring the Timer with large count widths, as this can lead to significant resource usage in synthesis.
+            }
+      \item{
+            The Timer module does not currently support dynamic reconfiguration of parameters during operation. Any changes to parameters require a reset.
+            }
+\end{itemize}
 
 \subsection{Known Issues}
 None.
