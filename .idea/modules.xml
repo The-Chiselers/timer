@@ -8,6 +8,8 @@
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/apb.apb-build.iml" filepath="$PROJECT_DIR$/.idea/modules/apb.apb-build.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/registermap.iml" filepath="$PROJECT_DIR$/.idea/modules/registermap.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/registermap.registermap-build.iml" filepath="$PROJECT_DIR$/.idea/modules/registermap.registermap-build.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/stdlib.iml" filepath="$PROJECT_DIR$/.idea/modules/stdlib.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/stdlib.stdlib-build.iml" filepath="$PROJECT_DIR$/.idea/modules/stdlib.stdlib-build.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/synth.iml" filepath="$PROJECT_DIR$/.idea/modules/synth.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/synth.synth-build.iml" filepath="$PROJECT_DIR$/.idea/modules/synth.synth-build.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/timer.iml" filepath="$PROJECT_DIR$/.idea/modules/timer.iml" />
