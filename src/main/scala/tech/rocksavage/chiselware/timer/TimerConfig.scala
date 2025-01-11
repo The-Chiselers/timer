@@ -1,9 +1,9 @@
 package tech.rocksavage.chiselware.timer
 
 import tech.rocksavage.chiselware.timer.param.TimerParams
-import tech.rocksavage.config.ConfigTrait
+import tech.rocksavage.traits.ModuleConfig
 
-class TimerConfig extends ConfigTrait {
+class TimerConfig extends ModuleConfig {
   override def getDefaultConfigs: Map[String, Any] = Map(
     "8_8_8" -> TimerParams(dataWidth = 8, addressWidth = 8, countWidth = 8),
     "16_16_16" -> TimerParams(
