@@ -1,24 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<module external.linked.project.id="root [https://github.com/The-Chiselers/addrdecode.git#main]" external.linked.project.path="$USER_HOME$/.sbt/1.0/staging/1c57281312caf22c1901/addrdecode" external.root.project.path="$MODULE_DIR$/../.." external.system.id="SBT" type="JAVA_MODULE" version="4">
+<module external.linked.project.id="root [https://github.com/The-Chiselers/apb.git#main]" external.linked.project.path="$USER_HOME$/.sbt/1.0/staging/4a74ca8ef9c0d9245091/apb" external.root.project.path="$MODULE_DIR$/../.." external.system.id="SBT" type="JAVA_MODULE" version="4">
   <component name="DisplayModuleName">
-    <option name="name" value="addrdecode" />
+    <option name="name" value="apb" />
   </component>
   <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_23">
-    <output url="file://$USER_HOME$/.sbt/1.0/staging/1c57281312caf22c1901/addrdecode/target/scala-2.13/classes" />
-    <output-test url="file://$USER_HOME$/.sbt/1.0/staging/1c57281312caf22c1901/addrdecode/target/scala-2.13/test-classes" />
+    <output url="file://$USER_HOME$/.sbt/1.0/staging/4a74ca8ef9c0d9245091/apb/target/scala-2.13/classes" />
+    <output-test url="file://$USER_HOME$/.sbt/1.0/staging/4a74ca8ef9c0d9245091/apb/target/scala-2.13/test-classes" />
     <exclude-output />
-    <content url="file://$USER_HOME$/.sbt/1.0/staging/1c57281312caf22c1901/addrdecode">
-      <sourceFolder url="file://$USER_HOME$/.sbt/1.0/staging/1c57281312caf22c1901/addrdecode/src/main/resources" type="java-resource" />
-      <sourceFolder url="file://$USER_HOME$/.sbt/1.0/staging/1c57281312caf22c1901/addrdecode/src/main/scala" isTestSource="false" />
-      <sourceFolder url="file://$USER_HOME$/.sbt/1.0/staging/1c57281312caf22c1901/addrdecode/src/test/scala" isTestSource="true" />
-      <excludeFolder url="file://$USER_HOME$/.sbt/1.0/staging/1c57281312caf22c1901/addrdecode/target" />
+    <content url="file://$USER_HOME$/.sbt/1.0/staging/4a74ca8ef9c0d9245091/apb">
+      <sourceFolder url="file://$USER_HOME$/.sbt/1.0/staging/4a74ca8ef9c0d9245091/apb/src/main/scala" isTestSource="false" />
+      <excludeFolder url="file://$USER_HOME$/.sbt/1.0/staging/4a74ca8ef9c0d9245091/apb/target" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="sbt: scala-sdk-2.13.15" level="project" />
-    <orderEntry type="module" module-name="chisel_module_runner" />
-    <orderEntry type="module" module-name="stdlib~1" />
-    <orderEntry type="module" module-name="20590224f33fad500c90.synth" />
     <orderEntry type="library" name="sbt: org.scala-lang:scala-library:2.13.15:jar" level="project" />
     <orderEntry type="library" name="sbt: org.chipsalliance:chisel_2.13:6.6.0:jar" level="project" />
     <orderEntry type="library" name="sbt: edu.berkeley.cs:chiseltest_2.13:6.0.0:jar" level="project" />

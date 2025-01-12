@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ScalaCompilerConfiguration">
     <profile name="sbt 1" modules="timer_4912" />
-    <profile name="sbt 2" modules="85328f966cfc8198da52.chisel_module_runner,addrdecode,addrdecode~1,apb,chisel_module_runner,registermap,stdlib,stdlib~1,synth,synth~1,timer">
+    <profile name="sbt 2" modules="20590224f33fad500c90.synth,4a74ca8ef9c0d9245091.apb,52083928a3d79263a9ce.registermap,85328f966cfc8198da52.chisel_module_runner,addrdecode,addrdecode~1,apb,chisel_module_runner,registermap,stdlib,stdlib~1,synth,synth~1,timer">
       <option name="reflectiveCalls" value="true" />
       <option name="deprecationWarnings" value="true" />
       <option name="featureWarnings" value="true" />

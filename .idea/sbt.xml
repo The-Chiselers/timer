@@ -9,20 +9,16 @@
           <set>
             <option value="$USER_HOME$/.sbt/1.0/staging/1c57281312caf22c1901/addrdecode" />
             <option value="$USER_HOME$/.sbt/1.0/staging/1c57281312caf22c1901/addrdecode/project" />
-            <option value="$USER_HOME$/.sbt/1.0/staging/2abadf25ad436b2513bb/addrdecode" />
-            <option value="$USER_HOME$/.sbt/1.0/staging/2abadf25ad436b2513bb/addrdecode/project" />
+            <option value="$USER_HOME$/.sbt/1.0/staging/20590224f33fad500c90/synth" />
+            <option value="$USER_HOME$/.sbt/1.0/staging/20590224f33fad500c90/synth/project" />
             <option value="$USER_HOME$/.sbt/1.0/staging/48a50686a413a20796b4/stdlib" />
             <option value="$USER_HOME$/.sbt/1.0/staging/48a50686a413a20796b4/stdlib/project" />
-            <option value="$USER_HOME$/.sbt/1.0/staging/4aeaf299b4b5cddc7729/stdlib" />
-            <option value="$USER_HOME$/.sbt/1.0/staging/4aeaf299b4b5cddc7729/stdlib/project" />
-            <option value="$USER_HOME$/.sbt/1.0/staging/4f5b96f37ef378c61dc1/synth" />
-            <option value="$USER_HOME$/.sbt/1.0/staging/4f5b96f37ef378c61dc1/synth/project" />
-            <option value="$USER_HOME$/.sbt/1.0/staging/5c412617bcae77959581/registermap" />
-            <option value="$USER_HOME$/.sbt/1.0/staging/5c412617bcae77959581/registermap/project" />
-            <option value="$USER_HOME$/.sbt/1.0/staging/6347d5bfc376f1ec18be/apb" />
-            <option value="$USER_HOME$/.sbt/1.0/staging/6347d5bfc376f1ec18be/apb/project" />
-            <option value="$USER_HOME$/.sbt/1.0/staging/85328f966cfc8198da52/chisel_module_runner" />
-            <option value="$USER_HOME$/.sbt/1.0/staging/85328f966cfc8198da52/chisel_module_runner/project" />
+            <option value="$USER_HOME$/.sbt/1.0/staging/4a74ca8ef9c0d9245091/apb" />
+            <option value="$USER_HOME$/.sbt/1.0/staging/4a74ca8ef9c0d9245091/apb/project" />
+            <option value="$USER_HOME$/.sbt/1.0/staging/52083928a3d79263a9ce/registermap" />
+            <option value="$USER_HOME$/.sbt/1.0/staging/52083928a3d79263a9ce/registermap/project" />
+            <option value="$USER_HOME$/.sbt/1.0/staging/da04db603991cd65594d/chisel_module_runner" />
+            <option value="$USER_HOME$/.sbt/1.0/staging/da04db603991cd65594d/chisel_module_runner/project" />
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/project" />
           </set>
