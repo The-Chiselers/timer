@@ -7,8 +7,8 @@ ThisBuild / organizationName := "Rocksavage Technology"
 
 //Test / parallelExecution := false
 
-lazy val main = RootProject(
-  uri("https://github.com/The-Chiselers/main.git#dev")
+lazy val chisel_module_runner = RootProject(
+  uri("https://github.com/The-Chiselers/chisel_module_runner.git#dev")
 )
 lazy val stdlib = RootProject(
   uri("https://github.com/The-Chiselers/stdlib.git#dev")
@@ -43,7 +43,7 @@ lazy val root = (project in file("."))
       "org.chipsalliance" % "chisel-plugin" % chiselVersion cross CrossVersion.full
     )
   )
-  .dependsOn(main, stdlib, synth, addrdecode, apb, registermap)
+  .dependsOn(chisel_module_runner, stdlib, synth, addrdecode, apb, registermap)
 val chiselVersion   = "6.6.0"
 val scalafmtVersion = "2.5.0"
 

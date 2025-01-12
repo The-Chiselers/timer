@@ -16,7 +16,6 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="sbt: scala-sdk-2.13.15" level="project" />
-    <orderEntry type="module" module-name="synth~1" />
     <orderEntry type="library" name="sbt: org.scala-lang:scala-library:2.13.15:jar" level="project" />
     <orderEntry type="library" name="sbt: org.chipsalliance:chisel_2.13:6.6.0:jar" level="project" />
     <orderEntry type="library" name="sbt: edu.berkeley.cs:chiseltest_2.13:6.0.0:jar" level="project" />

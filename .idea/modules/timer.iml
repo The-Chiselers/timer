@@ -8,7 +8,6 @@
     <output-test url="file://$MODULE_DIR$/../../target/scala-2.13/test-classes" />
     <exclude-output />
     <content url="file://$MODULE_DIR$/../..">
-      <sourceFolder url="file://$MODULE_DIR$/../../src/main/resources" type="java-resource" />
       <sourceFolder url="file://$MODULE_DIR$/../../src/main/scala" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/../../src/test/scala" isTestSource="true" />
       <excludeFolder url="file://$MODULE_DIR$/../../target" />
@@ -16,14 +15,14 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="sbt: scala-sdk-2.13.15" level="project" />
-    <orderEntry type="module" module-name="2abadf25ad436b2513bb.addrdecode" />
+    <orderEntry type="module" module-name="addrdecode" />
     <orderEntry type="module" module-name="addrdecode~1" />
-    <orderEntry type="module" module-name="6347d5bfc376f1ec18be.apb" />
-    <orderEntry type="module" module-name="main" />
-    <orderEntry type="module" module-name="5c412617bcae77959581.registermap" />
+    <orderEntry type="module" module-name="apb" />
+    <orderEntry type="module" module-name="85328f966cfc8198da52.chisel_module_runner" />
+    <orderEntry type="module" module-name="registermap" />
     <orderEntry type="module" module-name="stdlib" />
+    <orderEntry type="module" module-name="stdlib~1" />
     <orderEntry type="module" module-name="synth" />
-    <orderEntry type="module" module-name="synth~1" />
     <orderEntry type="library" name="sbt: org.scala-lang:scala-library:2.13.15:jar" level="project" />
     <orderEntry type="library" name="sbt: org.chipsalliance:chisel_2.13:6.6.0:jar" level="project" />
     <orderEntry type="library" name="sbt: edu.berkeley.cs:chiseltest_2.13:6.0.0:jar" level="project" />

@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="VcsDirectoryMappings">
-    <mapping directory="$USER_HOME$/.sbt/1.0/staging/4aeaf299b4b5cddc7729/stdlib" vcs="Git" />
-    <mapping directory="$USER_HOME$/.sbt/1.0/staging/4f5b96f37ef378c61dc1/synth" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$" vcs="Git" />
+    <mapping directory="" vcs="Git" />
   </component>
 </project>
