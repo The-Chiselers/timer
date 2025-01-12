@@ -8,8 +8,8 @@ default: verilog
 
 docs:
 	@echo Generating docs
-	mkdir -p $(BUILD_ROOT)/doc
-	cd doc/user-guide && pdflatex -output-directory=$(BUILD_ROOT)/doc timer.tex | tee -a $(BUILD_ROOT)/doc/doc.rpt
+	mkdir -p $(shell pwd)/out/doc
+	cd doc/user-guide && pdflatex -output-directory=$(shell pwd)/out/doc timer.tex | tee -a $(shell pwd)/out/doc/doc.rpt
 
 update:
 	@echo Updating...
@@ -44,11 +44,10 @@ test:
 	@$(SBT) test
 
 # Synthesize the design
-synth: verilog
+synth:
 	@echo Synthesizing...
 	@$(SBT) "runMain tech.rocksavage.Main synth --module tech.rocksavage.chiselware.timer.Timer --techlib synth/stdcells.lib --config-class tech.rocksavage.chiselware.timer.TimerConfig"
 
 sta:
-	# Uses a python script to generate the SDC file
-	mkdir -p $(BUILD_ROOT)/sta
-	sh $(PROJECT_ROOT)/synth/sta.sh
+	@echo Running Timing Analysis...
+	@$(SBT) "runMain tech.rocksavage.Main sta --module tech.rocksavage.chiselware.timer.Timer --techlib synth/stdcells.lib --config-class tech.rocksavage.chiselware.timer.TimerConfig --clock-period 5.0"
