@@ -8,20 +8,20 @@ ThisBuild / organizationName := "Rocksavage Technology"
 //Test / parallelExecution := false
 
 lazy val chisel_module_runner = RootProject(
-  uri("https://github.com/The-Chiselers/chisel_module_runner.git#dev")
+  uri("https://github.com/The-Chiselers/chisel_module_runner.git#main")
 )
 lazy val stdlib = RootProject(
-  uri("https://github.com/The-Chiselers/stdlib.git#dev")
+  uri("https://github.com/The-Chiselers/stdlib.git#main")
 )
 lazy val synth = RootProject(
-  uri("https://github.com/The-Chiselers/synth.git#dev")
+  uri("https://github.com/The-Chiselers/synth.git#main")
 )
 lazy val addrdecode = RootProject(
-  uri("https://github.com/The-Chiselers/addrdecode.git#dev")
+  uri("https://github.com/The-Chiselers/addrdecode.git#main")
 )
-lazy val apb = RootProject(uri("https://github.com/The-Chiselers/apb.git#dev"))
+lazy val apb = RootProject(uri("https://github.com/The-Chiselers/apb.git#main"))
 lazy val registermap = RootProject(
-  uri("https://github.com/The-Chiselers/registermap.git#dev")
+  uri("https://github.com/The-Chiselers/registermap.git#main")
 )
 lazy val root = (project in file("."))
   .settings(
