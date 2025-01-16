@@ -29,17 +29,9 @@ jobs:
       - name: Run Nix Cache
         uses: DeterminateSystems/magic-nix-cache-action@v2
 
-      # - name: Source Dev Shell
-      #   run: nix --extra-experimental-features nix-command --extra-experimental-features flakes develop --ignore-environment -c $SHELL
-
-      # - name: Install firtool
-      #   run: nix-env -iA nixpkgs.firtool
-
-      # - name: DEBUG STEP
-      #   run: echo $PATH; which firtool
-
-      # - uses: nicknovitski/nix-develop@1
-      # - run: echo $PATH
+      - name: Test
+        run: nix develop --command sbt test
 
       - name: Run
-        run: nix develop --command sbt run
+        run: nix develop --command sbt "runMain tech.rocksavage.Main verilog --mode print --module tech.rocksavage.chiselware.timer.Timer"
+

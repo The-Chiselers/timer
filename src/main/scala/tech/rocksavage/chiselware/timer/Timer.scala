@@ -3,24 +3,26 @@
 package tech.rocksavage.chiselware.timer
 
 import chisel3._
-import chisel3.util._
-import tech.rocksavage.chiselware.apb.{ApbBundle, ApbParams}
-import tech.rocksavage.chiselware.addrdecode.{AddrDecode, AddrDecodeError, AddrDecodeParams}
-import tech.rocksavage.chiselware.timer.bundle.{TimerBundle, TimerInterruptBundle, TimerInterruptEnum, TimerOutputBundle}
-import tech.rocksavage.chiselware.timer.param.TimerParams
+import tech.rocksavage.chiselware.addrdecode.{AddrDecode, AddrDecodeError}
 import tech.rocksavage.chiselware.addressable.RegisterMap
+import tech.rocksavage.chiselware.apb.{ApbBundle, ApbParams}
+import tech.rocksavage.chiselware.timer.bundle.{
+  TimerInterruptBundle,
+  TimerInterruptEnum,
+  TimerOutputBundle
+}
+import tech.rocksavage.chiselware.timer.param.TimerParams
 
 class Timer(val timerParams: TimerParams) extends Module {
-  // Default Constructor
-  def this() = this(TimerParams())
-  val dataWidth = timerParams.dataWidth
+
+  val dataWidth    = timerParams.dataWidth
   val addressWidth = timerParams.addressWidth
 
   // Input/Output bundle for the Timer module
   val io = IO(new Bundle {
-    val apb = new ApbBundle(ApbParams(dataWidth, addressWidth))
+    val apb         = new ApbBundle(ApbParams(dataWidth, addressWidth))
     val timerOutput = new TimerOutputBundle(timerParams)
-    val interrupt = new TimerInterruptBundle
+    val interrupt   = new TimerInterruptBundle
   })
 
   // Create a RegisterMap to manage the addressable registers
@@ -47,11 +49,11 @@ class Timer(val timerParams: TimerParams) extends Module {
 
   // Generate AddrDecode
   val addrDecodeParams = registerMap.getAddrDecodeParams
-  val addrDecode = Module(new AddrDecode(addrDecodeParams))
-  addrDecode.io.addr := io.apb.PADDR
+  val addrDecode       = Module(new AddrDecode(addrDecodeParams))
+  addrDecode.io.addr       := io.apb.PADDR
   addrDecode.io.addrOffset := 0.U
-  addrDecode.io.en := true.B
-  addrDecode.io.selInput := true.B
+  addrDecode.io.en         := true.B
+  addrDecode.io.selInput   := true.B
 
   io.apb.PREADY := (io.apb.PENABLE && io.apb.PSEL)
   io.apb.PSLVERR := addrDecode.io.errorCode === AddrDecodeError.AddressOutOfRange
@@ -76,11 +78,11 @@ class Timer(val timerParams: TimerParams) extends Module {
 
   // Instantiate the TimerInner module
   val timerInner = Module(new TimerInner(timerParams))
-  timerInner.io.timerInputBundle.en := en // Add this line
-  timerInner.io.timerInputBundle.setCount := setCount
-  timerInner.io.timerInputBundle.prescaler := prescaler
-  timerInner.io.timerInputBundle.maxCount := maxCount
-  timerInner.io.timerInputBundle.pwmCeiling := pwmCeiling
+  timerInner.io.timerInputBundle.en            := en // Add this line
+  timerInner.io.timerInputBundle.setCount      := setCount
+  timerInner.io.timerInputBundle.prescaler     := prescaler
+  timerInner.io.timerInputBundle.maxCount      := maxCount
+  timerInner.io.timerInputBundle.pwmCeiling    := pwmCeiling
   timerInner.io.timerInputBundle.setCountValue := setCountValue
   // Connect the TimerInner outputs to the top-level outputs
   io.timerOutput <> timerInner.io.timerOutputBundle

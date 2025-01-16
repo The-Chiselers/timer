@@ -18,15 +18,22 @@ To run this project, use the following commands:
 
 ### Serialize to Verilog
 ```bash
-sbt "runMain tech.rocksavage.Main verilog --mode print --module tech.rocksavage.chiselware.timer.Timer"
+sbt "runMain tech.rocksavage.Main verilog --mode print --module tech.rocksavage.chiselware.timer.Timer  --config-class tech.rocksavage.chiselware.timer.TimerConfig"
 ```
 
 ### Synthesis
 ```bash
-sbt "runMain tech.rocksavage.Main synthesis --module tech.rocksavage.chiselware.timer.Timer --techlib synth/stdcells.lib"
+sbt "runMain tech.rocksavage.Main synth --module tech.rocksavage.chiselware.timer.Timer --techlib synth/stdcells.lib  --config-class tech.rocksavage.chiselware.timer.TimerConfig"
 ```
 
 The results are written to the `./out/synth/$config` directories for each configuration.
+
+### Sta
+```bash
+sbt "runMain tech.rocksavage.Main sta --module tech.rocksavage.chiselware.timer.Timer --techlib synth/stdcells.lib  --config-class tech.rocksavage.chiselware.timer.TimerConfig --clock-period 5.0"
+```
+
+The results are written to the `./out/sta/$config` directories for each configuration.
 
 ## Usage
 
