@@ -1,10 +1,12 @@
-MAKEFLAGS += --silent
+# MAKEFLAGS += --silent
 
 # Define SBT variable
 SBT = sbt
 
+.PHONY: clean docs update verilog synth sta test
+
 # Default target
-default: verilog
+default: synth
 
 docs:
 	@echo Generating docs
@@ -15,10 +17,9 @@ update:
 	@echo Updating...
 	rm -rf ~/.sbt
 	rm -rf ~/.ivy2
-	sbt clean
-	sbt dependencyUpdates
+	$(SBT) clean
+	$(SBT) dependencyUpdates
 
-# Start with a fresh directory
 clean:
 	@echo Cleaning...
 	rm -rf generated target *anno.json ./*.rpt doc/*.rpt syn/*.rpt syn.log out test_run_dir target
@@ -33,17 +34,10 @@ clean:
 	find . -type f -name "*.synctex.gz" -delete
 	find . -type f -name "*.pdf" -delete
 
-# Generate verilog from the Chisel code
 verilog:
 	@echo Generating Verilog...
 	@$(SBT) "runMain tech.rocksavage.Main verilog --mode print --module tech.rocksavage.chiselware.timer.Timer --config-class tech.rocksavage.chiselware.timer.TimerConfig"
 
-# Run the tests
-test:
-	@echo Running tests...
-	@$(SBT) test
-
-# Synthesize the design
 synth:
 	@echo Synthesizing...
 	@$(SBT) "runMain tech.rocksavage.Main synth --module tech.rocksavage.chiselware.timer.Timer --techlib synth/stdcells.lib --config-class tech.rocksavage.chiselware.timer.TimerConfig"
@@ -51,3 +45,9 @@ synth:
 sta:
 	@echo Running Timing Analysis...
 	@$(SBT) "runMain tech.rocksavage.Main sta --module tech.rocksavage.chiselware.timer.Timer --techlib synth/stdcells.lib --config-class tech.rocksavage.chiselware.timer.TimerConfig --clock-period 5.0"
+
+
+test:
+	@echo Running tests...
+	@$(SBT) test
+
