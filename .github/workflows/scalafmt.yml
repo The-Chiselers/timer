@@ -32,7 +32,7 @@ jobs:
 
       - name: Run Scalafmt
         run: |
-          /home/runner/.local/share/coursier/bin/scalafmt --non-interactive --diff
+          /home/runner/.local/share/coursier/bin/scalafmt --non-interactive --diff-branch main
 
       - name: Commit and push changes
         if: github.ref == 'refs/heads/main' # Only commit on main branch
