@@ -1,39 +1,14 @@
-name: Scalafmt
-on:
-  pull_request:
-    branches:
-      - main
-  push:
-    branches:
-      - main
+name: Check scalafmt on push
+on: [push]
 
 jobs:
-  scalafmt:
+  scalafmt-lint:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v1
         with:
-          fetch-depth: 0 # Fetch full history for proper blame tracking
-
-      - name: Set up JDK
-        uses: actions/setup-java@v3
+          fetch-depth: 1
+      - name: Checking your code to see if u r naughty or nice
+        uses: openlawteam/scalafmt-ci@v2
         with:
-          distribution: "temurin"
-          java-version: "17"
-
-      - name: Run Scalafmt
-        run: |
-          # Install coursier (Scalafmt's dependency)
-          curl -fLo cs https://git.io/coursier-cli-linux && chmod +x cs
-          ./cs launch com.lihaoyi:ammonite_2.13.10:2.5.6 --scala 2.13 -- \
-            -c 'import $ivy.`org.scalameta::scalafmt-cli:3.7.4`, scalafmt.cli.Cli; Cli.main(Array("--non-interactive", "--diff"))'
-
-      - name: Commit and push changes
-        if: github.ref == 'refs/heads/main' # Only commit on main branch
-        run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git add .
-          git diff --quiet && git diff --cached --quiet || git commit -m "Apply Scalafmt formatting"
-          git push
+          args: "--exclude=third_party --list"
