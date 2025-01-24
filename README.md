@@ -16,9 +16,10 @@ The `Timer` module is a configurable hardware timer designed for use in embedded
 
 ### Git
 
-Once cloned, add github actions to git blame ignore list:
-
 ```bash
+git clone [url].git
+git submodule update --init --recursive
+touch .git-blame-ignore-revs
 git config blame.ignoreRevsFile .git-blame-ignore-revs
 ``` 
 
