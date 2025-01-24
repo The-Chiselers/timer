@@ -15,7 +15,7 @@ permissions:
   contents: read
 
 jobs:
-  generate_verilog:
+  test:
     runs-on: ubuntu-latest
 
     steps:
