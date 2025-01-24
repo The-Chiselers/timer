@@ -12,16 +12,28 @@ The `Timer` module is a configurable hardware timer designed for use in embedded
 - **APB Integration**: Easily integrate with APB interfaces for memory-mapped I/O.
 - **Formal Verification Support**: Enable formal verification to ensure the correctness of the timer logic.
 
+## Setup
+
+### Git
+
+Once cloned, add github actions to git blame ignore list:
+
+```bash
+git config blame.ignoreRevsFile .git-blame-ignore-revs
+``` 
+
 ## Run Directions
 
 To run this project, use the following commands:
 
 ### Serialize to Verilog
+
 ```bash
 sbt "runMain tech.rocksavage.Main verilog --mode print --module tech.rocksavage.chiselware.timer.Timer  --config-class tech.rocksavage.chiselware.timer.TimerConfig"
 ```
 
 ### Synthesis
+
 ```bash
 sbt "runMain tech.rocksavage.Main synth --module tech.rocksavage.chiselware.timer.Timer --techlib synth/stdcells.lib  --config-class tech.rocksavage.chiselware.timer.TimerConfig"
 ```
@@ -29,6 +41,7 @@ sbt "runMain tech.rocksavage.Main synth --module tech.rocksavage.chiselware.time
 The results are written to the `./out/synth/$config` directories for each configuration.
 
 ### Sta
+
 ```bash
 sbt "runMain tech.rocksavage.Main sta --module tech.rocksavage.chiselware.timer.Timer --techlib synth/stdcells.lib  --config-class tech.rocksavage.chiselware.timer.TimerConfig --clock-period 5.0"
 ```
