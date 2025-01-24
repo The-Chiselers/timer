@@ -14,13 +14,13 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
         with:
-          fetch-depth: 0  # Fetch full history for proper blame tracking
+          fetch-depth: 0 # Fetch full history for proper blame tracking
 
       - name: Set up JDK
         uses: actions/setup-java@v3
         with:
-          distribution: 'temurin'
-          java-version: '17'
+          distribution: "temurin"
+          java-version: "17"
 
       - name: Install Coursier
         run: |
@@ -32,10 +32,10 @@ jobs:
 
       - name: Run Scalafmt
         run: |
-          scalafmt --non-interactive --diff
+          /home/runner/.local/share/coursier/bin/scalafmt --non-interactive --diff
 
       - name: Commit and push changes
-        if: github.ref == 'refs/heads/main'  # Only commit on main branch
+        if: github.ref == 'refs/heads/main' # Only commit on main branch
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
