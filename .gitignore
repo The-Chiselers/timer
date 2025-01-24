@@ -15,7 +15,7 @@ project/target/
 target/
 
 # scalafmt / github actions
-./cs
+cs
 
 # Jetbrains
 .idea/
