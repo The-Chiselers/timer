@@ -15,6 +15,7 @@ jobs:
         uses: actions/checkout@v3
         with:
           fetch-depth: 0 # Fetch full history for proper blame tracking
+          token: ${{ secrets.REPO_TOKEN }} # Use the token for authentication
 
       - name: Set up JDK
         uses: actions/setup-java@v3
@@ -32,7 +33,7 @@ jobs:
 
       - name: Run Scalafmt
         run: |
-          /home/runner/.local/share/coursier/bin/scalafmt --non-interactive --diff-branch main
+          scalafmt --non-interactive --diff-branch main
 
       - name: Commit and push changes
         if: github.ref == 'refs/heads/main' # Only commit on main branch
@@ -41,4 +42,4 @@ jobs:
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git add .
           git diff --quiet && git diff --cached --quiet || git commit -m "Apply Scalafmt formatting"
-          git push
+          git push https://${{ secrets.REPO_TOKEN }}@github.com/${{ github.repository }}.git
