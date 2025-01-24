@@ -31,7 +31,3 @@ jobs:
 
       - name: Test
         run: nix develop --command sbt test
-
-      - name: Run
-        run: nix develop --command sbt "runMain tech.rocksavage.Main verilog --mode print --module tech.rocksavage.chiselware.timer.Timer"
-
