@@ -24,31 +24,38 @@ lazy val registermap = RootProject(
   uri("https://github.com/The-Chiselers/registermap.git#main")
 )
 lazy val root = (project in file("."))
-  .settings(
-    name                   := "timer",
-    Test / publishArtifact := true,
-    libraryDependencies ++= Seq(
-      "org.chipsalliance" %% "chisel"     % chiselVersion,
-      "edu.berkeley.cs"   %% "chiseltest" % "6.0.0",
-      "org.rogach"        %% "scallop"    % "5.2.0"
-    ),
-    scalacOptions ++= Seq(
-      "-language:reflectiveCalls",
-      "-deprecation",
-      "-feature",
-      "-Xcheckinit",
-      "-Ymacro-annotations"
-    ),
-    addCompilerPlugin(
-      "org.chipsalliance" % "chisel-plugin" % chiselVersion cross CrossVersion.full
+    .settings(
+      name                   := "timer",
+      Test / publishArtifact := true,
+      libraryDependencies ++= Seq(
+        "org.chipsalliance" %% "chisel"     % chiselVersion,
+        "edu.berkeley.cs"   %% "chiseltest" % "6.0.0",
+        "org.rogach"        %% "scallop"    % "5.2.0"
+      ),
+      scalacOptions ++= Seq(
+        "-language:reflectiveCalls",
+        "-deprecation",
+        "-feature",
+        "-Xcheckinit",
+        "-Ymacro-annotations"
+      ),
+      addCompilerPlugin(
+        "org.chipsalliance" % "chisel-plugin" % chiselVersion cross CrossVersion.full
+      )
     )
-  )
-  .dependsOn(chisel_module_runner, stdlib, synth, addrdecode, apb, registermap)
+    .dependsOn(
+      chisel_module_runner,
+      stdlib,
+      synth,
+      addrdecode,
+      apb,
+      registermap
+    )
 val chiselVersion   = "6.6.0"
 val scalafmtVersion = "2.5.0"
 
 // Scala coverage settings
-coverageDataDir            := target.value / "../generated/scalaCoverage"
+coverageDataDir            := target.value / "../out/cov"
 coverageFailOnMinimum      := true
 coverageMinimumStmtTotal   := 90
 coverageMinimumBranchTotal := 95

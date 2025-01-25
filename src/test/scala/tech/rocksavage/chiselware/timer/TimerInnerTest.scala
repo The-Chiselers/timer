@@ -10,16 +10,16 @@ class TimerInnerTest
     with ChiselScalatestTester
     with Formal {
 
-  "TimerInner" should "formally verify" in {
+    "TimerInner" should "formally verify" in {
 
-    val addrWidth: Int  = 32
-    val dataWidth: Int  = 32
+        val addrWidth: Int = 32
+        val dataWidth: Int = 32
 
-    val countWidth: Int = 16
+        val countWidth: Int = 16
 
-    val p = TimerParams(dataWidth, addrWidth, countWidth)
+        val p = TimerParams(dataWidth, addrWidth, countWidth)
 
-    verify(new TimerInner(p, true), Seq(BoundedCheck(100)))
+        verify(new TimerInner(p, true), Seq(BoundedCheck(100)))
 
-  }
+    }
 }
