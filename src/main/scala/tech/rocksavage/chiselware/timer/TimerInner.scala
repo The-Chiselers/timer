@@ -118,25 +118,24 @@ class TimerInner(
     }
 
     // State transition logic
-    when(enReg) {
-        when(prescalerWrap || setCountReg) {
-            when(countSum >= maxCountReg || countOverflow) {
-                nextCount      := 0.U
-                nextMaxReached := true.B
-            }.otherwise {
-                nextCount      := countSum
-                nextMaxReached := false.B
-            }
+    when(prescalerWrap && !setCountReg) {
+        when(countSum >= maxCountReg || countOverflow) {
+            nextCount      := 0.U
+            nextMaxReached := true.B
+        }.otherwise {
+            nextCount      := countSum
+            nextMaxReached := false.B
+        }
+    }.otherwise {
+        when(setCountReg) {
+            nextCount      := setCountValueReg
+            nextMaxReached := false.B
         }.otherwise {
             nextCount      := countReg
             nextMaxReached := maxReachedReg
         }
-        nextPwm := countReg >= pwmCeilingReg
-    }.otherwise {
-        nextCount      := countReg
-        nextMaxReached := maxReachedReg
-        nextPwm        := pwmReg
     }
+    nextPwm := countReg >= pwmCeilingReg
 
     // ###################
     // Formal verification
