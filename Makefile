@@ -14,8 +14,8 @@ docs:
 	cd doc/user-guide && pdflatex -output-directory=$(shell pwd)/out/doc timer.tex | tee -a $(shell pwd)/out/doc/doc.rpt
 
 update:
-        @echo Updating...
-        sbt clean update
+	@echo Updating...
+	sbt clean update
 
 clean:
 	@echo Cleaning...
