@@ -21,7 +21,13 @@ git clone [url].git
 git submodule update --init --recursive
 touch .git-blame-ignore-revs
 git config blame.ignoreRevsFile .git-blame-ignore-revs
-``` 
+```
+
+### Update Submodules Only
+
+```bash
+git submodule update --init --recursive
+```
 
 ## Run Directions
 
