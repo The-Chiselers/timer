@@ -47,7 +47,7 @@ class Timer(val timerParams: TimerParams, formal: Boolean) extends Module {
     val setCount: Bool = RegInit(false.B)
     registerMap.createAddressableRegister(setCount, "setCount")
 
-    println("Register Map: " + registerMap.getRegisters)
+    // println("Register Map: " + registerMap.getRegisters)
 
     // Generate AddrDecode
     val addrDecodeParams = registerMap.getAddrDecodeParams
