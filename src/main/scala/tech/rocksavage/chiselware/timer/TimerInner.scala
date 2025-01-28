@@ -160,7 +160,8 @@ class TimerInner(
               prescalerReg,
               2
             ) === 0.U)
-        val enableStable2 = (enReg === past(enReg))
+        val enableStable3 =
+            (enReg === past(enReg)) && (past(enReg, 2) === past(enReg))
 
         when(enReg) {
             // ######################
@@ -169,7 +170,7 @@ class TimerInner(
             // assert that every cycle,
             // (prescaler > 0) implies ((nextCount > countReg) or (nextMaxReached))
             when(
-              maxCountStable3 && setCountStableLow3 && prescalerStableLow3 && enableStable2
+              maxCountStable3 && setCountStableLow3 && prescalerStableLow3 && enableStable3
             ) {
                 assert(madeProgressFV || maxReachedFV)
             }
