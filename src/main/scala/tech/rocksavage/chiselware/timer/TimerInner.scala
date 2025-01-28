@@ -162,6 +162,12 @@ class TimerInner(
             when(!setCountReg) {
                 assert(madeProgressFV || maxReachedFV)
             }
+
+            // ######################
+            // Safety Specification
+            // ######################
+            // assert that every cycle, the count is less than the maxCount
+            assert(nextCount < maxCountReg)
         }
     }
 }
