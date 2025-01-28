@@ -6,14 +6,20 @@ import tech.rocksavage.traits.ModuleConfig
 class TimerConfig extends ModuleConfig {
     override def getDefaultConfigs: Map[String, Any] = Map(
       "8_8_8" -> Seq(
-        TimerParams(dataWidth = 8, addressWidth = 8, countWidth = 8),
+        TimerParams(
+          dataWidth = 8,
+          addressWidth = 8,
+          countWidth = 8,
+          prescalerWidth = 8
+        ),
         false
       ),
       "16_16_16" -> Seq(
         TimerParams(
           dataWidth = 16,
           addressWidth = 16,
-          countWidth = 16
+          countWidth = 16,
+          prescalerWidth = 16
         ),
         false
       ),
@@ -21,7 +27,8 @@ class TimerConfig extends ModuleConfig {
         TimerParams(
           dataWidth = 32,
           addressWidth = 32,
-          countWidth = 32
+          countWidth = 32,
+          prescalerWidth = 32
         ),
         false
       ),
@@ -29,7 +36,8 @@ class TimerConfig extends ModuleConfig {
         TimerParams(
           dataWidth = 64,
           addressWidth = 64,
-          countWidth = 64
+          countWidth = 64,
+          prescalerWidth = 64
         ),
         false
       )

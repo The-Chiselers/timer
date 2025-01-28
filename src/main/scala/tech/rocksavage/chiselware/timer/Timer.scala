@@ -32,7 +32,7 @@ class Timer(val timerParams: TimerParams, formal: Boolean) extends Module {
     val en: Bool = RegInit(false.B)
     registerMap.createAddressableRegister(en, "en")
 
-    val prescaler: UInt = RegInit(0.U(timerParams.countWidth.W))
+    val prescaler: UInt = RegInit(0.U(timerParams.prescalerWidth.W))
     registerMap.createAddressableRegister(prescaler, "prescaler")
 
     val maxCount: UInt = RegInit(0.U(timerParams.countWidth.W))

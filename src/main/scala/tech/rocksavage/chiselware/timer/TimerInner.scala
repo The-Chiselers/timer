@@ -4,6 +4,7 @@ package tech.rocksavage.chiselware.timer
 
 import chisel3._
 import chisel3.util.Cat
+import chiseltest.formal.past
 import tech.rocksavage.chiselware.timer.bundle.TimerBundle
 import tech.rocksavage.chiselware.timer.param.TimerParams
 
@@ -78,12 +79,12 @@ class TimerInner(
     // ###################
 
     // Wires
-    val prescalerCounterNext = WireInit(0.U(params.countWidth.W))
+    val prescalerCounterNext = WireInit(0.U(params.prescalerWidth.W))
     val prescalerWrapNext    = WireInit(false.B)
     val countOverflowNext    = WireInit(false.B)
 
     // Regs
-    val prescalerCounterReg = RegInit(0.U(params.countWidth.W))
+    val prescalerCounterReg = RegInit(0.U(params.prescalerWidth.W))
     val prescalerWrapReg    = RegInit(false.B)
     val countOverflowReg    = RegInit(false.B)
 
@@ -97,23 +98,18 @@ class TimerInner(
     // - Only assigning Internal and Output Next values
     // ###################
 
-    countNext := computeCountNext(
-      en = enReg,
-      count = countReg,
-      setCount = setCountReg,
-      setCountValue = setCountValueReg,
-      prescalerWrap = prescalerWrapReg
-    )
-
-    maxReachedNext := computeMaxReachedNext(
-      en = enReg,
-      count = countReg,
-      countNext = countNext,
-      maxCount = maxCountReg,
-      setCount = setCountReg,
-      setCountValue = setCountValueReg,
-      prescalerWrap = prescalerWrapReg
-    )
+    val (countNextTemp, countOverflowNextTemp, maxReachedNextTemp) =
+        computeCount(
+          en = enReg,
+          count = countReg,
+          maxCount = maxCountReg,
+          setCount = setCountReg,
+          setCountValue = setCountValueReg,
+          prescalerWrap = prescalerWrapReg
+        )
+    countNext         := countNextTemp
+    countOverflowNext := countOverflowNextTemp
+    maxReachedNext    := maxReachedNextTemp
 
     pwmNext := computePwmNext(
       en = enReg,
@@ -123,22 +119,16 @@ class TimerInner(
 
     prescalerCounterNext := computePrescalerCounterNext(
       en = enReg,
+      setCount = setCountReg,
       prescalerCounter = prescalerCounterReg,
       prescaler = prescalerReg
     )
 
     prescalerWrapNext := computePrescalerWrapNext(
       en = enReg,
+      setCount = setCountReg,
       prescalerCounter = prescalerCounterReg,
       prescaler = prescalerReg
-    )
-
-    countOverflowNext := computeCountOverflowNext(
-      en = enReg,
-      count = countReg,
-      setCount = setCountReg,
-      setCountValue = setCountValueReg,
-      prescalerWrap = prescalerWrapReg
     )
 
     // ###################
@@ -155,85 +145,121 @@ class TimerInner(
         val madeProgressFV = (combinedTimerNext > combinedTimer)
         val maxReachedFV   = maxReachedNext
 
+        val maxCountStable3 = (past(maxCountReg) === maxCountReg) && (past(
+          maxCountReg,
+          2
+        ) === maxCountReg)
+        val maxCountStable2 = (maxCountReg === past(maxCountReg))
+        val setCountStableLow3 =
+            (setCountReg === 0.B) && (past(setCountReg) === 0.B) && (past(
+              setCountReg,
+              2
+            ) === 0.B)
+        val prescalerStableLow3 =
+            (prescalerReg === 0.U) && (past(prescalerReg) === 0.U) && (past(
+              prescalerReg,
+              2
+            ) === 0.U)
+        val enableStable2 = (enReg === past(enReg))
+
         when(enReg) {
             // ######################
             // Liveness Specification
             // ######################
             // assert that every cycle,
             // (prescaler > 0) implies ((nextCount > countReg) or (nextMaxReached))
-            when(!setCountReg) {
+            when(
+              maxCountStable3 && setCountStableLow3 && prescalerStableLow3 && enableStable2
+            ) {
                 assert(madeProgressFV || maxReachedFV)
             }
 
             // ######################
             // Clock Specification
             // ######################
-            // assert that every cycle, the count is less than the maxCount
-            assert(countReg < maxCountReg)
+            // assert that every cycle, the count is less than the maxCount if the maxCount is stable
+            // This is necessary since there is no synchronized maxCountNext as maxCount is a input
+            when(maxCountStable3 && setCountStableLow3) {
+                assert(countNext <= maxCountReg)
+            }
 
             // ######################
             // Prescaler Specification
             // ######################
-            // assert that every cycle, the prescaler is less than the prescalerReg
-            assert(prescalerCounterReg < prescalerReg)
+            // assert that every cycle, the prescaler is less than the prescalerReg if the prescalerReg is stable
+            // This is necessary since there is no synchronized prescalerNext as prescaler is a input
+            when(prescalerStableLow3 && setCountStableLow3) {
+                assert(prescalerCounterNext <= prescalerReg)
+            }
 
         }
     }
 
-    def computeCountNext(
+    def computeCount(
         en: Bool,
+        maxCount: UInt,
         count: UInt,
         setCount: Bool,
         setCountValue: UInt,
         prescalerWrap: Bool
     ) = {
-        val countNext = WireInit(0.U(params.countWidth.W))
+        val countNextBeforeBoundsCheck = WireInit(0.U(params.countWidth.W))
+        val countNext                  = WireInit(0.U(params.countWidth.W))
+        val countOverflowNext          = WireInit(false.B)
+        val maxReachedNext             = WireInit(false.B)
+
+        // Initial Count Assignment
         when(en) {
             when(setCount) {
-                countNext := setCountValue
-            }.otherwise {
-                when(prescalerWrap) {
-                    countNext := count + 1.U
+                countNextBeforeBoundsCheck := setCountValue
+            }.elsewhen(prescalerWrap) {
+                when(count >= maxCount) {
+                    countNextBeforeBoundsCheck := 0.U
                 }.otherwise {
-                    countNext := count
+                    countNextBeforeBoundsCheck := count + 1.U
                 }
+            }.otherwise {
+                countNextBeforeBoundsCheck := count
             }
         }.otherwise {
-            countNext := count
+            countNextBeforeBoundsCheck := count
         }
-        countNext
-    }
 
-    def computeMaxReachedNext(
-        en: Bool,
-        count: UInt,
-        countNext: UInt,
-        maxCount: UInt,
-        setCount: Bool,
-        setCountValue: UInt,
-        prescalerWrap: Bool
-    ) = {
-        val maxReachedNext = WireInit(false.B)
+        // Initial Count Overflow Assignment
+        when(en) {
+            when(setCount) {
+                countOverflowNext := false.B
+            }.elsewhen(prescalerWrap) {
+                countOverflowNext := (countNextBeforeBoundsCheck === 0.U) & prescalerWrap
+            }.otherwise {
+                countOverflowNext := false.B
+            }
+        }.otherwise {
+            countOverflowNext := false.B
+        }
+
+        // Check if the count has reached the maxCount
         when(en) {
             when(setCount) {
                 maxReachedNext := false.B
             }.otherwise {
-                when(prescalerWrap) {
-                    when(
-                      countNext >= maxCount || (countNext === 0.U && prescalerWrap)
-                    ) {
-                        maxReachedNext := true.B
-                    }.otherwise {
-                        maxReachedNext := false.B
-                    }
-                }.otherwise {
-                    maxReachedNext := false.B
-                }
+                maxReachedNext := (countNextBeforeBoundsCheck >= maxCount) || countOverflowNext
             }
         }.otherwise {
             maxReachedNext := false.B
         }
-        maxReachedNext
+
+        when(en) {
+            when(maxReachedNext) {
+                countNext := 0.U
+            }.otherwise {
+                countNext := countNextBeforeBoundsCheck
+            }
+        }.otherwise {
+            countNext := count
+        }
+
+        (countNext, countOverflowNext, maxReachedNext)
     }
 
     def computePwmNext(
@@ -252,12 +278,13 @@ class TimerInner(
 
     def computePrescalerCounterNext(
         en: Bool,
+        setCount: Bool,
         prescalerCounter: UInt,
         prescaler: UInt
     ) = {
         val prescalerCounterNext = WireInit(0.U(params.countWidth.W))
         when(en) {
-            when(prescalerCounter === prescaler) {
+            when(prescalerCounter >= prescaler || setCount) {
                 prescalerCounterNext := 0.U
             }.otherwise {
                 prescalerCounterNext := prescalerCounter + 1.U
@@ -270,39 +297,16 @@ class TimerInner(
 
     def computePrescalerWrapNext(
         en: Bool,
+        setCount: Bool,
         prescalerCounter: UInt,
         prescaler: UInt
     ) = {
         val prescalerWrapNext = WireInit(false.B)
         when(en) {
-            when(prescalerCounter === prescaler) {
-                prescalerWrapNext := true.B
-            }.otherwise {
-                prescalerWrapNext := false.B
-            }
+            prescalerWrapNext := (prescalerCounter === prescaler) || setCount
         }.otherwise {
             prescalerWrapNext := false.B
         }
         prescalerWrapNext
-    }
-
-    def computeCountOverflowNext(
-        en: Bool,
-        count: UInt,
-        setCount: Bool,
-        setCountValue: UInt,
-        prescalerWrap: Bool
-    ) = {
-        val countOverflowNext = WireInit(false.B)
-        when(en) {
-            when(setCount) {
-                countOverflowNext := false.B
-            }.otherwise {
-                countOverflowNext := (count === 0.U) && prescalerWrap
-            }
-        }.otherwise {
-            countOverflowNext := false.B
-        }
-        countOverflowNext
     }
 }

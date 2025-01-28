@@ -15,9 +15,10 @@ class TimerInnerTest
         val addrWidth: Int = 32
         val dataWidth: Int = 32
 
-        val countWidth: Int = 16
+        val countWidth: Int     = 16
+        val prescalerWidth: Int = 16
 
-        val p = TimerParams(dataWidth, addrWidth, countWidth)
+        val p = TimerParams(dataWidth, addrWidth, countWidth, prescalerWidth)
 
         verify(new TimerInner(p, true), Seq(BoundedCheck(100)))
 
