@@ -15,7 +15,7 @@
                 '';
             in 
         {
-            aarch64-darwin = with nixpkgs.legacyPackages.aarch64-darwin; mkShellNoCC {
+            aarch64-darwin = with nixpkgs.legacyPackages.aarch64-darwin; mkShell {
                 packages = with pkgs; [
 
                     # Scala
