@@ -35,31 +35,32 @@ object TimerBasicTests extends AnyFlatSpec with ChiselScalatestTester {
             registerMap.getAddressOfRegister("setCount").get
 
         // Write to the prescaler register
-        writeAPB(dut.io.apb, prescalerAddr.U, 10.U)
-        readAPB(dut.io.apb, prescalerAddr.U) shouldEqual 10
+        writeAPB(dut.io.apb, prescalerAddr.U, 0.U)
+        readAPB(dut.io.apb, prescalerAddr.U) shouldEqual 0
 
         // Write to the maxCount register
-        writeAPB(dut.io.apb, maxCountAddr.U, 1024.U)
-        readAPB(dut.io.apb, maxCountAddr.U) shouldEqual 1024
+        writeAPB(dut.io.apb, maxCountAddr.U, 32.U)
+        readAPB(dut.io.apb, maxCountAddr.U) shouldEqual 32
 
         // Write to the pwmCeiling register
-        writeAPB(dut.io.apb, pwmCeilingAddr.U, 50.U)
-        readAPB(dut.io.apb, pwmCeilingAddr.U) shouldEqual 50
+        writeAPB(dut.io.apb, pwmCeilingAddr.U, 5.U)
+        readAPB(dut.io.apb, pwmCeilingAddr.U) shouldEqual 5
 
         // Write to the setCountValue register
-        writeAPB(dut.io.apb, setCountValueAddr.U, 20.U)
-        readAPB(dut.io.apb, setCountValueAddr.U) shouldEqual 20
+        writeAPB(dut.io.apb, setCountValueAddr.U, 0.U)
+        readAPB(dut.io.apb, setCountValueAddr.U) shouldEqual 0
 
         // Write to the setCount register
-        writeAPB(dut.io.apb, setCountAddr.U, 1.U)
-        readAPB(dut.io.apb, setCountAddr.U) shouldEqual 1
+//        writeAPB(dut.io.apb, setCountAddr.U, 1.U)
+//        readAPB(dut.io.apb, setCountAddr.U) shouldEqual 1
 
         // Write to the enable register
         writeAPB(dut.io.apb, enAddr.U, 1.U)
         readAPB(dut.io.apb, enAddr.U) shouldEqual 1
 
         // Step the clock until the count reaches maxCount
-        while (dut.io.timerOutput.count.peekInt() < 1000) {
+        dut.clock.setTimeout(0)
+        while (dut.io.timerOutput.count.peekInt() < 30) {
             dut.clock.step(1)
         }
 

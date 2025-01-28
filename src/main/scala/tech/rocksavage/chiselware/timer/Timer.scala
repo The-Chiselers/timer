@@ -6,11 +6,7 @@ import chisel3._
 import tech.rocksavage.chiselware.addrdecode.{AddrDecode, AddrDecodeError}
 import tech.rocksavage.chiselware.addressable.RegisterMap
 import tech.rocksavage.chiselware.apb.{ApbBundle, ApbParams}
-import tech.rocksavage.chiselware.timer.bundle.{
-    TimerInterruptBundle,
-    TimerInterruptEnum,
-    TimerOutputBundle
-}
+import tech.rocksavage.chiselware.timer.bundle.{TimerInterruptBundle, TimerInterruptEnum, TimerOutputBundle}
 import tech.rocksavage.chiselware.timer.param.TimerParams
 
 class Timer(val timerParams: TimerParams, formal: Boolean) extends Module {
@@ -25,9 +21,8 @@ class Timer(val timerParams: TimerParams, formal: Boolean) extends Module {
         val interrupt   = new TimerInterruptBundle
     })
 
-
     // Create a RegisterMap to manage the addressable registers
-        val registerMap = new RegisterMap(dataWidth, addressWidth)
+    val registerMap = new RegisterMap(dataWidth, addressWidth)
 
     // Now define your registers without the macro
     val en: Bool = RegInit(false.B)

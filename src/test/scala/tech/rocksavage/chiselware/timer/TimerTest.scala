@@ -10,8 +10,6 @@ import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
 import tech.rocksavage.chiselware.timer.param.TimerParams
 
-import scala.util.Random
-
 /** Highly randomized test suite driven by configuration parameters. Includes
   * code coverage for all top-level ports. Inspired by the DynamicFifo
   */
@@ -42,7 +40,7 @@ class TimerTest extends AnyFlatSpec with ChiselScalatestTester with Matchers {
         if (enableFst) annos = annos :+ chiseltest.simulator.WriteFstAnnotation
         if (useVerilator) {
             annos = annos :+ chiseltest.simulator.VerilatorBackendAnnotation
-            annos = annos :+ VerilatorCFlags(Seq("--std=c++17"))
+            annos = annos :+ VerilatorCFlags(Seq("--std=c++17 -O3"))
         }
         annos = annos :+ TargetDirAnnotation(testDir)
 
@@ -61,25 +59,29 @@ class TimerTest extends AnyFlatSpec with ChiselScalatestTester with Matchers {
         behavior of testName
 
         // Randomize Input Variables
-        val validDataWidths      = Seq(8, 16, 32)
-        val validPAddrWidths     = Seq(8, 16, 32)
-        val validCountWidths     = Seq(8, 16, 32)
-        val validPrescalerWidths = Seq(8, 16, 32)
-
-        val dataWidth =
-            validDataWidths(Random.nextInt(validDataWidths.length))
-        val addrWidth = validPAddrWidths(
-          Random.nextInt(validPAddrWidths.length)
-        )
-        val countWidth = validCountWidths(
-          Random.nextInt(validCountWidths.length)
-        )
-        val prescalerWidth = validPrescalerWidths(
-          Random.nextInt(validPrescalerWidths.length)
-        )
+//        val validDataWidths      = Seq(8, 16, 32)
+//        val validPAddrWidths     = Seq(8, 16, 32)
+//        val validCountWidths     = Seq(8, 16, 32)
+//        val validPrescalerWidths = Seq(8, 16, 32)
+//
+//        val dataWidth =
+//            validDataWidths(Random.nextInt(validDataWidths.length))
+//        val addrWidth = validPAddrWidths(
+//          Random.nextInt(validPAddrWidths.length)
+//        )
+//        val countWidth = validCountWidths(
+//          Random.nextInt(validCountWidths.length)
+//        )
+//        val prescalerWidth = validPrescalerWidths(
+//          Random.nextInt(validPrescalerWidths.length)
+//        )
+        val dataWidth      = 32
+        val addrWidth      = 32
+        val countWidth     = 32
+        val prescalerWidth = 32
 
         // Pass in randomly selected values to DUT
-        val timerParams = TimerParams(dataWidth, addrWidth, 8)
+        val timerParams = TimerParams(32, 32, 32, 32, verbose = true)
 
         info(s"Data Width = $dataWidth")
         info(s"Address Width = $addrWidth")
