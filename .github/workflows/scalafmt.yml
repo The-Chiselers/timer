@@ -44,6 +44,8 @@ jobs:
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git add .
           git diff --quiet && git diff --cached --quiet || git commit -m "[gh-bot] Apply Scalafmt formatting"
+          git push https://${{ secrets.REPO_TOKEN }}@github.com/${{ github.repository }}.git HEAD:main
+
 
           echo "$(git rev-parse HEAD)" >> .git-blame-ignore-revs
           git add .git-blame-ignore-revs
