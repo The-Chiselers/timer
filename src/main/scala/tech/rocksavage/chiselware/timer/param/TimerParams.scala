@@ -28,7 +28,10 @@ case class TimerParams(
 
     // Parameters for the counter
     countWidth: Int = 32,
-    prescalerWidth: Int = 32
+    prescalerWidth: Int = 32,
+
+    // Cov
+    coverage: Boolean = false
 ) {
 
     require(dataWidth >= 1, "Data Width must be greater than or equal 1")
