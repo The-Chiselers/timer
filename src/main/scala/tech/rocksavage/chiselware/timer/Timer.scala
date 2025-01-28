@@ -25,8 +25,9 @@ class Timer(val timerParams: TimerParams, formal: Boolean) extends Module {
         val interrupt   = new TimerInterruptBundle
     })
 
+
     // Create a RegisterMap to manage the addressable registers
-    val registerMap = new RegisterMap(dataWidth, addressWidth)
+        val registerMap = new RegisterMap(dataWidth, addressWidth)
 
     // Now define your registers without the macro
     val en: Bool = RegInit(false.B)
