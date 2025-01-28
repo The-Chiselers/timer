@@ -8,12 +8,16 @@ import chiseltest.formal.past
 import tech.rocksavage.chiselware.timer.bundle.TimerBundle
 import tech.rocksavage.chiselware.timer.param.TimerParams
 
-/** An address decoder that can be used to decode addresses into a set of ranges
+/** An Timer modules that
+  *
+  * @assume
+  *   This module does not buffer the input signals
+  *   It is assumed that the input signals are already synchronized
   *
   * @constructor
-  *   Create a new address decoder
+  *   Create a new timer module
   * @param params
-  *   GpioParams object including dataWidth and addressWidth
+  *   TimerParams object including dataWidth and addressWidth, as well as countWidth and prescalerWidth
   * @param formal
   *   A boolean value to enable formal verification
   * @author
@@ -36,20 +40,20 @@ class TimerInner(
     // ###################
 
     // Regs
-    val enReg            = RegInit(false.B)
-    val prescalerReg     = RegInit(0.U(params.prescalerWidth.W))
-    val maxCountReg      = RegInit(0.U(params.countWidth.W))
-    val pwmCeilingReg    = RegInit(0.U(params.countWidth.W))
-    val setCountValueReg = RegInit(0.U(params.countWidth.W))
-    val setCountReg      = RegInit(false.B)
+    val enWire            = WireInit(false.B)
+    val prescalerWire     = WireInit(0.U(params.prescalerWidth.W))
+    val maxCountWire      = WireInit(0.U(params.countWidth.W))
+    val pwmCeilingWire    = WireInit(0.U(params.countWidth.W))
+    val setCountValueWire = WireInit(0.U(params.countWidth.W))
+    val setCountWire      = WireInit(false.B)
 
     // Assignment
-    enReg            := io.timerInputBundle.en
-    prescalerReg     := io.timerInputBundle.prescaler
-    maxCountReg      := io.timerInputBundle.maxCount
-    pwmCeilingReg    := io.timerInputBundle.pwmCeiling
-    setCountValueReg := io.timerInputBundle.setCountValue
-    setCountReg      := io.timerInputBundle.setCount
+    enWire            := io.timerInputBundle.en
+    prescalerWire     := io.timerInputBundle.prescaler
+    maxCountWire      := io.timerInputBundle.maxCount
+    pwmCeilingWire    := io.timerInputBundle.pwmCeiling
+    setCountValueWire := io.timerInputBundle.setCountValue
+    setCountWire      := io.timerInputBundle.setCount
 
     // ###################
     // Output
@@ -100,11 +104,11 @@ class TimerInner(
 
     val (countNextTemp, countOverflowNextTemp, maxReachedNextTemp) =
         computeCount(
-          en = enReg,
+          en = enWire,
           count = countReg,
-          maxCount = maxCountReg,
-          setCount = setCountReg,
-          setCountValue = setCountValueReg,
+          maxCount = maxCountWire,
+          setCount = setCountWire,
+          setCountValue = setCountValueWire,
           prescalerWrap = prescalerWrapReg
         )
     countNext         := countNextTemp
@@ -112,23 +116,23 @@ class TimerInner(
     maxReachedNext    := maxReachedNextTemp
 
     pwmNext := computePwmNext(
-      en = enReg,
+      en = enWire,
       count = countReg,
-      pwmCeiling = pwmCeilingReg
+      pwmCeiling = pwmCeilingWire
     )
 
     prescalerCounterNext := computePrescalerCounterNext(
-      en = enReg,
-      setCount = setCountReg,
+      en = enWire,
+      setCount = setCountWire,
       prescalerCounter = prescalerCounterReg,
-      prescaler = prescalerReg
+      prescaler = prescalerWire
     )
 
     prescalerWrapNext := computePrescalerWrapNext(
-      en = enReg,
-      setCount = setCountReg,
+      en = enWire,
+      setCount = setCountWire,
       prescalerCounter = prescalerCounterReg,
-      prescaler = prescalerReg
+      prescaler = prescalerWire
     )
 
     // ###################
@@ -145,25 +149,24 @@ class TimerInner(
         val madeProgressFV = (combinedTimerNext > combinedTimer)
         val maxReachedFV   = maxReachedNext
 
-        val maxCountStable3 = (past(maxCountReg) === maxCountReg) && (past(
-          maxCountReg,
+        val maxCountStable3 = (past(maxCountWire) === maxCountWire) && (past(
+          maxCountWire,
           2
-        ) === maxCountReg)
-        val maxCountStable2 = (maxCountReg === past(maxCountReg))
+        ) === maxCountWire)
         val setCountStableLow3 =
-            (setCountReg === 0.B) && (past(setCountReg) === 0.B) && (past(
-              setCountReg,
+            (setCountWire === 0.B) && (past(setCountWire) === 0.B) && (past(
+              setCountWire,
               2
             ) === 0.B)
         val prescalerStableLow3 =
-            (prescalerReg === 0.U) && (past(prescalerReg) === 0.U) && (past(
-              prescalerReg,
+            (prescalerWire === 0.U) && (past(prescalerWire) === 0.U) && (past(
+              prescalerWire,
               2
             ) === 0.U)
         val enableStable3 =
-            (enReg === past(enReg)) && (past(enReg, 2) === past(enReg))
+            (enWire === past(enWire)) && (past(enWire, 2) === past(enWire))
 
-        when(enReg) {
+        when(enWire) {
             // ######################
             // Liveness Specification
             // ######################
@@ -181,7 +184,7 @@ class TimerInner(
             // assert that every cycle, the count is less than the maxCount if the maxCount is stable
             // This is necessary since there is no synchronized maxCountNext as maxCount is a input
             when(maxCountStable3 && setCountStableLow3) {
-                assert(countNext <= maxCountReg)
+                assert(countNext <= maxCountWire)
             }
 
             // ######################
@@ -190,7 +193,7 @@ class TimerInner(
             // assert that every cycle, the prescaler is less than the prescalerReg if the prescalerReg is stable
             // This is necessary since there is no synchronized prescalerNext as prescaler is a input
             when(prescalerStableLow3 && setCountStableLow3) {
-                assert(prescalerCounterNext <= prescalerReg)
+                assert(prescalerCounterNext <= prescalerWire)
             }
 
         }

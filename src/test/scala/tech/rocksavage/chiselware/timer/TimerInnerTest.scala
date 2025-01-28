@@ -20,7 +20,7 @@ class TimerInnerTest
 
         val p = TimerParams(dataWidth, addrWidth, countWidth, prescalerWidth)
 
-        verify(new TimerInner(p, true), Seq(BoundedCheck(100)))
+        verify(new TimerInnerFVHarness(p, true), Seq(BoundedCheck(100)))
 
     }
 }
