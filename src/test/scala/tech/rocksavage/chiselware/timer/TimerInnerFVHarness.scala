@@ -9,26 +9,26 @@ import tech.rocksavage.chiselware.timer.bundle.TimerBundle
 import tech.rocksavage.chiselware.timer.param.TimerParams
 
 /** An address decoder that can be used to decode addresses into a set of ranges
- *
- * @constructor
- *   Create a new address decoder
- * @param params
- *   GpioParams object including dataWidth and addressWidth
- * @param formal
- *   A boolean value to enable formal verification
- * @author
- *   Warren Savage
- */
+  *
+  * @constructor
+  *   Create a new address decoder
+  * @param params
+  *   GpioParams object including dataWidth and addressWidth
+  * @param formal
+  *   A boolean value to enable formal verification
+  * @author
+  *   Warren Savage
+  */
 class TimerInnerFVHarness(
-                    params: TimerParams,
-                    formal: Boolean = false
-                ) extends Module {
+    params: TimerParams,
+    formal: Boolean = false
+) extends Module {
 
     /** Returns the number of memory addresses used by the module
-     *
-     * @return
-     *   The width of the memory
-     */
+      *
+      * @return
+      *   The width of the memory
+      */
     val io = IO(new TimerBundle(params))
 
     // ###################

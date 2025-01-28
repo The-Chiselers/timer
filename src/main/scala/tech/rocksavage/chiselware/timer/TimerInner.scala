@@ -8,25 +8,27 @@ import chiseltest.formal.past
 import tech.rocksavage.chiselware.timer.bundle.TimerBundle
 import tech.rocksavage.chiselware.timer.param.TimerParams
 
-/**
- * A Timer module that implements a configurable timer with prescaler, count, and PWM functionality.
- *
- * @assume
- *   This module does not buffer the input signals. It is assumed that the input signals are already synchronized.
- *
- * @constructor
- *   Create a new timer module.
- * @param params
- *   TimerParams object including dataWidth, addressWidth, countWidth, and prescalerWidth.
- * @param formal
- *   A boolean value to enable formal verification.
- * @author
- *   Warren Savage
- */
+/** A Timer module that implements a configurable timer with prescaler, count,
+  * and PWM functionality.
+  *
+  * @assume
+  *   This module does not buffer the input signals. It is assumed that the
+  *   input signals are already synchronized.
+  *
+  * @constructor
+  *   Create a new timer module.
+  * @param params
+  *   TimerParams object including dataWidth, addressWidth, countWidth, and
+  *   prescalerWidth.
+  * @param formal
+  *   A boolean value to enable formal verification.
+  * @author
+  *   Warren Savage
+  */
 class TimerInner(
-                    params: TimerParams,
-                    formal: Boolean = false
-                ) extends Module {
+    params: TimerParams,
+    formal: Boolean = false
+) extends Module {
 
     val io = IO(new TimerBundle(params))
 
@@ -196,32 +198,33 @@ class TimerInner(
         }
     }
 
-    /**
-     * Computes the next value for the count, count overflow, and max reached signals.
-     *
-     * @param en
-     *   Enable signal for the timer.
-     * @param maxCount
-     *   Maximum count value.
-     * @param count
-     *   Current count value.
-     * @param setCount
-     *   Signal to set the count to a specific value.
-     * @param setCountValue
-     *   Value to set the count to if setCount is true.
-     * @param prescalerWrap
-     *   Signal indicating that the prescaler has wrapped around.
-     * @return
-     *   A tuple containing the next count value, count overflow signal, and max reached signal.
-     */
+    /** Computes the next value for the count, count overflow, and max reached
+      * signals.
+      *
+      * @param en
+      *   Enable signal for the timer.
+      * @param maxCount
+      *   Maximum count value.
+      * @param count
+      *   Current count value.
+      * @param setCount
+      *   Signal to set the count to a specific value.
+      * @param setCountValue
+      *   Value to set the count to if setCount is true.
+      * @param prescalerWrap
+      *   Signal indicating that the prescaler has wrapped around.
+      * @return
+      *   A tuple containing the next count value, count overflow signal, and
+      *   max reached signal.
+      */
     def computeCount(
-                        en: Bool,
-                        maxCount: UInt,
-                        count: UInt,
-                        setCount: Bool,
-                        setCountValue: UInt,
-                        prescalerWrap: Bool
-                    ) = {
+        en: Bool,
+        maxCount: UInt,
+        count: UInt,
+        setCount: Bool,
+        setCountValue: UInt,
+        prescalerWrap: Bool
+    ) = {
         val countNextBeforeBoundsCheck = WireInit(0.U(params.countWidth.W))
         val countNext                  = WireInit(0.U(params.countWidth.W))
         val countOverflowNext          = WireInit(false.B)
@@ -289,23 +292,22 @@ class TimerInner(
         (countNext, countOverflowNext, maxReachedNext)
     }
 
-    /**
-     * Computes the next value for the PWM signal.
-     *
-     * @param en
-     *   Enable signal for the timer.
-     * @param count
-     *   Current count value.
-     * @param pwmCeiling
-     *   PWM ceiling value.
-     * @return
-     *   The next value for the PWM signal.
-     */
+    /** Computes the next value for the PWM signal.
+      *
+      * @param en
+      *   Enable signal for the timer.
+      * @param count
+      *   Current count value.
+      * @param pwmCeiling
+      *   PWM ceiling value.
+      * @return
+      *   The next value for the PWM signal.
+      */
     def computePwmNext(
-                          en: Bool,
-                          count: UInt,
-                          pwmCeiling: UInt
-                      ) = {
+        en: Bool,
+        count: UInt,
+        pwmCeiling: UInt
+    ) = {
         val pwmNext = WireInit(false.B)
         when(en) {
             pwmNext := count >= pwmCeiling
@@ -315,26 +317,25 @@ class TimerInner(
         pwmNext
     }
 
-    /**
-     * Computes the next value for the prescaler counter.
-     *
-     * @param en
-     *   Enable signal for the timer.
-     * @param setCount
-     *   Signal to set the count to a specific value.
-     * @param prescalerCounter
-     *   Current prescaler counter value.
-     * @param prescaler
-     *   Prescaler value.
-     * @return
-     *   The next value for the prescaler counter.
-     */
+    /** Computes the next value for the prescaler counter.
+      *
+      * @param en
+      *   Enable signal for the timer.
+      * @param setCount
+      *   Signal to set the count to a specific value.
+      * @param prescalerCounter
+      *   Current prescaler counter value.
+      * @param prescaler
+      *   Prescaler value.
+      * @return
+      *   The next value for the prescaler counter.
+      */
     def computePrescalerCounterNext(
-                                       en: Bool,
-                                       setCount: Bool,
-                                       prescalerCounter: UInt,
-                                       prescaler: UInt
-                                   ) = {
+        en: Bool,
+        setCount: Bool,
+        prescalerCounter: UInt,
+        prescaler: UInt
+    ) = {
         val prescalerCounterNext = WireInit(0.U(params.countWidth.W))
         when(en) {
             when(prescalerCounter >= prescaler || setCount) {
@@ -348,26 +349,25 @@ class TimerInner(
         prescalerCounterNext
     }
 
-    /**
-     * Computes the next value for the prescaler wrap signal.
-     *
-     * @param en
-     *   Enable signal for the timer.
-     * @param setCount
-     *   Signal to set the count to a specific value.
-     * @param prescalerCounter
-     *   Current prescaler counter value.
-     * @param prescaler
-     *   Prescaler value.
-     * @return
-     *   The next value for the prescaler wrap signal.
-     */
+    /** Computes the next value for the prescaler wrap signal.
+      *
+      * @param en
+      *   Enable signal for the timer.
+      * @param setCount
+      *   Signal to set the count to a specific value.
+      * @param prescalerCounter
+      *   Current prescaler counter value.
+      * @param prescaler
+      *   Prescaler value.
+      * @return
+      *   The next value for the prescaler wrap signal.
+      */
     def computePrescalerWrapNext(
-                                    en: Bool,
-                                    setCount: Bool,
-                                    prescalerCounter: UInt,
-                                    prescaler: UInt
-                                ) = {
+        en: Bool,
+        setCount: Bool,
+        prescalerCounter: UInt,
+        prescaler: UInt
+    ) = {
         val prescalerWrapNext = WireInit(false.B)
         when(en) {
             prescalerWrapNext := (prescalerCounter === prescaler) || setCount
