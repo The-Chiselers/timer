@@ -14,45 +14,46 @@ import java.io.{File, PrintWriter}
 object TestUtils {
 
     /** Checks coverage and writes results to a file
-     *
-     * All chiselWare-compliant cores must have tests that exercise all IO ports.
-     *
-     * Chiseltest coverage utilities are used to achieve this. Coverage data is
-     * stored in a Map. This utility processes that map file, checking that all
-     * ports are toggled and returns an error if there is a stuck-at port which
-     * indicates that the test is not sufficiently robust.
-     *
-     * The full report is written to the doc directory as part of the standard
-     * deliverables.
-     *
-     * {{{
-     * val result = checkCoverage(myCovMap,"cov.rpt")
-     * }}}
-     *
-     * @param coverage
-     *   the coverage Map containing coverage data
-     * @param file
-     *   the name of the file to write the coverage report
-     * @return
-     *   whether the coverage passed or failed
-     */
+      *
+      * All chiselWare-compliant cores must have tests that exercise all IO
+      * ports.
+      *
+      * Chiseltest coverage utilities are used to achieve this. Coverage data is
+      * stored in a Map. This utility processes that map file, checking that all
+      * ports are toggled and returns an error if there is a stuck-at port which
+      * indicates that the test is not sufficiently robust.
+      *
+      * The full report is written to the doc directory as part of the standard
+      * deliverables.
+      *
+      * {{{
+      * val result = checkCoverage(myCovMap,"cov.rpt")
+      * }}}
+      *
+      * @param coverage
+      *   the coverage Map containing coverage data
+      * @param file
+      *   the name of the file to write the coverage report
+      * @return
+      *   whether the coverage passed or failed
+      */
     def checkCoverage(coverage: Map[String, Long], file: String): Boolean = {
-        val cov = new File(file)
-        val covFile = new PrintWriter(cov)
-        val numTicks = coverage("tick")
-        val netCoverage = coverage.view.filterKeys(_ != "dut.tick").toMap
+        val cov            = new File(file)
+        val covFile        = new PrintWriter(cov)
+        val numTicks       = coverage("tick")
+        val netCoverage    = coverage.view.filterKeys(_ != "dut.tick").toMap
         val sortedCoverage = ListMap(netCoverage.toSeq.sortBy(_._1): _*).toMap
-        var stuckAtOne = false
-        var stuckAtZero = false
-        val separator = "-" * 80
+        var stuckAtOne     = false
+        var stuckAtZero    = false
+        val separator      = "-" * 80
         covFile.write(separator + "\n")
         covFile.write("%\t\t\t\t\t\t\t\t\tCount\t\t\t\tCoverage Point \n")
         covFile.write(separator + "\n")
         sortedCoverage.keys.foreach((coverPoint) => {
             val toggleCount = sortedCoverage(coverPoint)
-            val togglePct = toggleCount.toDouble / numTicks * 100
+            val togglePct   = toggleCount.toDouble / numTicks * 100
             covFile.write(
-                f"${togglePct}%1.2f\t\t\t\t\t ${toggleCount}%8s\t\t\t\t${coverPoint}\n"
+              f"${togglePct}%1.2f\t\t\t\t\t ${toggleCount}%8s\t\t\t\t${coverPoint}\n"
             )
             if (toggleCount == 0) {
                 covFile.write(s"${coverPoint} is stuck at 0 \n")
@@ -70,20 +71,20 @@ object TestUtils {
     }
 
     /** Return a random data word of arbitrary length
-     *
-     * Built-in scala random number generators do not work for generating random
-     * numbers for words that are of a length not divisible by 4. This utility
-     * returns a randomized bit vector where every bit is randomized.
-     *
-     * {{{
-     * val myData = randData(19) // return a 19-bit word of random data
-     * }}}
-     *
-     * @param width
-     *   the coverage Map containing coverage data
-     * @return
-     *   a word with random data
-     */
+      *
+      * Built-in scala random number generators do not work for generating
+      * random numbers for words that are of a length not divisible by 4. This
+      * utility returns a randomized bit vector where every bit is randomized.
+      *
+      * {{{
+      * val myData = randData(19) // return a 19-bit word of random data
+      * }}}
+      *
+      * @param width
+      *   the coverage Map containing coverage data
+      * @return
+      *   a word with random data
+      */
     def randData(width: Int): UInt = {
 
         // format: off
@@ -102,9 +103,9 @@ object TestUtils {
         // format: on
         def getHexString(x: Int): String = {
             val hexStringRem0 = "0123456789abcdef" // no extra bits
-            val hexStringRem1 = "01" // one extra bit
-            val hexStringRem2 = "0123" // two extra bits
-            val hexStringRem3 = "01234567" // three extra bits
+            val hexStringRem1 = "01"               // one extra bit
+            val hexStringRem2 = "0123"             // two extra bits
+            val hexStringRem3 = "01234567"         // three extra bits
             return x match {
                 case 0 => hexStringRem0
                 case 1 => hexStringRem1
@@ -119,7 +120,7 @@ object TestUtils {
             else { return 1 }
         }
 
-        val numNibbles = width / 4
+        val numNibbles      = width / 4
         val numLeftOverBits = width % 4
 
         // format: off
@@ -133,7 +134,7 @@ object TestUtils {
          */
         // format: on
 
-        val randFullNibble = getHexString(0)
+        val randFullNibble    = getHexString(0)
         val randPartialNibble = getHexString(numLeftOverBits)
 
         // format: off
