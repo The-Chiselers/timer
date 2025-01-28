@@ -27,10 +27,15 @@ case class TimerParams(
     addressWidth: Int = 32,
 
     // Parameters for the counter
-    countWidth: Int = 32
+    countWidth: Int = 32,
+    prescalerWidth: Int = 32
 ) {
 
     require(dataWidth >= 1, "Data Width must be greater than or equal 1")
     require(addressWidth >= 1, "Address Width must be greater than or equal 1")
     require(countWidth >= 1, "Count Width must be greater than or equal 1")
+    require(
+      prescalerWidth >= 1,
+      "Prescaler Width must be greater than or equal 1"
+    )
 }

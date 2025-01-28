@@ -18,7 +18,7 @@ class TimerInputBundle(params: TimerParams) extends Bundle {
     val en = Input(Bool())
 
     /** Prescaler value to divide the clock frequency. */
-    val prescaler = Input(UInt(params.countWidth.W))
+    val prescaler = Input(UInt(params.prescalerWidth.W))
 
     /** Maximum count value before the timer resets. */
     val maxCount = Input(UInt(params.countWidth.W))
