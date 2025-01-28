@@ -33,15 +33,12 @@ jobs:
         run: |
           ./cs install scalafmt
 
-      - name: Run Scalafmt
-        run: |
-          /home/runner/.local/share/coursier/bin/scalafmt --non-interactive --diff-branch main
-
-      - name: Commit and push changes
+      - name: Run & Commit and push changes
         if: ${{ github.ref == 'refs/heads/main' }} # Only commit on main branch
         run: |
+          /home/runner/.local/share/coursier/bin/scalafmt --non-interactive --diff-branch main
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git add .
-          git diff --quiet && git diff --cached --quiet || git commit -m "[gh-bot] Apply Scalafmt formatting"
+          git commit -m "[gh-bot] Apply Scalafmt formatting"
           git push https://${{ secrets.REPO_TOKEN }}@github.com/${{ github.repository }}.git HEAD:main
