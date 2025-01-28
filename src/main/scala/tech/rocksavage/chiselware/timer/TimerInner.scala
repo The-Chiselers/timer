@@ -164,10 +164,17 @@ class TimerInner(
             }
 
             // ######################
-            // Safety Specification
+            // Clock Specification
             // ######################
             // assert that every cycle, the count is less than the maxCount
             assert(nextCount < maxCountReg)
+
+            // ######################
+            // Prescaler Specification
+            // ######################
+            // assert that every cycle, the prescaler is less than the prescalerReg
+            assert(prescalerCounterReg < prescalerReg)
+            
         }
     }
 }
