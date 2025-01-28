@@ -28,11 +28,6 @@ class TimerInner(
     formal: Boolean = false
 ) extends Module {
 
-    /** Returns the number of memory addresses used by the module
-      *
-      * @return
-      *   The width of the memory
-      */
     val io = IO(new TimerBundle(params))
 
     // ###################
@@ -226,7 +221,11 @@ class TimerInner(
                 countNextBeforeBoundsCheck := count
             }
         }.otherwise {
-            countNextBeforeBoundsCheck := count
+            when(setCount) {
+                countNextBeforeBoundsCheck := setCountValue
+            }.otherwise {
+                countNextBeforeBoundsCheck := count
+            }
         }
 
         // Initial Count Overflow Assignment
@@ -260,7 +259,11 @@ class TimerInner(
                 countNext := countNextBeforeBoundsCheck
             }
         }.otherwise {
-            countNext := count
+            when(setCount) {
+                countNext := setCountValue
+            }.otherwise {
+                countNext := count
+            }
         }
 
         (countNext, countOverflowNext, maxReachedNext)
