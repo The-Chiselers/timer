@@ -44,10 +44,9 @@ sta:
 	@echo Running Timing Analysis...
 	@$(SBT) "runMain tech.rocksavage.Main sta --module tech.rocksavage.chiselware.timer.Timer --techlib synth/stdcells.lib --config-class tech.rocksavage.chiselware.timer.TimerConfig --clock-period 5.0"
 
-
 test:
 	@echo Running tests...
-	@$(SBT) test -DtestName="basic"
+	@$(SBT) test
 
 cov: 
-	$(SBT) coverageOn test coverageReport
+	@$(SBT) coverageOn test coverageReport

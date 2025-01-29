@@ -96,13 +96,16 @@ object TimerBasicTests extends AnyFlatSpec with ChiselScalatestTester {
         // Enable the timer last
         writeAPB(dut.io.apb, enAddr.U, 1.U)
 
+        var prevCount = 0
+
         // Sample at every clock cycle for one period
         val maxCountValue = 10
         for (i <- 0 until maxCountValue) {
             dut.clock.step(1)
             val count       = dut.io.timerOutput.count.peekInt().toInt
             val pwm         = dut.io.timerOutput.pwm.peekBoolean()
-            val expectedPwm = count >= 5
+            val expectedPwm = prevCount >= 5
+            prevCount = count
             assert(
               pwm == expectedPwm,
               s"At count $count, expected PWM $expectedPwm but got $pwm"
