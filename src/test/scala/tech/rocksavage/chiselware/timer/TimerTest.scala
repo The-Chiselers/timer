@@ -22,9 +22,9 @@ class TimerTest extends AnyFlatSpec with ChiselScalatestTester with Matchers {
     println(s"Argument passed: $testName")
 
     // System properties for flags
-    val enableVcd    = System.getProperty("enableVcd", "false").toBoolean
-    val enableFst    = System.getProperty("enableFst", "true").toBoolean
-    val useVerilator = System.getProperty("useVerilator", "true").toBoolean
+    val enableVcd    = System.getProperty("enableVcd", "true").toBoolean
+    val enableFst    = System.getProperty("enableFst", "false").toBoolean
+    val useVerilator = System.getProperty("useVerilator", "false").toBoolean
 
     val testDir = "out/test"
 
@@ -55,7 +55,9 @@ class TimerTest extends AnyFlatSpec with ChiselScalatestTester with Matchers {
         main(testName)
     }
 
-    def main(testName: String): Unit = {
+    def main(testNameMaybeNull: String): Unit = {
+        val testName =
+            if (testNameMaybeNull == null) "basic" else testNameMaybeNull
         behavior of testName
 
         // Randomize Input Variables
@@ -100,18 +102,8 @@ class TimerTest extends AnyFlatSpec with ChiselScalatestTester with Matchers {
                 }
 
             // Test case for Slave Mode Initialization
-            case "basic" =>
-                it should "pass a basic test" in {
-                    test(new Timer(timerParams, false))
-                        .withAnnotations(backendAnnotations) { dut =>
-                            TimerBasicTests.timerBasicTest(dut, timerParams)
-                        }
-                }
-
-//            case "allTests" =>
-//                allTests(timerParams)
-//
-//            case _ => allTests(timerParams)
+            case "basic" => basicTest()
+            case _       => basicTest()
         }
 
         // Test 6.1: Master Deactivation upon SS Low
@@ -135,6 +127,18 @@ class TimerTest extends AnyFlatSpec with ChiselScalatestTester with Matchers {
     }
 
     // }
+
+    def basicTest(): Unit = {
+        it should "pass a basic test" in {
+            test(new Timer(TimerParams(32, 32, 32, 32, verbose = true), false))
+                .withAnnotations(backendAnnotations) { dut =>
+                    TimerBasicTests.timerBasicTest(
+                      dut,
+                      TimerParams(32, 32, 32, 32, verbose = true)
+                    )
+                }
+        }
+    }
 
 //    def allTests(
 //        timerParams: TimerParams
