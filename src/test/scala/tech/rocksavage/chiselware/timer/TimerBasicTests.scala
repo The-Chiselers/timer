@@ -69,4 +69,177 @@ object TimerBasicTests extends AnyFlatSpec with ChiselScalatestTester {
           true.B
         ) // Since count >= pwmCeiling, PWM should be high
     }
+    // Test 1: Set PWM ceiling and sample at every clock cycle to verify its correct for one cycle
+    def testPWMCeiling(
+        dut: Timer,
+        myParams: TimerParams
+    ): Unit = {
+        implicit val clock = dut.clock
+        // Get the register map and addresses
+        val registerMap = dut.registerMap
+
+        val enAddr         = registerMap.getAddressOfRegister("en").get
+        val prescalerAddr  = registerMap.getAddressOfRegister("prescaler").get
+        val maxCountAddr   = registerMap.getAddressOfRegister("maxCount").get
+        val pwmCeilingAddr = registerMap.getAddressOfRegister("pwmCeiling").get
+        val setCountValueAddr =
+            registerMap.getAddressOfRegister("setCountValue").get
+        val setCountAddr = registerMap.getAddressOfRegister("setCount").get
+
+        // Configure the timer
+        // Set prescaler to 0 (no prescaling)
+        writeAPB(dut.io.apb, prescalerAddr.U, 0.U)
+        // Set maxCount to 10
+        writeAPB(dut.io.apb, maxCountAddr.U, 10.U)
+        // Set pwmCeiling to 5
+        writeAPB(dut.io.apb, pwmCeilingAddr.U, 5.U)
+        // Enable the timer last
+        writeAPB(dut.io.apb, enAddr.U, 1.U)
+
+        // Sample at every clock cycle for one period
+        val maxCountValue = 10
+        for (i <- 0 until maxCountValue) {
+            dut.clock.step(1)
+            val count       = dut.io.timerOutput.count.peekInt().toInt
+            val pwm         = dut.io.timerOutput.pwm.peekBoolean()
+            val expectedPwm = count >= 5
+            assert(
+              pwm == expectedPwm,
+              s"At count $count, expected PWM $expectedPwm but got $pwm"
+            )
+        }
+    }
+
+    // Test 2: Change the prescaler halfway through execution and check timing
+    def testPrescalerChange(
+        dut: Timer,
+        myParams: TimerParams
+    ): Unit = {
+        implicit val clock = dut.clock
+        val registerMap    = dut.registerMap
+
+        val enAddr        = registerMap.getAddressOfRegister("en").get
+        val prescalerAddr = registerMap.getAddressOfRegister("prescaler").get
+        val maxCountAddr  = registerMap.getAddressOfRegister("maxCount").get
+
+        // Set initial prescaler to 1
+        writeAPB(dut.io.apb, prescalerAddr.U, 1.U)
+        // Set maxCount to 20
+        writeAPB(dut.io.apb, maxCountAddr.U, 20.U)
+        // Enable the timer last
+        writeAPB(dut.io.apb, enAddr.U, 1.U)
+
+        var totalCycles    = 0
+        var countValue     = 0
+        var prescalerValue = 1
+
+        while (dut.io.timerOutput.maxReached.peek().litToBoolean == false) {
+            if (dut.io.timerOutput.count.peekInt() == 10) {
+                // Change prescaler to 3
+                writeAPB(dut.io.apb, prescalerAddr.U, 3.U)
+                prescalerValue = 3
+            }
+            dut.clock.step(1)
+            totalCycles += 1
+        }
+
+        // Calculate expected total cycles
+        val cyclesToCount10     = 10 * (1 + 1) // Initial prescaler value is 1
+        val cyclesFromCount10   = 10 * (3 + 1) // New prescaler value is 3
+        val expectedTotalCycles = cyclesToCount10 + cyclesFromCount10
+
+        assert(
+          totalCycles == expectedTotalCycles,
+          s"Total cycles $totalCycles != expected $expectedTotalCycles"
+        )
+    }
+
+    // Test 3: Set maxCount to a low value and verify duty cycle over 10 periods
+    def testLowMaxCountDutyCycle(
+        dut: Timer,
+        myParams: TimerParams
+    ): Unit = {
+        implicit val clock = dut.clock
+        val registerMap    = dut.registerMap
+
+        val enAddr         = registerMap.getAddressOfRegister("en").get
+        val prescalerAddr  = registerMap.getAddressOfRegister("prescaler").get
+        val maxCountAddr   = registerMap.getAddressOfRegister("maxCount").get
+        val pwmCeilingAddr = registerMap.getAddressOfRegister("pwmCeiling").get
+
+        // Set prescaler to 0 (no prescaling)
+        writeAPB(dut.io.apb, prescalerAddr.U, 0.U)
+        // Set maxCount to 4
+        writeAPB(dut.io.apb, maxCountAddr.U, 4.U)
+        // Set pwmCeiling to 2
+        writeAPB(dut.io.apb, pwmCeilingAddr.U, 2.U)
+        // Enable the timer last
+        writeAPB(dut.io.apb, enAddr.U, 1.U)
+
+        val totalPeriods  = 10
+        val maxCountValue = 4
+        val totalCycles   = totalPeriods * (maxCountValue + 1)
+        var pwmHighCount  = 0
+        var pwmLowCount   = 0
+
+        for (_ <- 0 until totalCycles) {
+            dut.clock.step(1)
+            val pwm = dut.io.timerOutput.pwm.peekBoolean()
+            if (pwm) pwmHighCount += 1 else pwmLowCount += 1
+        }
+
+        val expectedDutyCycle = (maxCountValue - 2).toDouble / maxCountValue
+        val actualDutyCycle =
+            pwmHighCount.toDouble / (pwmHighCount + pwmLowCount)
+
+        assert(
+          math.abs(actualDutyCycle - expectedDutyCycle) < 0.1,
+          s"Expected duty cycle $expectedDutyCycle, but got $actualDutyCycle"
+        )
+    }
+
+    // Test 4: Random maxCount and prescaler, verify total cycles until maxReached
+    def testRandomMaxCountAndPrescaler(
+        dut: Timer,
+        myParams: TimerParams
+    ): Unit = {
+        implicit val clock = dut.clock
+        val registerMap    = dut.registerMap
+
+        val enAddr        = registerMap.getAddressOfRegister("en").get
+        val prescalerAddr = registerMap.getAddressOfRegister("prescaler").get
+        val maxCountAddr  = registerMap.getAddressOfRegister("maxCount").get
+
+        val rand           = new scala.util.Random
+        val maxCountValue  = rand.nextInt(50) + 1 // Ensure non-zero
+        val prescalerValue = rand.nextInt(5)
+
+        // Set prescaler
+        writeAPB(dut.io.apb, prescalerAddr.U, prescalerValue.U)
+        // Set maxCount
+        writeAPB(dut.io.apb, maxCountAddr.U, maxCountValue.U)
+        // Enable the timer last
+        writeAPB(dut.io.apb, enAddr.U, 1.U)
+
+        // Calculate expected total cycles
+        val expectedTotalCycles = maxCountValue * (prescalerValue + 1)
+        var cycles              = 0
+
+        while (
+          !dut.io.timerOutput.maxReached
+              .peekBoolean() && cycles < expectedTotalCycles * 2
+        ) {
+            dut.clock.step(1)
+            cycles += 1
+        }
+
+        println(
+          s"Random Test: maxCount=$maxCountValue, prescaler=$prescalerValue, totalCycles=$cycles"
+        )
+
+        assert(
+          cycles == expectedTotalCycles,
+          s"Total cycles $cycles != expected $expectedTotalCycles"
+        )
+    }
 }

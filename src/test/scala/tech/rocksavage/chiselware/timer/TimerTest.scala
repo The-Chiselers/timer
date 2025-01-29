@@ -57,26 +57,10 @@ class TimerTest extends AnyFlatSpec with ChiselScalatestTester with Matchers {
 
     def main(testNameMaybeNull: String): Unit = {
         val testName =
-            if (testNameMaybeNull == null) "basic" else testNameMaybeNull
+            if (testNameMaybeNull == null) "" else testNameMaybeNull
         behavior of testName
 
         // Randomize Input Variables
-//        val validDataWidths      = Seq(8, 16, 32)
-//        val validPAddrWidths     = Seq(8, 16, 32)
-//        val validCountWidths     = Seq(8, 16, 32)
-//        val validPrescalerWidths = Seq(8, 16, 32)
-//
-//        val dataWidth =
-//            validDataWidths(Random.nextInt(validDataWidths.length))
-//        val addrWidth = validPAddrWidths(
-//          Random.nextInt(validPAddrWidths.length)
-//        )
-//        val countWidth = validCountWidths(
-//          Random.nextInt(validCountWidths.length)
-//        )
-//        val prescalerWidth = validPrescalerWidths(
-//          Random.nextInt(validPrescalerWidths.length)
-//        )
         val dataWidth      = 32
         val addrWidth      = 32
         val countWidth     = 32
@@ -100,35 +84,99 @@ class TimerTest extends AnyFlatSpec with ChiselScalatestTester with Matchers {
                       Seq(BoundedCheck(40))
                     )
                 }
-
-            // Test case for Slave Mode Initialization
-            case "basic" => basicTest()
-            case _       => basicTest()
+            case "pwm_ceiling_test" =>
+                it should "verify PWM ceiling functionality" in {
+                    test(new Timer(timerParams, false))
+                        .withAnnotations(backendAnnotations) { dut =>
+                            TimerBasicTests.testPWMCeiling(dut, timerParams)
+                        }
+                }
+            case "prescaler_change_test" =>
+                it should "verify prescaler change during execution" in {
+                    test(new Timer(timerParams, false))
+                        .withAnnotations(backendAnnotations) { dut =>
+                            TimerBasicTests.testPrescalerChange(
+                              dut,
+                              timerParams
+                            )
+                        }
+                }
+            case "low_maxcount_dutycycle_test" =>
+                it should "verify duty cycle with low maxCount over multiple cycles" in {
+                    test(new Timer(timerParams, false))
+                        .withAnnotations(backendAnnotations) { dut =>
+                            TimerBasicTests.testLowMaxCountDutyCycle(
+                              dut,
+                              timerParams
+                            )
+                        }
+                }
+            case "random_test" =>
+                it should "verify timer with random maxCount and prescaler" in {
+                    test(new Timer(timerParams, false))
+                        .withAnnotations(backendAnnotations) { dut =>
+                            TimerBasicTests.testRandomMaxCountAndPrescaler(
+                              dut,
+                              timerParams
+                            )
+                        }
+                }
+            case "basic" =>
+                it should "pass a basic test" in {
+                    test(
+                      new Timer(
+                        TimerParams(32, 32, 32, 32, verbose = true),
+                        false
+                      )
+                    )
+                        .withAnnotations(backendAnnotations) { dut =>
+                            TimerBasicTests.timerBasicTest(
+                              dut,
+                              TimerParams(32, 32, 32, 32, verbose = true)
+                            )
+                        }
+                }
+            case _ => allTests(timerParams)
         }
 
-        // Test 6.1: Master Deactivation upon SS Low
-        // In a multi-master scenario, configure the SS pin to control master activation.
-        // Drive SS low and ensure the SPI automatically switches from Master to Slave mode.
-
-        // Test 6.2: Tri-state MISO in Slave Mode
-        // In Slave mode, configure the MISO pin as output.
-        // When SS is high, ensure MISO is tri-stated (disconnected).
-        // When SS is low, verify that MISO outputs data correctly.
-
-        // Test 7.3: Normal Mode Slave
-        // In Slave mode, ensure the SPI logic halts when SS is high and resumes when SS is low.
-
-        // Test 7.4: Buffered Mode Slave
-        // Enable Buffered Mode in Slave mode and verify that multiple received bytes are stored in the FIFO and transmitted correctly.
-
-        /*t should "generate cumulative coverage report" in {
-            coverageCollector.saveCumulativeCoverage(timerParams)
-        }*/
     }
 
-    // }
+    def allTests(timerParams: TimerParams): Unit = {
+        "TimerInner" should "Formally Verify" in {
+            verify(
+              new TimerInnerFVHarness(timerParams, true),
+              Seq(BoundedCheck(40))
+            )
+        }
 
-    def basicTest(): Unit = {
+        it should "verify PWM ceiling functionality" in {
+            test(new Timer(timerParams, false))
+                .withAnnotations(backendAnnotations) { dut =>
+                    TimerBasicTests.testPWMCeiling(dut, timerParams)
+                }
+        }
+
+        it should "verify prescaler change during execution" in {
+            test(new Timer(timerParams, false))
+                .withAnnotations(backendAnnotations) { dut =>
+                    TimerBasicTests.testPrescalerChange(dut, timerParams)
+                }
+        }
+        it should "verify duty cycle with low maxCount over multiple cycles" in {
+            test(new Timer(timerParams, false))
+                .withAnnotations(backendAnnotations) { dut =>
+                    TimerBasicTests.testLowMaxCountDutyCycle(dut, timerParams)
+                }
+        }
+        it should "verify timer with random maxCount and prescaler" in {
+            test(new Timer(timerParams, false))
+                .withAnnotations(backendAnnotations) { dut =>
+                    TimerBasicTests.testRandomMaxCountAndPrescaler(
+                      dut,
+                      timerParams
+                    )
+                }
+        }
         it should "pass a basic test" in {
             test(new Timer(TimerParams(32, 32, 32, 32, verbose = true), false))
                 .withAnnotations(backendAnnotations) { dut =>
@@ -140,185 +188,4 @@ class TimerTest extends AnyFlatSpec with ChiselScalatestTester with Matchers {
         }
     }
 
-//    def allTests(
-//        timerParams: TimerParams
-//    ): Unit = {
-//        transmitTestsFull(timerParams)
-//        clockTestsFull(timerParams)
-//        interruptTestsFull(timerParams)
-//        modeTestsFull(timerParams)
-//    }
-//
-//    def transmitTestsFull(
-//        timerParams: TimerParams
-//    ): Unit = {
-//
-//        it should "initialize the SPI core in Master Mode correctly" in {
-//            val cov =
-//                test(new SPI(timerParams)).withAnnotations(backendAnnotations) {
-//                    dut =>
-//                        transmitTests.masterMode(dut, timerParams)
-//                }
-//            coverageCollection(cov.getAnnotationSeq, timerParams, "masterMode")
-//        }
-//
-//        it should "initialize the SPI core in Slave Mode correctly" in {
-//            val cov =
-//                test(new SPI(timerParams)).withAnnotations(backendAnnotations) {
-//                    dut =>
-//                        transmitTests.slaveMode(dut, timerParams)
-//                }
-//            coverageCollection(cov.getAnnotationSeq, timerParams, "slaveMode")
-//        }
-//
-//        it should "transmit and receive data correctly in Full Duplex mode (Master-Slave) for all SPI modes" in {
-//            val cov = test(new FullDuplexSPI(timerParams))
-//                .withAnnotations(backendAnnotations) { dut =>
-//                    transmitTests.fullDuplex(dut, timerParams)
-//                }
-//            coverageCollection(cov.getAnnotationSeq, timerParams, "fullDuplex")
-//        }
-//
-//        it should "transmit and receive data correctly in MSB and LSB first modes" in {
-//            val cov = test(new FullDuplexSPI(timerParams))
-//                .withAnnotations(backendAnnotations) { dut =>
-//                    transmitTests.bitOrder(dut, timerParams)
-//                }
-//            coverageCollection(cov.getAnnotationSeq, timerParams, "bitOrder")
-//        }
-//
-//    }
-//
-//    def clockTestsFull(
-//        timerParams: TimerParams
-//    ): Unit = {
-//
-//        it should "clock speed test for prescalar 0x2(64 times slower)" in {
-//            val cov = test(new FullDuplexSPI(timerParams))
-//                .withAnnotations(backendAnnotations) { dut =>
-//                    clockTests.prescaler(dut, timerParams)
-//                }
-//            coverageCollection(cov.getAnnotationSeq, timerParams, "prescaler")
-//        }
-//
-//        it should "clock speed for clk2x with prescalar of 8 times slower" in {
-//            val cov = test(new FullDuplexSPI(timerParams))
-//                .withAnnotations(backendAnnotations) { dut =>
-//                    clockTests.doubleSpeed(dut, timerParams)
-//                }
-//            coverageCollection(cov.getAnnotationSeq, timerParams, "doubleSpeed")
-//        }
-//    }
-//
-//    def interruptTestsFull(
-//        timerParams: TimerParams
-//    ): Unit = {
-//
-//        it should "transmission complete interrupt flag" in {
-//            val cov = test(new FullDuplexSPI(timerParams))
-//                .withAnnotations(backendAnnotations) { dut =>
-//                    interruptTests.txComplete(dut, timerParams)
-//                }
-//            coverageCollection(cov.getAnnotationSeq, timerParams, "txComplete")
-//        }
-//
-//        it should "write collision flag" in {
-//            val cov = test(new FullDuplexSPI(timerParams))
-//                .withAnnotations(backendAnnotations) { dut =>
-//                    interruptTests.wcolFlag(dut, timerParams)
-//                }
-//            coverageCollection(cov.getAnnotationSeq, timerParams, "wcolFLag")
-//        }
-//
-//        it should "data register empty interrupt flag" in {
-//            val cov = test(new FullDuplexSPI(timerParams))
-//                .withAnnotations(backendAnnotations) { dut =>
-//                    interruptTests.dataEmpty(dut, timerParams)
-//                }
-//            coverageCollection(cov.getAnnotationSeq, timerParams, "dataEmpty")
-//        }
-//
-//        it should "cause buffer overflow flag" in {
-//            val cov = test(new FullDuplexSPI(timerParams))
-//                .withAnnotations(backendAnnotations) { dut =>
-//                    interruptTests.overFlow(dut, timerParams)
-//                }
-//            coverageCollection(cov.getAnnotationSeq, timerParams, "overFlow")
-//        }
-//    }
-//
-//    def modeTestsFull(
-//        timerParams: TimerParams
-//    ): Unit = {
-//        it should "buffered mode master" in {
-//            val cov = test(new FullDuplexSPI(timerParams))
-//                .withAnnotations(backendAnnotations) { dut =>
-//                    modeTests.bufferTx(dut, timerParams)
-//                }
-//            coverageCollection(cov.getAnnotationSeq, timerParams, "bufferTx")
-//        }
-//
-//        it should "recieve register correct normal mode" in {
-//            val cov = test(new FullDuplexSPI(timerParams))
-//                .withAnnotations(backendAnnotations) { dut =>
-//                    modeTests.normalRx(dut, timerParams)
-//                }
-//            coverageCollection(cov.getAnnotationSeq, timerParams, "normalRx")
-//        }
-//
-//        it should "daisy chain correctly" in {
-//            val cov = test(new DaisyChainSPI(timerParams))
-//                .withAnnotations(backendAnnotations) { dut =>
-//                    modeTests.daisyChain(dut, timerParams)
-//                }
-//            coverageCollection(cov.getAnnotationSeq, timerParams, "daisyChain")
-//        }
-//
-//        it should "daisy chain + buffer correctly" in {
-//            val cov = test(new DaisyChainSPI(timerParams))
-//                .withAnnotations(backendAnnotations) { dut =>
-//                    modeTests.daisyChainBuffer(dut, timerParams)
-//                }
-//            coverageCollection(
-//              cov.getAnnotationSeq,
-//              timerParams,
-//              "daisyChainBuffer"
-//            )
-//        }
-//    }
-//
-//    def coverageCollection(
-//        cov: Seq[Annotation],
-//        timerParams: TimerParams,
-//        testName: String
-//    ): Unit = {
-//        if (timerParams.coverage) {
-//            val coverage = cov
-//                .collectFirst { case a: TestCoverage => a.counts }
-//                .get
-//                .toMap
-//
-//            val testConfig =
-//                timerParams.addressWidth.toString + "_" + timerParams.dataWidth.toString
-//
-//            val buildRoot = sys.env.get("BUILD_ROOT")
-//            if (buildRoot.isEmpty) {
-//                println("BUILD_ROOT not set, please set and run again")
-//                System.exit(1)
-//            }
-//            // path join
-//            val scalaCoverageDir = new File(buildRoot.get + "/cov/scala")
-//            val verCoverageDir   = new File(buildRoot.get + "/cov/verilog")
-//            verCoverageDir.mkdirs()
-//            val coverageFile = verCoverageDir.toString + "/" + testName + "_" +
-//                testConfig + ".cov"
-//
-//            val stuckAtFault = checkCoverage(coverage, coverageFile)
-//            if (stuckAtFault)
-//                println(
-//                  s"WARNING: At least one IO port did not toggle -- see $coverageFile"
-//                )
-//            info(s"Verilog Coverage report written to $coverageFile")
-//        }
-//    }
 }
