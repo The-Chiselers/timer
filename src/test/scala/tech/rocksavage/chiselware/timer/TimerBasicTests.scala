@@ -219,7 +219,9 @@ object TimerBasicTests extends AnyFlatSpec with ChiselScalatestTester {
         val prescalerAddr = registerMap.getAddressOfRegister("prescaler").get
         val maxCountAddr  = registerMap.getAddressOfRegister("maxCount").get
 
-        val rand           = new scala.util.Random
+        val rand    = new scala.util.Random
+        val unix_ms = System.currentTimeMillis()
+        rand.setSeed(unix_ms)
         val maxCountValue  = rand.nextInt(50) + 1 // Ensure non-zero
         val prescalerValue = rand.nextInt(5)
 
@@ -231,8 +233,9 @@ object TimerBasicTests extends AnyFlatSpec with ChiselScalatestTester {
         writeAPB(dut.io.apb, enAddr.U, 1.U)
 
         // Calculate expected total cycles
-        val expectedTotalCycles = maxCountValue * (prescalerValue + 1)
-        var cycles              = 0
+        val expectedTotalCycles =
+            maxCountValue * (prescalerValue + 1) - 1 // -1 for apb write
+        var cycles = 0
 
         while (
           !dut.io.timerOutput.maxReached
