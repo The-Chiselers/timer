@@ -164,6 +164,7 @@ class TimerTest extends AnyFlatSpec with ChiselScalatestTester with Matchers {
         }
 
         it should "verify PWM ceiling functionality" in {
+          val testName = "pwm_ceiling_test"
             val cov = test(new Timer(timerParams, false))
                 .withAnnotations(backendAnnotations) { dut =>
                     TimerBasicTests.testPWMCeiling(dut, timerParams)
@@ -172,6 +173,7 @@ class TimerTest extends AnyFlatSpec with ChiselScalatestTester with Matchers {
         }
 
         it should "verify prescaler change during execution" in {
+            val testName = "prescaler_change_test"
             val cov = test(new Timer(timerParams, false))
                 .withAnnotations(backendAnnotations) { dut =>
                     TimerBasicTests.testPrescalerChange(dut, timerParams)
@@ -179,6 +181,7 @@ class TimerTest extends AnyFlatSpec with ChiselScalatestTester with Matchers {
             coverageCollector.collectCoverage(cov.getAnnotationSeq, testName, configName, coverage, covDir)
         }
         it should "verify duty cycle with low maxCount over multiple cycles" in {
+            val testName = "low_maxcount_dutycycle_test"
             val cov = test(new Timer(timerParams, false))
                 .withAnnotations(backendAnnotations) { dut =>
                     TimerBasicTests.testLowMaxCountDutyCycle(dut, timerParams)
@@ -186,6 +189,7 @@ class TimerTest extends AnyFlatSpec with ChiselScalatestTester with Matchers {
             coverageCollector.collectCoverage(cov.getAnnotationSeq, testName, configName, coverage, covDir)
         }
         it should "verify timer with random maxCount and prescaler" in {
+            val testName = "random_test"
             val cov = test(new Timer(timerParams, false))
                 .withAnnotations(backendAnnotations) { dut =>
                     TimerBasicTests.testRandomMaxCountAndPrescaler(
@@ -196,6 +200,7 @@ class TimerTest extends AnyFlatSpec with ChiselScalatestTester with Matchers {
             coverageCollector.collectCoverage(cov.getAnnotationSeq, testName, configName, coverage, covDir)
         }
         it should "pass a basic test" in {
+            val testName = "basic"
             val timerParams = TimerParams(32, 32, 32, 32, verbose = true)
             val cov = test(new Timer(timerParams, false))
                 .withAnnotations(backendAnnotations) { dut =>
