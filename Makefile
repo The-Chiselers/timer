@@ -11,7 +11,7 @@ default: synth
 docs:
 	@echo Generating docs
 	mkdir -p $(shell pwd)/out/doc
-	cd doc/user-guide && pdflatex -output-directory=$(shell pwd)/out/doc timer.tex | tee -a $(shell pwd)/out/doc/doc.rpt
+	cd doc/user-guide && pdflatex -shell-escape -output-directory=$(shell pwd)/out/doc timer.tex | tee -a $(shell pwd)/out/doc/doc.rpt
 
 update:
 	@echo Updating...

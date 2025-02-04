@@ -44,6 +44,7 @@
 
                     # LaTeX
                     texliveFull
+                    inkscape
 
                     # Other
                     python3
@@ -128,6 +129,7 @@
 
                       # LaTeX
                       texliveFull
+                      inkscape
 
                       # Other
                       python3
@@ -208,6 +210,7 @@
 
                       # LaTeX
                       texliveFull
+                      inkscape
 
                       # Other
                       python3

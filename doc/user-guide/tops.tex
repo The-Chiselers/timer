@@ -6,17 +6,27 @@ including PWM generation and interrupt signaling. It features a counter that can
 maximum count value, and PWM ceiling value.
 
 \begin{figure}[h]
-  \includegraphics[width=0.80\textwidth]{images/TimerDragram.drawio.png}
-  \caption{Timer Diagram}\label{fig:timer-diagram}
+    \includesvg[width=0.80\textwidth]{images/TimerPrescaler.drawio.svg}
+    \caption{Timer Prescaler Diagram}\label{fig:timer-prescaler}
+\end{figure}
+
+\begin{figure}[h]
+    \includesvg[width=0.80\textwidth]{images/TimerCount.drawio.svg}
+    \caption{Timer Count Diagram}\label{fig:timer-count}
+\end{figure}
+
+\begin{figure}[h]
+    \includesvg[width=0.80\textwidth]{images/TimerPwm.drawio.svg}
+    \caption{Timer PWM Diagram}\label{fig:timer-pwm}
 \end{figure}
 
 The Timer module provides the following outputs:
 
 \begin{itemize}[noitemsep]
-  \item{\textit{count}: Current value of the counter.}
-  \item{\textit{maxReached}: Signal indicating the counter has reached its maximum value.}
-  \item{\textit{pwm}: PWM output signal with a duty cycle controlled by \textit{pwmCeiling}.}
-  \item{\textit{interrupt}: Interrupt signal indicating timer events (e.g., max reached).}
+    \item{\textit{count}: Current value of the counter.}
+    \item{\textit{maxReached}: Signal indicating the counter has reached its maximum value.}
+    \item{\textit{pwm}: PWM output signal with a duty cycle controlled by \textit{pwmCeiling}.}
+    \item{\textit{interrupt}: Interrupt signal indicating timer events (e.g., max reached).}
 \end{itemize}
 
 \subsection{APB Interface}
