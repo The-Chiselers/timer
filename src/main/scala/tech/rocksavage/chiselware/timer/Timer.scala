@@ -53,7 +53,7 @@ class Timer(val timerParams: TimerParams, formal: Boolean) extends Module {
     val addrDecodeParams = registerMap.getAddrDecodeParams
     val addrDecode       = Module(new AddrDecode(addrDecodeParams))
     addrDecode.io.addr       := io.apb.PADDR
-    addrDecode.io.addrOffset := 0.U
+//    addrDecode.io.addrOffset := 0.U
     addrDecode.io.en         := true.B
     addrDecode.io.selInput   := true.B
 
@@ -66,13 +66,13 @@ class Timer(val timerParams: TimerParams, formal: Boolean) extends Module {
         when(io.apb.PWRITE) {
             for (reg <- registerMap.getRegisters) {
                 when(addrDecode.io.sel(reg.id)) {
-                    reg.writeCallback(addrDecode.io.addrOffset, io.apb.PWDATA)
+                    reg.writeCallback(addrDecode.io.addrOut, io.apb.PWDATA)
                 }
             }
         }.otherwise {
             for (reg <- registerMap.getRegisters) {
                 when(addrDecode.io.sel(reg.id)) {
-                    io.apb.PRDATA := reg.readCallback(addrDecode.io.addrOffset)
+                    io.apb.PRDATA := reg.readCallback(addrDecode.io.addrOut)
                 }
             }
         }
