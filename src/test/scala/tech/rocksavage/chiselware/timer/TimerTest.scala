@@ -130,6 +130,7 @@ class TimerTest extends AnyFlatSpec with ChiselScalatestTester with Matchers {
                               timerParams
                             )
                         }
+                  coverageCollector.collectCoverage(cov.getAnnotationSeq, testName, configName, coverage, covDir)
                 }
             case "basic" =>
                 it should "pass a basic test" in {

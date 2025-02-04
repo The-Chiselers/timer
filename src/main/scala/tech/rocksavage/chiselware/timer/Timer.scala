@@ -30,22 +30,22 @@ class Timer(val timerParams: TimerParams, formal: Boolean) extends Module {
 
     // Now define your registers without the macro
     val en: Bool = RegInit(false.B)
-    registerMap.createAddressableRegister(en, "en")
+    registerMap.createAddressableRegister(en, "en", verbose = timerParams.verbose)
 
     val prescaler: UInt = RegInit(0.U(timerParams.prescalerWidth.W))
-    registerMap.createAddressableRegister(prescaler, "prescaler")
+    registerMap.createAddressableRegister(prescaler, "prescaler", verbose = timerParams.verbose)
 
     val maxCount: UInt = RegInit(0.U(timerParams.countWidth.W))
-    registerMap.createAddressableRegister(maxCount, "maxCount")
+    registerMap.createAddressableRegister(maxCount, "maxCount", verbose = timerParams.verbose)
 
     val pwmCeiling: UInt = RegInit(0.U(timerParams.countWidth.W))
-    registerMap.createAddressableRegister(pwmCeiling, "pwmCeiling")
+    registerMap.createAddressableRegister(pwmCeiling, "pwmCeiling", verbose = timerParams.verbose)
 
     val setCountValue: UInt = RegInit(0.U(timerParams.countWidth.W))
-    registerMap.createAddressableRegister(setCountValue, "setCountValue")
+    registerMap.createAddressableRegister(setCountValue, "setCountValue", verbose = timerParams.verbose)
 
     val setCount: Bool = RegInit(false.B)
-    registerMap.createAddressableRegister(setCount, "setCount")
+    registerMap.createAddressableRegister(setCount, "setCount", verbose = timerParams.verbose)
 
     // println("Register Map: " + registerMap.getRegisters)
 
