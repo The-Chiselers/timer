@@ -9,7 +9,8 @@ import firrtl2.options.TargetDirAnnotation
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
 import tech.rocksavage.chiselware.timer.param.TimerParams
-import tech.rocksavage.test.coverageCollector
+import tech.rocksavage.chiselware.timer.TimerBasicTests
+import tech.rocksavage.test._
 
 /** Highly randomized test suite driven by configuration parameters. Includes
   * code coverage for all top-level ports. Inspired by the DynamicFifo
