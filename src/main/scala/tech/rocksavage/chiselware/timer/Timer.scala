@@ -22,7 +22,6 @@ class Timer(val timerParams: TimerParams, formal: Boolean) extends Module {
     val io = IO(new Bundle {
         val apb         = new ApbBundle(ApbParams(dataWidth, addressWidth))
         val timerOutput = new TimerOutputBundle(timerParams)
-        val interrupt   = new TimerInterruptBundle
     })
 
     // Create a RegisterMap to manage the addressable registers
@@ -46,6 +45,9 @@ class Timer(val timerParams: TimerParams, formal: Boolean) extends Module {
 
     val setCount: Bool = RegInit(false.B)
     registerMap.createAddressableRegister(setCount, "setCount", verbose = timerParams.verbose)
+
+    val maxCountEnableInterrupt: Bool = RegInit(false.B)
+    registerMap.createAddressableRegister(maxCountEnableInterrupt, "maxCountEnableInterrupt", verbose = timerParams.verbose)
 
     // println("Register Map: " + registerMap.getRegisters)
 
@@ -86,11 +88,8 @@ class Timer(val timerParams: TimerParams, formal: Boolean) extends Module {
     timerInner.io.timerInputBundle.maxCount      := maxCount
     timerInner.io.timerInputBundle.pwmCeiling    := pwmCeiling
     timerInner.io.timerInputBundle.setCountValue := setCountValue
+    timerInner.io.timerInputBundle.maxCountEnableInterrupt := maxCountEnableInterrupt
     // Connect the TimerInner outputs to the top-level outputs
     io.timerOutput <> timerInner.io.timerOutputBundle
-    // Handle interrupts
-    io.interrupt.interrupt := TimerInterruptEnum.None
-    when(timerInner.io.timerOutputBundle.maxReached) {
-        io.interrupt.interrupt := TimerInterruptEnum.MaxReached
-    }
+
 }

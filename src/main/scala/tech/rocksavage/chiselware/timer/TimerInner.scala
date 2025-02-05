@@ -43,6 +43,8 @@ class TimerInner(
     val pwmCeilingWire    = WireInit(0.U(params.countWidth.W))
     val setCountValueWire = WireInit(0.U(params.countWidth.W))
     val setCountWire      = WireInit(false.B)
+    val maxCountEnableInterruptWire = WireInit(false.B)
+
 
     // Assign input signals to wires
     enWire            := io.timerInputBundle.en
@@ -51,6 +53,7 @@ class TimerInner(
     pwmCeilingWire    := io.timerInputBundle.pwmCeiling
     setCountValueWire := io.timerInputBundle.setCountValue
     setCountWire      := io.timerInputBundle.setCount
+    maxCountEnableInterruptWire := io.timerInputBundle.maxCountEnableInterrupt
 
     // ###################
     // Output
@@ -60,21 +63,25 @@ class TimerInner(
     val countNext      = WireInit(0.U(params.countWidth.W))
     val maxReachedNext = WireInit(false.B)
     val pwmNext        = WireInit(false.B)
+    val maxCountInterruptNext = WireInit(false.B)
 
     // Registers for output signals
     val countReg      = RegInit(0.U(params.countWidth.W))
     val maxReachedReg = RegInit(false.B)
     val pwmReg        = RegInit(false.B)
+    val maxCountInterruptReg = RegInit(false.B)
 
     // Assign next values to registers
     countReg      := countNext
     maxReachedReg := maxReachedNext
     pwmReg        := pwmNext
+    maxCountInterruptReg := maxCountInterruptNext
 
     // Assign registers to output bundle
     io.timerOutputBundle.count      := countReg
     io.timerOutputBundle.maxReached := maxReachedReg
     io.timerOutputBundle.pwm        := pwmReg
+    io.timerOutputBundle.interrupts.maxCountInterrupt := maxCountInterruptReg
 
     // ###################
     // Internal
@@ -137,6 +144,13 @@ class TimerInner(
       prescaler = prescalerWire
     )
 
+    // Interrupts
+    maxCountInterruptNext := false.B
+    when(maxReachedNext && maxCountEnableInterruptWire) {
+        maxCountInterruptNext := true.B
+    }
+
+
     // ###################
     // Formal verification
     // ###################
@@ -194,6 +208,13 @@ class TimerInner(
             // Assert that every cycle, the prescaler is less than the prescalerReg if the prescalerReg is stable
             when(prescalerStableLow3 && setCountStableLow3) {
                 assert(prescalerCounterNext <= prescalerWire)
+            }
+
+            // ######################
+            // Interrupt Specification
+            // ######################
+            when (maxReachedFV && maxCountEnableInterruptWire) {
+                assert(maxCountInterruptNext)
             }
         }
     }

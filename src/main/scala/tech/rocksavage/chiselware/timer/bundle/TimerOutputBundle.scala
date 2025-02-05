@@ -22,4 +22,7 @@ class TimerOutputBundle(params: TimerParams) extends Bundle {
 
     /** PWM output signal with a duty cycle controlled by `pwmCeiling`. */
     val pwm = Output(Bool())
+
+    /** Interrupt signals for the timer. */
+    val interrupts = new TimerInterruptBundle
 }

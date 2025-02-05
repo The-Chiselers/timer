@@ -6,5 +6,5 @@ import chisel3._
 import chisel3.util._
 
 class TimerInterruptBundle extends Bundle {
-    val interrupt = Output(TimerInterruptEnum())
+    val maxCountInterrupt = Output(Bool())
 }
