@@ -36,21 +36,21 @@ class TimerInnerFVHarness(
     // ###################
 
     // Regs
-    val enReg            = RegInit(false.B)
-    val prescalerReg     = RegInit(0.U(params.prescalerWidth.W))
-    val maxCountReg      = RegInit(0.U(params.countWidth.W))
-    val pwmCeilingReg    = RegInit(0.U(params.countWidth.W))
-    val setCountValueReg = RegInit(0.U(params.countWidth.W))
-    val setCountReg      = RegInit(false.B)
+    val enReg                      = RegInit(false.B)
+    val prescalerReg               = RegInit(0.U(params.prescalerWidth.W))
+    val maxCountReg                = RegInit(0.U(params.countWidth.W))
+    val pwmCeilingReg              = RegInit(0.U(params.countWidth.W))
+    val setCountValueReg           = RegInit(0.U(params.countWidth.W))
+    val setCountReg                = RegInit(false.B)
     val maxCountEnableInterruptReg = RegInit(false.B)
 
     // Assignment
-    enReg            := io.timerInputBundle.en
-    prescalerReg     := io.timerInputBundle.prescaler
-    maxCountReg      := io.timerInputBundle.maxCount
-    pwmCeilingReg    := io.timerInputBundle.pwmCeiling
-    setCountValueReg := io.timerInputBundle.setCountValue
-    setCountReg      := io.timerInputBundle.setCount
+    enReg                      := io.timerInputBundle.en
+    prescalerReg               := io.timerInputBundle.prescaler
+    maxCountReg                := io.timerInputBundle.maxCount
+    pwmCeilingReg              := io.timerInputBundle.pwmCeiling
+    setCountValueReg           := io.timerInputBundle.setCountValue
+    setCountReg                := io.timerInputBundle.setCount
     maxCountEnableInterruptReg := io.timerInputBundle.maxCountEnableInterrupt
 
     // ###################
@@ -58,9 +58,9 @@ class TimerInnerFVHarness(
     // ###################
 
     // Wires
-    val countNext      = WireInit(0.U(params.countWidth.W))
-    val maxReachedNext = WireInit(false.B)
-    val pwmNext        = WireInit(false.B)
+    val countNext             = WireInit(0.U(params.countWidth.W))
+    val maxReachedNext        = WireInit(false.B)
+    val pwmNext               = WireInit(false.B)
     val maxCountInterruptNext = WireInit(false.B)
 
     // ###################
@@ -82,8 +82,8 @@ class TimerInnerFVHarness(
     pwmNext        := timerInner.io.timerOutputBundle.pwm
     maxCountInterruptNext := timerInner.io.timerOutputBundle.interrupts.maxCountInterrupt
 
-    io.timerOutputBundle.count      := countNext
-    io.timerOutputBundle.maxReached := maxReachedNext
-    io.timerOutputBundle.pwm        := pwmNext
+    io.timerOutputBundle.count                        := countNext
+    io.timerOutputBundle.maxReached                   := maxReachedNext
+    io.timerOutputBundle.pwm                          := pwmNext
     io.timerOutputBundle.interrupts.maxCountInterrupt := maxCountInterruptNext
 }

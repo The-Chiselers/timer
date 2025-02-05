@@ -9,22 +9,28 @@ import tech.rocksavage.chiselware.apb.{ApbBundle, ApbParams}
 import tech.rocksavage.chiselware.timer.bundle.TimerOutputBundle
 import tech.rocksavage.chiselware.timer.param.TimerParams
 
-/**
- * A Timer module that implements a configurable timer with various functionalities.
- *
- * @param timerParams Parameters for configuring the timer.
- * @param formal A boolean value to enable formal verification.
- */
+/** A Timer module that implements a configurable timer with various
+  * functionalities.
+  *
+  * @param timerParams
+  *   Parameters for configuring the timer.
+  * @param formal
+  *   A boolean value to enable formal verification.
+  */
 class Timer(val timerParams: TimerParams, formal: Boolean) extends Module {
+
     /** Data width for the timer */
-    val dataWidth    = timerParams.dataWidth
+    val dataWidth = timerParams.dataWidth
+
     /** Address width for the timer */
     val addressWidth = timerParams.addressWidth
 
     /** Input/Output bundle for the Timer module */
     val io = IO(new Bundle {
+
         /** APB interface for the timer */
-        val apb         = new ApbBundle(ApbParams(dataWidth, addressWidth))
+        val apb = new ApbBundle(ApbParams(dataWidth, addressWidth))
+
         /** Output bundle for timer outputs */
         val timerOutput = new TimerOutputBundle(timerParams)
     })
@@ -34,41 +40,70 @@ class Timer(val timerParams: TimerParams, formal: Boolean) extends Module {
 
     /** Enable signal register */
     val en: Bool = RegInit(false.B)
-    registerMap.createAddressableRegister(en, "en", verbose = timerParams.verbose)
+    registerMap.createAddressableRegister(
+      en,
+      "en",
+      verbose = timerParams.verbose
+    )
 
     /** Prescaler value register */
     val prescaler: UInt = RegInit(0.U(timerParams.prescalerWidth.W))
-    registerMap.createAddressableRegister(prescaler, "prescaler", verbose = timerParams.verbose)
+    registerMap.createAddressableRegister(
+      prescaler,
+      "prescaler",
+      verbose = timerParams.verbose
+    )
 
     /** Maximum count value register */
     val maxCount: UInt = RegInit(0.U(timerParams.countWidth.W))
-    registerMap.createAddressableRegister(maxCount, "maxCount", verbose = timerParams.verbose)
+    registerMap.createAddressableRegister(
+      maxCount,
+      "maxCount",
+      verbose = timerParams.verbose
+    )
 
     /** PWM ceiling value register */
     val pwmCeiling: UInt = RegInit(0.U(timerParams.countWidth.W))
-    registerMap.createAddressableRegister(pwmCeiling, "pwmCeiling", verbose = timerParams.verbose)
+    registerMap.createAddressableRegister(
+      pwmCeiling,
+      "pwmCeiling",
+      verbose = timerParams.verbose
+    )
 
     /** Value to set the count register */
     val setCountValue: UInt = RegInit(0.U(timerParams.countWidth.W))
-    registerMap.createAddressableRegister(setCountValue, "setCountValue", verbose = timerParams.verbose)
+    registerMap.createAddressableRegister(
+      setCountValue,
+      "setCountValue",
+      verbose = timerParams.verbose
+    )
 
     /** Signal to set the count register */
     val setCount: Bool = RegInit(false.B)
-    registerMap.createAddressableRegister(setCount, "setCount", verbose = timerParams.verbose)
+    registerMap.createAddressableRegister(
+      setCount,
+      "setCount",
+      verbose = timerParams.verbose
+    )
 
     /** Enable interrupt for maximum count register */
     val maxCountEnableInterrupt: Bool = RegInit(false.B)
-    registerMap.createAddressableRegister(maxCountEnableInterrupt, "maxCountEnableInterrupt", verbose = timerParams.verbose)
+    registerMap.createAddressableRegister(
+      maxCountEnableInterrupt,
+      "maxCountEnableInterrupt",
+      verbose = timerParams.verbose
+    )
 
     // Generate AddrDecode
     /** Parameters for address decoding */
     val addrDecodeParams = registerMap.getAddrDecodeParams
+
     /** AddrDecode module instance */
-    val addrDecode       = Module(new AddrDecode(addrDecodeParams))
-    addrDecode.io.addr       := io.apb.PADDR
-    addrDecode.io.en         := true.B
-    addrDecode.io.selInput   := true.B
-    io.apb.PREADY := (io.apb.PENABLE && io.apb.PSEL)
+    val addrDecode = Module(new AddrDecode(addrDecodeParams))
+    addrDecode.io.addr     := io.apb.PADDR
+    addrDecode.io.en       := true.B
+    addrDecode.io.selInput := true.B
+    io.apb.PREADY          := (io.apb.PENABLE && io.apb.PSEL)
     io.apb.PSLVERR := addrDecode.io.errorCode === AddrDecodeError.AddressOutOfRange
     io.apb.PRDATA := 0.U
 
