@@ -11,7 +11,7 @@ default: synth
 docs:
 	@echo Generating docs
 	mkdir -p $(shell pwd)/out/doc
-	cd doc/user-guide && pdflatex -output-directory=$(shell pwd)/out/doc timer.tex | tee -a $(shell pwd)/out/doc/doc.rpt
+	cd doc/user-guide && pdflatex -shell-escape -output-directory=$(shell pwd)/out/doc timer.tex | tee -a $(shell pwd)/out/doc/doc.rpt
 
 update:
 	@echo Updating...
@@ -45,10 +45,9 @@ sta:
 	@echo Running Timing Analysis...
 	@$(SBT) "runMain tech.rocksavage.Main sta --module tech.rocksavage.chiselware.timer.Timer --techlib synth/stdcells.lib --config-class tech.rocksavage.chiselware.timer.TimerConfig --clock-period 5.0"
 
-
 test:
 	@echo Running tests...
-	@$(SBT) test -DtestName="basic"
+	@$(SBT) test
 
 cov: 
-	$(SBT) coverageOn test coverageReport
+	@$(SBT) coverageOn test coverageReport

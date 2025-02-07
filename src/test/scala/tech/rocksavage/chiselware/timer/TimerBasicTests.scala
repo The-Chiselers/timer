@@ -96,13 +96,16 @@ object TimerBasicTests extends AnyFlatSpec with ChiselScalatestTester {
         // Enable the timer last
         writeAPB(dut.io.apb, enAddr.U, 1.U)
 
+        var prevCount = 0
+
         // Sample at every clock cycle for one period
         val maxCountValue = 10
         for (i <- 0 until maxCountValue) {
             dut.clock.step(1)
             val count       = dut.io.timerOutput.count.peekInt().toInt
             val pwm         = dut.io.timerOutput.pwm.peekBoolean()
-            val expectedPwm = count >= 5
+            val expectedPwm = prevCount >= 5
+            prevCount = count
             assert(
               pwm == expectedPwm,
               s"At count $count, expected PWM $expectedPwm but got $pwm"
@@ -129,12 +132,23 @@ object TimerBasicTests extends AnyFlatSpec with ChiselScalatestTester {
         // Enable the timer last
         writeAPB(dut.io.apb, enAddr.U, 1.U)
 
+        // 2 clock cycles for apb write to finish
         var totalCycles    = 0
         var countValue     = 0
         var prescalerValue = 1
 
+        val initPrescaler   = 1
+        val secondPrescaler = 3
+
+        val cyclesToCount10     = 19 // has to account for time for apb write
+        val cyclesFromCount10   = 34 // has to account for time for apb write
+        val expectedTotalCycles = cyclesToCount10 + cyclesFromCount10
         while (dut.io.timerOutput.maxReached.peek().litToBoolean == false) {
             if (dut.io.timerOutput.count.peekInt() == 10) {
+                assert(
+                  totalCycles == cyclesToCount10, // 0 - 10 is 11 counts
+                  s"Total cycles $totalCycles != expected $cyclesToCount10"
+                )
                 // Change prescaler to 3
                 writeAPB(dut.io.apb, prescalerAddr.U, 3.U)
                 prescalerValue = 3
@@ -142,11 +156,6 @@ object TimerBasicTests extends AnyFlatSpec with ChiselScalatestTester {
             dut.clock.step(1)
             totalCycles += 1
         }
-
-        // Calculate expected total cycles
-        val cyclesToCount10     = 10 * (1 + 1) // Initial prescaler value is 1
-        val cyclesFromCount10   = 10 * (3 + 1) // New prescaler value is 3
-        val expectedTotalCycles = cyclesToCount10 + cyclesFromCount10
 
         assert(
           totalCycles == expectedTotalCycles,
@@ -210,7 +219,9 @@ object TimerBasicTests extends AnyFlatSpec with ChiselScalatestTester {
         val prescalerAddr = registerMap.getAddressOfRegister("prescaler").get
         val maxCountAddr  = registerMap.getAddressOfRegister("maxCount").get
 
-        val rand           = new scala.util.Random
+        val rand    = new scala.util.Random
+        val unix_ms = System.currentTimeMillis()
+        rand.setSeed(unix_ms)
         val maxCountValue  = rand.nextInt(50) + 1 // Ensure non-zero
         val prescalerValue = rand.nextInt(5)
 
@@ -222,8 +233,9 @@ object TimerBasicTests extends AnyFlatSpec with ChiselScalatestTester {
         writeAPB(dut.io.apb, enAddr.U, 1.U)
 
         // Calculate expected total cycles
-        val expectedTotalCycles = maxCountValue * (prescalerValue + 1)
-        var cycles              = 0
+        val expectedTotalCycles =
+            maxCountValue * (prescalerValue + 1) - 1 // -1 for apb write
+        var cycles = 0
 
         while (
           !dut.io.timerOutput.maxReached

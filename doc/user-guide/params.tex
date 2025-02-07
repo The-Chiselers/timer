@@ -35,6 +35,12 @@ The parameters for \textbf{Timer} are shown below in Table~\ref{table:params}.
   $\ge$ 8       &
   The width of the counter in bits       \\ \hline
 
+  prescalerWidth    &
+  Int           &
+  8             &
+  $\ge$ 8       &
+  The width of the prescaler in bits       \\ \hline
+
   \caption{Parameter Descriptions}\label{table:params}
 \end{longtable}
 
@@ -45,6 +51,7 @@ The Timer is instantiated into a design as follows:
   val myTimer = new Timer(TimerParams(
     dataWidth = 32,
     addressWidth = 32,
-    countWidth = 64
+    countWidth = 64,
+    prescalerWidth = 32
   ))
 \end{lstlisting}

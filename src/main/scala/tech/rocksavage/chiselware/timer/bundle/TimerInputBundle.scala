@@ -32,4 +32,9 @@ class TimerInputBundle(params: TimerParams) extends Bundle {
     /** Signal to set the counter to `setCountValue`. */
     val setCount = Input(Bool())
 
+    /** Signal to enable the interrupt when the counter reaches the maximum
+      * count.
+      */
+    val maxCountEnableInterrupt = Input(Bool())
+
 }
