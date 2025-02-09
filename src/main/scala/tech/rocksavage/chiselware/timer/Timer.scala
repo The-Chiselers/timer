@@ -140,8 +140,6 @@ class Timer(val timerParams: TimerParams, formal: Boolean) extends Module {
     io.timerOutput <> timerInner.io.timerOutputBundle
 
     if (timerParams.coverage) {
-        // An example separate coverage point.
-
         // Cover the entire IO bundle recursively.
         coverAll(io, "cover_io")
     }
