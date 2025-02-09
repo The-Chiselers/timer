@@ -9,7 +9,6 @@ import firrtl2.options.TargetDirAnnotation
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
 import tech.rocksavage.chiselware.timer.param.TimerParams
-import tech.rocksavage.chiselware.timer.TimerBasicTests
 import tech.rocksavage.test._
 
 /** Highly randomized test suite driven by configuration parameters. Includes
@@ -72,8 +71,9 @@ class TimerTest extends AnyFlatSpec with ChiselScalatestTester with Matchers {
         val prescalerWidth = 32
 
         // Pass in randomly selected values to DUT
-        val timerParams = TimerParams(32, 32, 32, 32, verbose = true)
-        val configName  = "32_32_32_32"
+        val timerParams =
+            TimerParams(32, 32, 32, 32, coverage = true, verbose = true)
+        val configName = "32_32_32_32"
 
         info(s"Data Width = $dataWidth")
         info(s"Address Width = $addrWidth")

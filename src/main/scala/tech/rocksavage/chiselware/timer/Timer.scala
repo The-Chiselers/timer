@@ -8,6 +8,7 @@ import tech.rocksavage.chiselware.addressable.RegisterMap
 import tech.rocksavage.chiselware.apb.{ApbBundle, ApbParams}
 import tech.rocksavage.chiselware.timer.bundle.TimerOutputBundle
 import tech.rocksavage.chiselware.timer.param.TimerParams
+import tech.rocksavage.test.TestUtils.coverAll
 
 /** A Timer module that implements a configurable timer with various
   * functionalities.
@@ -137,4 +138,11 @@ class Timer(val timerParams: TimerParams, formal: Boolean) extends Module {
 
     // Connect the TimerInner outputs to the top-level outputs
     io.timerOutput <> timerInner.io.timerOutputBundle
+
+    if (timerParams.coverage) {
+        // An example separate coverage point.
+
+        // Cover the entire IO bundle recursively.
+        coverAll(io, "cover_io")
+    }
 }
