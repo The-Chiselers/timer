@@ -141,6 +141,6 @@ class Timer(val timerParams: TimerParams, formal: Boolean) extends Module {
 
     if (timerParams.coverage) {
         // Cover the entire IO bundle recursively.
-        coverAll(io, "cover_io")
+        coverAll(io, "_io")
     }
 }
