@@ -9,8 +9,7 @@ import tech.rocksavage.chiselware.timer.param.TimerParams
 /** A bundle representing the input signals for a timer module.
   *
   * @param params
-  *   The configuration parameters for the timer, including the width of the
-  *   count registers.
+  *   The configuration parameters for the timer, including the width of the count registers.
   */
 class TimerInputBundle(params: TimerParams) extends Bundle {
 
@@ -32,8 +31,7 @@ class TimerInputBundle(params: TimerParams) extends Bundle {
     /** Signal to set the counter to `setCountValue`. */
     val setCount = Input(Bool())
 
-    /** Signal to enable the interrupt when the counter reaches the maximum
-      * count.
+    /** Signal to enable the interrupt when the counter reaches the maximum count.
       */
     val maxCountEnableInterrupt = Input(Bool())
 

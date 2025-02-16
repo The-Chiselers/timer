@@ -21,8 +21,8 @@ import tech.rocksavage.chiselware.timer.param.TimerParams
   */
 class TimerInnerFVHarness(
     params: TimerParams,
-    formal: Boolean = false
-) extends Module {
+    formal: Boolean = false)
+    extends Module {
 
     /** Returns the number of memory addresses used by the module
       *
@@ -69,17 +69,17 @@ class TimerInnerFVHarness(
 
     val timerInner = Module(new TimerInner(params, formal))
 
-    timerInner.io.timerInputBundle.en            := enReg
-    timerInner.io.timerInputBundle.prescaler     := prescalerReg
-    timerInner.io.timerInputBundle.maxCount      := maxCountReg
-    timerInner.io.timerInputBundle.pwmCeiling    := pwmCeilingReg
-    timerInner.io.timerInputBundle.setCountValue := setCountValueReg
-    timerInner.io.timerInputBundle.setCount      := setCountReg
+    timerInner.io.timerInputBundle.en                      := enReg
+    timerInner.io.timerInputBundle.prescaler               := prescalerReg
+    timerInner.io.timerInputBundle.maxCount                := maxCountReg
+    timerInner.io.timerInputBundle.pwmCeiling              := pwmCeilingReg
+    timerInner.io.timerInputBundle.setCountValue           := setCountValueReg
+    timerInner.io.timerInputBundle.setCount                := setCountReg
     timerInner.io.timerInputBundle.maxCountEnableInterrupt := maxCountEnableInterruptReg
 
-    countNext      := timerInner.io.timerOutputBundle.count
-    maxReachedNext := timerInner.io.timerOutputBundle.maxReached
-    pwmNext        := timerInner.io.timerOutputBundle.pwm
+    countNext             := timerInner.io.timerOutputBundle.count
+    maxReachedNext        := timerInner.io.timerOutputBundle.maxReached
+    pwmNext               := timerInner.io.timerOutputBundle.pwm
     maxCountInterruptNext := timerInner.io.timerOutputBundle.interrupts.maxCountInterrupt
 
     io.timerOutputBundle.count                        := countNext

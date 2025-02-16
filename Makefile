@@ -47,7 +47,7 @@ sta:
 
 test:
 	@echo Running tests...
-	@$(SBT) test
+	@$(SBT) test -DuseVerilator="true"
 
 cov: 
 	@$(SBT) coverageOn test coverageReport

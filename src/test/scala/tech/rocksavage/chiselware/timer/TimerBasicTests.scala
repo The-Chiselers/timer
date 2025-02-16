@@ -14,8 +14,7 @@ object TimerBasicTests extends AnyFlatSpec with ChiselScalatestTester {
 
     def timerBasicTest(
         dut: Timer,
-        myParams: TimerParams
-    ): Unit = {
+        myParams: TimerParams): Unit = {
         implicit val clock = dut.clock
 
         // Get the register map from the Timer module
@@ -60,20 +59,18 @@ object TimerBasicTests extends AnyFlatSpec with ChiselScalatestTester {
 
         // Step the clock until the count reaches maxCount
         dut.clock.setTimeout(0)
-        while (dut.io.timerOutput.count.peekInt() < 30) {
+        while (dut.io.timerOutput.count.peekInt() < 30)
             dut.clock.step(1)
-        }
 
         // Check that maxReached is true
         dut.io.timerOutput.pwm.expect(
-          true.B
+          true.B,
         ) // Since count >= pwmCeiling, PWM should be high
     }
     // Test 1: Set PWM ceiling and sample at every clock cycle to verify its correct for one cycle
     def testPWMCeiling(
         dut: Timer,
-        myParams: TimerParams
-    ): Unit = {
+        myParams: TimerParams): Unit = {
         implicit val clock = dut.clock
         // Get the register map and addresses
         val registerMap = dut.registerMap
@@ -108,7 +105,7 @@ object TimerBasicTests extends AnyFlatSpec with ChiselScalatestTester {
             prevCount = count
             assert(
               pwm == expectedPwm,
-              s"At count $count, expected PWM $expectedPwm but got $pwm"
+              s"At count $count, expected PWM $expectedPwm but got $pwm",
             )
         }
     }
@@ -116,8 +113,7 @@ object TimerBasicTests extends AnyFlatSpec with ChiselScalatestTester {
     // Test 2: Change the prescaler halfway through execution and check timing
     def testPrescalerChange(
         dut: Timer,
-        myParams: TimerParams
-    ): Unit = {
+        myParams: TimerParams): Unit = {
         implicit val clock = dut.clock
         val registerMap    = dut.registerMap
 
@@ -147,7 +143,7 @@ object TimerBasicTests extends AnyFlatSpec with ChiselScalatestTester {
             if (dut.io.timerOutput.count.peekInt() == 10) {
                 assert(
                   totalCycles == cyclesToCount10, // 0 - 10 is 11 counts
-                  s"Total cycles $totalCycles != expected $cyclesToCount10"
+                  s"Total cycles $totalCycles != expected $cyclesToCount10",
                 )
                 // Change prescaler to 3
                 writeAPB(dut.io.apb, prescalerAddr.U, 3.U)
@@ -159,15 +155,14 @@ object TimerBasicTests extends AnyFlatSpec with ChiselScalatestTester {
 
         assert(
           totalCycles == expectedTotalCycles,
-          s"Total cycles $totalCycles != expected $expectedTotalCycles"
+          s"Total cycles $totalCycles != expected $expectedTotalCycles",
         )
     }
 
     // Test 3: Set maxCount to a low value and verify duty cycle over 10 periods
     def testLowMaxCountDutyCycle(
         dut: Timer,
-        myParams: TimerParams
-    ): Unit = {
+        myParams: TimerParams): Unit = {
         implicit val clock = dut.clock
         val registerMap    = dut.registerMap
 
@@ -203,15 +198,14 @@ object TimerBasicTests extends AnyFlatSpec with ChiselScalatestTester {
 
         assert(
           math.abs(actualDutyCycle - expectedDutyCycle) < 0.1,
-          s"Expected duty cycle $expectedDutyCycle, but got $actualDutyCycle"
+          s"Expected duty cycle $expectedDutyCycle, but got $actualDutyCycle",
         )
     }
 
     // Test 4: Random maxCount and prescaler, verify total cycles until maxReached
     def testRandomMaxCountAndPrescaler(
         dut: Timer,
-        myParams: TimerParams
-    ): Unit = {
+        myParams: TimerParams): Unit = {
         implicit val clock = dut.clock
         val registerMap    = dut.registerMap
 
@@ -246,12 +240,12 @@ object TimerBasicTests extends AnyFlatSpec with ChiselScalatestTester {
         }
 
         println(
-          s"Random Test: maxCount=$maxCountValue, prescaler=$prescalerValue, totalCycles=$cycles"
+          s"Random Test: maxCount=$maxCountValue, prescaler=$prescalerValue, totalCycles=$cycles",
         )
 
         assert(
           cycles == expectedTotalCycles,
-          s"Total cycles $cycles != expected $expectedTotalCycles"
+          s"Total cycles $cycles != expected $expectedTotalCycles",
         )
     }
 }

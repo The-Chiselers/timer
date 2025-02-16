@@ -9,8 +9,7 @@ import tech.rocksavage.chiselware.timer.param.TimerParams
 /** A bundle representing the input and output signals for a timer module.
   *
   * @param params
-  *   The configuration parameters for the timer, including the width of the
-  *   count registers.
+  *   The configuration parameters for the timer, including the width of the count registers.
   */
 class TimerBundle(params: TimerParams) extends Bundle {
 
