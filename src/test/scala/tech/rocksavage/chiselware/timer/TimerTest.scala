@@ -72,7 +72,7 @@ class TimerTest extends AnyFlatSpec with ChiselScalatestTester with Matchers {
         val prescalerWidth = 32
 
         // Pass in randomly selected values to DUT
-        val timerParams = TimerParams(32, 32, 32, 32, verbose = true)
+        val timerParams = TimerParams(32, 32, 8, 32, 32, verbose = true)
         val configName  = "32_32_32_32"
 
         info(s"Data Width = $dataWidth")
@@ -259,7 +259,7 @@ class TimerTest extends AnyFlatSpec with ChiselScalatestTester with Matchers {
         }
         it should "pass a basic test" in {
             val testName    = "basic"
-            val timerParams = TimerParams(32, 32, 32, 32, verbose = true)
+            val timerParams = TimerParams(32, 32, 8, 32, 32, verbose = true)
             val cov = test(new Timer(timerParams, false))
                 .withAnnotations(backendAnnotations) { dut =>
                     TimerBasicTests.timerBasicTest(

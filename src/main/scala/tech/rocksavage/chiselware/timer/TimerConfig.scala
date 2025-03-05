@@ -9,6 +9,7 @@ class TimerConfig extends ModuleConfig {
         TimerParams(
           dataWidth = 8,
           addressWidth = 8,
+          wordWidth = 8,
           countWidth = 8,
           prescalerWidth = 8
         ),
@@ -18,6 +19,7 @@ class TimerConfig extends ModuleConfig {
         TimerParams(
           dataWidth = 16,
           addressWidth = 16,
+          wordWidth = 8,
           countWidth = 16,
           prescalerWidth = 16
         ),
@@ -27,6 +29,7 @@ class TimerConfig extends ModuleConfig {
         TimerParams(
           dataWidth = 32,
           addressWidth = 32,
+          wordWidth = 8,
           countWidth = 32,
           prescalerWidth = 32
         ),
@@ -36,6 +39,7 @@ class TimerConfig extends ModuleConfig {
         TimerParams(
           dataWidth = 64,
           addressWidth = 64,
+          wordWidth = 8,
           countWidth = 64,
           prescalerWidth = 64
         ),

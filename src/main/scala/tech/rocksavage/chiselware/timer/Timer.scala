@@ -25,6 +25,9 @@ class Timer(val timerParams: TimerParams, formal: Boolean) extends Module {
     /** Address width for the timer */
     val addressWidth = timerParams.addressWidth
 
+    /** Word width for the timer */
+    val wordWidth = timerParams.wordWidth
+
     /** Input/Output bundle for the Timer module */
     val io = IO(new Bundle {
 
@@ -36,7 +39,11 @@ class Timer(val timerParams: TimerParams, formal: Boolean) extends Module {
     })
 
     /** RegisterMap to manage the addressable registers */
-    val registerMap = new RegisterMap(dataWidth, addressWidth)
+    val registerMap = new RegisterMap(
+      dataWidth,
+      addressWidth,
+      wordWidthOption = Some(wordWidth)
+    )
 
     /** Enable signal register */
     val en: Bool = RegInit(false.B)
@@ -100,7 +107,7 @@ class Timer(val timerParams: TimerParams, formal: Boolean) extends Module {
 
     /** AddrDecode module instance */
     val addrDecode = Module(new AddrDecode(addrDecodeParams))
-    addrDecode.io.addr     := io.apb.PADDR
+    addrDecode.io.addrRaw  := io.apb.PADDR
     addrDecode.io.en       := true.B
     addrDecode.io.selInput := true.B
     io.apb.PREADY          := (io.apb.PENABLE && io.apb.PSEL)
