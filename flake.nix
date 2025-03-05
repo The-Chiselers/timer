@@ -23,6 +23,7 @@
                     sbt
                     scala-cli
                     scalafmt
+                    scalafix
 
                     # Chisel
                     circt
@@ -108,6 +109,7 @@
                       sbt
                       scala-cli
                       scalafmt
+                      scalafix
 
                       # Chisel
                       circt
@@ -189,6 +191,7 @@
                       sbt
                       scala-cli
                       scalafmt
+                      scalafix
 
                       # Chisel
                       circt

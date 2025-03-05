@@ -3,21 +3,26 @@
 package tech.rocksavage.chiselware.timer
 
 import chisel3._
-import tech.rocksavage.chiselware.addrdecode.{AddrDecode, AddrDecodeError}
+import tech.rocksavage.chiselware.addrdecode.AddrDecode
+import tech.rocksavage.chiselware.addrdecode.AddrDecodeError
 import tech.rocksavage.chiselware.addressable.RegisterMap
-import tech.rocksavage.chiselware.apb.{ApbBundle, ApbParams}
+import tech.rocksavage.chiselware.apb.ApbBundle
+import tech.rocksavage.chiselware.apb.ApbParams
 import tech.rocksavage.chiselware.timer.bundle.TimerOutputBundle
 import tech.rocksavage.chiselware.timer.param.TimerParams
+import tech.rocksavage.test.TestUtils.coverAll
 
-/** A Timer module that implements a configurable timer with various
-  * functionalities.
+/** A Timer module that implements a configurable timer with various functionalities.
   *
   * @param timerParams
   *   Parameters for configuring the timer.
   * @param formal
   *   A boolean value to enable formal verification.
   */
-class Timer(val timerParams: TimerParams, formal: Boolean) extends Module {
+class Timer(
+    val timerParams: TimerParams,
+    formal: Boolean)
+    extends Module {
 
     /** Data width for the timer */
     val dataWidth = timerParams.dataWidth
@@ -50,7 +55,7 @@ class Timer(val timerParams: TimerParams, formal: Boolean) extends Module {
     registerMap.createAddressableRegister(
       en,
       "en",
-      verbose = timerParams.verbose
+      verbose = timerParams.verbose,
     )
 
     /** Prescaler value register */
@@ -58,7 +63,7 @@ class Timer(val timerParams: TimerParams, formal: Boolean) extends Module {
     registerMap.createAddressableRegister(
       prescaler,
       "prescaler",
-      verbose = timerParams.verbose
+      verbose = timerParams.verbose,
     )
 
     /** Maximum count value register */
@@ -66,7 +71,7 @@ class Timer(val timerParams: TimerParams, formal: Boolean) extends Module {
     registerMap.createAddressableRegister(
       maxCount,
       "maxCount",
-      verbose = timerParams.verbose
+      verbose = timerParams.verbose,
     )
 
     /** PWM ceiling value register */
@@ -74,7 +79,7 @@ class Timer(val timerParams: TimerParams, formal: Boolean) extends Module {
     registerMap.createAddressableRegister(
       pwmCeiling,
       "pwmCeiling",
-      verbose = timerParams.verbose
+      verbose = timerParams.verbose,
     )
 
     /** Value to set the count register */
@@ -82,7 +87,7 @@ class Timer(val timerParams: TimerParams, formal: Boolean) extends Module {
     registerMap.createAddressableRegister(
       setCountValue,
       "setCountValue",
-      verbose = timerParams.verbose
+      verbose = timerParams.verbose,
     )
 
     /** Signal to set the count register */
@@ -90,7 +95,7 @@ class Timer(val timerParams: TimerParams, formal: Boolean) extends Module {
     registerMap.createAddressableRegister(
       setCount,
       "setCount",
-      verbose = timerParams.verbose
+      verbose = timerParams.verbose,
     )
 
     /** Enable interrupt for maximum count register */
@@ -98,7 +103,7 @@ class Timer(val timerParams: TimerParams, formal: Boolean) extends Module {
     registerMap.createAddressableRegister(
       maxCountEnableInterrupt,
       "maxCountEnableInterrupt",
-      verbose = timerParams.verbose
+      verbose = timerParams.verbose,
     )
 
     // Generate AddrDecode
@@ -111,37 +116,39 @@ class Timer(val timerParams: TimerParams, formal: Boolean) extends Module {
     addrDecode.io.en       := true.B
     addrDecode.io.selInput := true.B
     io.apb.PREADY          := (io.apb.PENABLE && io.apb.PSEL)
-    io.apb.PSLVERR := addrDecode.io.errorCode === AddrDecodeError.AddressOutOfRange
-    io.apb.PRDATA := 0.U
+    io.apb.PSLVERR         := addrDecode.io.errorCode === AddrDecodeError.AddressOutOfRange
+    io.apb.PRDATA          := 0.U
 
     // Control Register Read/Write
     when(io.apb.PSEL && io.apb.PENABLE) {
         when(io.apb.PWRITE) {
-            for (reg <- registerMap.getRegisters) {
+            for (reg <- registerMap.getRegisters)
                 when(addrDecode.io.sel(reg.id)) {
                     reg.writeCallback(addrDecode.io.addrOut, io.apb.PWDATA)
                 }
-            }
         }.otherwise {
-            for (reg <- registerMap.getRegisters) {
+            for (reg <- registerMap.getRegisters)
                 when(addrDecode.io.sel(reg.id)) {
                     io.apb.PRDATA := reg.readCallback(addrDecode.io.addrOut)
                 }
-            }
         }
     }
 
     // Instantiate the TimerInner module
     /** TimerInner module instance */
     val timerInner = Module(new TimerInner(timerParams, formal))
-    timerInner.io.timerInputBundle.en            := en
-    timerInner.io.timerInputBundle.setCount      := setCount
-    timerInner.io.timerInputBundle.prescaler     := prescaler
-    timerInner.io.timerInputBundle.maxCount      := maxCount
-    timerInner.io.timerInputBundle.pwmCeiling    := pwmCeiling
-    timerInner.io.timerInputBundle.setCountValue := setCountValue
+    timerInner.io.timerInputBundle.en                      := en
+    timerInner.io.timerInputBundle.setCount                := setCount
+    timerInner.io.timerInputBundle.prescaler               := prescaler
+    timerInner.io.timerInputBundle.maxCount                := maxCount
+    timerInner.io.timerInputBundle.pwmCeiling              := pwmCeiling
+    timerInner.io.timerInputBundle.setCountValue           := setCountValue
     timerInner.io.timerInputBundle.maxCountEnableInterrupt := maxCountEnableInterrupt
 
     // Connect the TimerInner outputs to the top-level outputs
     io.timerOutput <> timerInner.io.timerOutputBundle
+
+    if (timerParams.coverage)
+        // Cover the entire IO bundle recursively.
+        coverAll(io, "_io")
 }

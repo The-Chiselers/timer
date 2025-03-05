@@ -33,14 +33,13 @@ case class TimerParams(
 
     // Cov
     coverage: Boolean = false,
-    verbose: Boolean = false
-) {
+    verbose: Boolean = false) {
 
     require(dataWidth >= 1, "Data Width must be greater than or equal 1")
     require(addressWidth >= 1, "Address Width must be greater than or equal 1")
     require(countWidth >= 1, "Count Width must be greater than or equal 1")
     require(
       prescalerWidth >= 1,
-      "Prescaler Width must be greater than or equal 1"
+      "Prescaler Width must be greater than or equal 1",
     )
 }

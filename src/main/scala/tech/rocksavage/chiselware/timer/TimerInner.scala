@@ -8,19 +8,18 @@ import chiseltest.formal.past
 import tech.rocksavage.chiselware.timer.bundle.TimerBundle
 import tech.rocksavage.chiselware.timer.param.TimerParams
 
-/** A Timer module that implements a configurable timer with prescaler, count,
-  * and PWM functionality.
+/** A Timer module that implements a configurable timer with prescaler, count, and PWM
+  * functionality.
   *
   * @assume
-  *   This module does not buffer the input signals. It is assumed that the
-  *   input signals are already synchronized.
+  *   This module does not buffer the input signals. It is assumed that the input signals are
+  *   already synchronized.
   *
   * @constructor
   *   Create a new timer module.
   *
   * @param params
-  *   TimerParams object including dataWidth, addressWidth, countWidth, and
-  *   prescalerWidth.
+  *   TimerParams object including dataWidth, addressWidth, countWidth, and prescalerWidth.
   * @param formal
   *   A boolean value to enable formal verification.
   * @author
@@ -28,8 +27,8 @@ import tech.rocksavage.chiselware.timer.param.TimerParams
   */
 class TimerInner(
     params: TimerParams,
-    formal: Boolean = false
-) extends Module {
+    formal: Boolean = false)
+    extends Module {
 
     /** Input/output interface for the timer module */
     val io = IO(new TimerBundle(params))
@@ -148,7 +147,7 @@ class TimerInner(
           maxCount = maxCountWire,
           setCount = setCountWire,
           setCountValue = setCountValueWire,
-          prescalerWrap = prescalerWrapReg
+          prescalerWrap = prescalerWrapReg,
         )
     countNext         := countNextTemp
     countOverflowNext := countOverflowNextTemp
@@ -158,7 +157,7 @@ class TimerInner(
     pwmNext := computePwmNext(
       en = enWire,
       count = countReg,
-      pwmCeiling = pwmCeilingWire
+      pwmCeiling = pwmCeilingWire,
     )
 
     // Compute next value for prescaler counter
@@ -166,7 +165,7 @@ class TimerInner(
       en = enWire,
       setCount = setCountWire,
       prescalerCounter = prescalerCounterReg,
-      prescaler = prescalerWire
+      prescaler = prescalerWire,
     )
 
     // Compute next value for prescaler wrap
@@ -174,7 +173,7 @@ class TimerInner(
       en = enWire,
       setCount = setCountWire,
       prescalerCounter = prescalerCounterReg,
-      prescaler = prescalerWire
+      prescaler = prescalerWire,
     )
 
     // Interrupts
@@ -200,17 +199,17 @@ class TimerInner(
         combinedTimerNext := Cat(countNext, prescalerCounterNext)
 
         // Formal verification signals
-        val madeProgressFV = (combinedTimerNext > combinedTimer)
+        val madeProgressFV = combinedTimerNext > combinedTimer
         val maxReachedFV   = maxReachedNext
         val maxCountStable3 = (past(maxCountWire) === maxCountWire) && (past(
           maxCountWire,
-          2
+          2,
         ) === maxCountWire)
         val setCountStableLow3 = (setCountWire === 0.B) && (past(
-          setCountWire
+          setCountWire,
         ) === 0.B) && (past(setCountWire, 2) === 0.B)
         val prescalerStableLow3 = (prescalerWire === 0.U) && (past(
-          prescalerWire
+          prescalerWire,
         ) === 0.U) && (past(prescalerWire, 2) === 0.U)
         val enableStable3 =
             (enWire === past(enWire)) && (past(enWire, 2) === past(enWire))
@@ -221,7 +220,7 @@ class TimerInner(
             // ######################
             // Assert that every cycle, (prescaler > 0) implies ((nextCount > countReg) or (nextMaxReached))
             when(
-              maxCountStable3 && setCountStableLow3 && prescalerStableLow3 && enableStable3
+              maxCountStable3 && setCountStableLow3 && prescalerStableLow3 && enableStable3,
             ) {
                 assert(madeProgressFV || maxReachedFV)
             }
@@ -251,8 +250,7 @@ class TimerInner(
         }
     }
 
-    /** Computes the next value for the count, count overflow, and max reached
-      * signals.
+    /** Computes the next value for the count, count overflow, and max reached signals.
       *
       * @param en
       *   Enable signal for the timer.
@@ -267,8 +265,7 @@ class TimerInner(
       * @param prescalerWrap
       *   Signal indicating that the prescaler has wrapped around.
       * @return
-      *   A tuple containing the next count value, count overflow signal, and
-      *   max reached signal.
+      *   A tuple containing the next count value, count overflow signal, and max reached signal.
       */
     def computeCount(
         en: Bool,
@@ -276,8 +273,7 @@ class TimerInner(
         count: UInt,
         setCount: Bool,
         setCountValue: UInt,
-        prescalerWrap: Bool
-    ) = {
+        prescalerWrap: Bool) = {
         val countNextBeforeBoundsCheck = WireInit(0.U(params.countWidth.W))
         val countNext                  = WireInit(0.U(params.countWidth.W))
         val countOverflowNext          = WireInit(false.B)
@@ -359,8 +355,7 @@ class TimerInner(
     def computePwmNext(
         en: Bool,
         count: UInt,
-        pwmCeiling: UInt
-    ) = {
+        pwmCeiling: UInt) = {
         val pwmNext = WireInit(false.B)
         when(en) {
             pwmNext := count >= pwmCeiling
@@ -387,8 +382,7 @@ class TimerInner(
         en: Bool,
         setCount: Bool,
         prescalerCounter: UInt,
-        prescaler: UInt
-    ) = {
+        prescaler: UInt) = {
         val prescalerCounterNext = WireInit(0.U(params.countWidth.W))
         when(en) {
             when(prescalerCounter >= prescaler || setCount) {
@@ -419,8 +413,7 @@ class TimerInner(
         en: Bool,
         setCount: Bool,
         prescalerCounter: UInt,
-        prescaler: UInt
-    ) = {
+        prescaler: UInt) = {
         val prescalerWrapNext = WireInit(false.B)
         when(en) {
             prescalerWrapNext := (prescalerCounter === prescaler) || setCount
