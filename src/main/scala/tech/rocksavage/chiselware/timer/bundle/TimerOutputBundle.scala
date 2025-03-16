@@ -14,13 +14,13 @@ import tech.rocksavage.chiselware.timer.param.TimerParams
 class TimerOutputBundle(params: TimerParams) extends Bundle {
 
     /** Current count value of the timer. */
-    val count = Output(UInt(params.countWidth.W))
+    val count: UInt = Output(UInt(params.countWidth.W))
 
     /** Signal indicating that the timer has reached its maximum count value. */
-    val maxReached = Output(Bool())
+    val maxReached: Bool = Output(Bool())
 
     /** PWM output signal with a duty cycle controlled by `pwmCeiling`. */
-    val pwm = Output(Bool())
+    val pwm: Bool = Output(Bool())
 
     /** Interrupt signals for the timer. */
     val interrupts = new TimerInterruptBundle

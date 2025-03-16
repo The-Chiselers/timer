@@ -3,8 +3,7 @@
 package tech.rocksavage.chiselware.timer.bundle
 
 import chisel3._
-import chisel3.util._
 
 class TimerInterruptBundle extends Bundle {
-    val maxCountInterrupt = Output(Bool())
+    val maxCountInterrupt: Bool = Output(Bool())
 }

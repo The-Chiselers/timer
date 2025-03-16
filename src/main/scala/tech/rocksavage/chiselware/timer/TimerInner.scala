@@ -31,32 +31,32 @@ class TimerInner(
     extends Module {
 
     /** Input/output interface for the timer module */
-    val io = IO(new TimerBundle(params))
+    val io: TimerBundle = IO(new TimerBundle(params))
 
     // ###################
     // Input Regs
     // ###################
 
     /** Enable signal wire */
-    val enWire = WireInit(false.B)
+    val enWire: Bool = WireInit(false.B)
 
     /** Prescaler value wire */
-    val prescalerWire = WireInit(0.U(params.prescalerWidth.W))
+    val prescalerWire: UInt = WireInit(0.U(params.prescalerWidth.W))
 
     /** Maximum count value wire */
-    val maxCountWire = WireInit(0.U(params.countWidth.W))
+    val maxCountWire: UInt = WireInit(0.U(params.countWidth.W))
 
     /** PWM ceiling value wire */
-    val pwmCeilingWire = WireInit(0.U(params.countWidth.W))
+    val pwmCeilingWire: UInt = WireInit(0.U(params.countWidth.W))
 
     /** Value to set the count wire */
-    val setCountValueWire = WireInit(0.U(params.countWidth.W))
+    val setCountValueWire: UInt = WireInit(0.U(params.countWidth.W))
 
     /** Signal to set the count wire */
-    val setCountWire = WireInit(false.B)
+    val setCountWire: Bool = WireInit(false.B)
 
     /** Enable interrupt for maximum count wire */
-    val maxCountEnableInterruptWire = WireInit(false.B)
+    val maxCountEnableInterruptWire: Bool = WireInit(false.B)
 
     // Assign input signals to wires
     enWire                      := io.timerInputBundle.en
@@ -72,28 +72,28 @@ class TimerInner(
     // ###################
 
     /** Next count value wire */
-    val countNext = WireInit(0.U(params.countWidth.W))
+    val countNext: UInt = WireInit(0.U(params.countWidth.W))
 
     /** Maximum reached signal wire */
-    val maxReachedNext = WireInit(false.B)
+    val maxReachedNext: Bool = WireInit(false.B)
 
     /** PWM next value wire */
-    val pwmNext = WireInit(false.B)
+    val pwmNext: Bool = WireInit(false.B)
 
     /** Maximum count interrupt next signal wire */
-    val maxCountInterruptNext = WireInit(false.B)
+    val maxCountInterruptNext: Bool = WireInit(false.B)
 
     /** Current count register */
-    val countReg = RegInit(0.U(params.countWidth.W))
+    val countReg: UInt = RegInit(0.U(params.countWidth.W))
 
     /** Maximum reached register */
-    val maxReachedReg = RegInit(false.B)
+    val maxReachedReg: Bool = RegInit(false.B)
 
     /** Current PWM register */
-    val pwmReg = RegInit(false.B)
+    val pwmReg: Bool = RegInit(false.B)
 
     /** Maximum count interrupt register */
-    val maxCountInterruptReg = RegInit(false.B)
+    val maxCountInterruptReg: Bool = RegInit(false.B)
 
     // Assign next values to registers
     countReg             := countNext
@@ -112,22 +112,22 @@ class TimerInner(
     // ###################
 
     /** Next prescaler counter value wire */
-    val prescalerCounterNext = WireInit(0.U(params.prescalerWidth.W))
+    val prescalerCounterNext: UInt = WireInit(0.U(params.prescalerWidth.W))
 
     /** Prescaler wrap signal wire */
-    val prescalerWrapNext = WireInit(false.B)
+    val prescalerWrapNext: Bool = WireInit(false.B)
 
     /** Count overflow signal wire */
-    val countOverflowNext = WireInit(false.B)
+    val countOverflowNext: Bool = WireInit(false.B)
 
     /** Current prescaler counter register */
-    val prescalerCounterReg = RegInit(0.U(params.prescalerWidth.W))
+    val prescalerCounterReg: UInt = RegInit(0.U(params.prescalerWidth.W))
 
     /** Current prescaler wrap register */
-    val prescalerWrapReg = RegInit(false.B)
+    val prescalerWrapReg: Bool = RegInit(false.B)
 
     /** Current count overflow register */
-    val countOverflowReg = RegInit(false.B)
+    val countOverflowReg: Bool = RegInit(false.B)
 
     // Assign next values to internal registers
     prescalerCounterReg := prescalerCounterNext
@@ -273,7 +273,7 @@ class TimerInner(
         count: UInt,
         setCount: Bool,
         setCountValue: UInt,
-        prescalerWrap: Bool) = {
+        prescalerWrap: Bool): (UInt, Bool, Bool) = {
         val countNextBeforeBoundsCheck = WireInit(0.U(params.countWidth.W))
         val countNext                  = WireInit(0.U(params.countWidth.W))
         val countOverflowNext          = WireInit(false.B)
@@ -355,7 +355,7 @@ class TimerInner(
     def computePwmNext(
         en: Bool,
         count: UInt,
-        pwmCeiling: UInt) = {
+        pwmCeiling: UInt): Bool = {
         val pwmNext = WireInit(false.B)
         when(en) {
             pwmNext := count >= pwmCeiling
@@ -382,7 +382,7 @@ class TimerInner(
         en: Bool,
         setCount: Bool,
         prescalerCounter: UInt,
-        prescaler: UInt) = {
+        prescaler: UInt): UInt = {
         val prescalerCounterNext = WireInit(0.U(params.countWidth.W))
         when(en) {
             when(prescalerCounter >= prescaler || setCount) {
@@ -413,7 +413,7 @@ class TimerInner(
         en: Bool,
         setCount: Bool,
         prescalerCounter: UInt,
-        prescaler: UInt) = {
+        prescaler: UInt): Bool = {
         val prescalerWrapNext = WireInit(false.B)
         when(en) {
             prescalerWrapNext := (prescalerCounter === prescaler) || setCount

@@ -3,8 +3,6 @@
 package tech.rocksavage.chiselware.timer
 
 import chisel3._
-import chisel3.util.Cat
-import chiseltest.formal.past
 import tech.rocksavage.chiselware.timer.bundle.TimerBundle
 import tech.rocksavage.chiselware.timer.param.TimerParams
 
@@ -29,20 +27,20 @@ class TimerInnerFVHarness(
       * @return
       *   The width of the memory
       */
-    val io = IO(new TimerBundle(params))
+    val io: TimerBundle = IO(new TimerBundle(params))
 
     // ###################
     // Input Regs
     // ###################
 
     // Regs
-    val enReg                      = RegInit(false.B)
-    val prescalerReg               = RegInit(0.U(params.prescalerWidth.W))
-    val maxCountReg                = RegInit(0.U(params.countWidth.W))
-    val pwmCeilingReg              = RegInit(0.U(params.countWidth.W))
-    val setCountValueReg           = RegInit(0.U(params.countWidth.W))
-    val setCountReg                = RegInit(false.B)
-    val maxCountEnableInterruptReg = RegInit(false.B)
+    val enReg: Bool                      = RegInit(false.B)
+    val prescalerReg: UInt               = RegInit(0.U(params.prescalerWidth.W))
+    val maxCountReg: UInt                = RegInit(0.U(params.countWidth.W))
+    val pwmCeilingReg: UInt              = RegInit(0.U(params.countWidth.W))
+    val setCountValueReg: UInt           = RegInit(0.U(params.countWidth.W))
+    val setCountReg: Bool                = RegInit(false.B)
+    val maxCountEnableInterruptReg: Bool = RegInit(false.B)
 
     // Assignment
     enReg                      := io.timerInputBundle.en
@@ -58,16 +56,16 @@ class TimerInnerFVHarness(
     // ###################
 
     // Wires
-    val countNext             = WireInit(0.U(params.countWidth.W))
-    val maxReachedNext        = WireInit(false.B)
-    val pwmNext               = WireInit(false.B)
-    val maxCountInterruptNext = WireInit(false.B)
+    val countNext: UInt             = WireInit(0.U(params.countWidth.W))
+    val maxReachedNext: Bool        = WireInit(false.B)
+    val pwmNext: Bool               = WireInit(false.B)
+    val maxCountInterruptNext: Bool = WireInit(false.B)
 
     // ###################
     // Module Instantiation
     // ###################
 
-    val timerInner = Module(new TimerInner(params, formal))
+    val timerInner: TimerInner = Module(new TimerInner(params, formal))
 
     timerInner.io.timerInputBundle.en                      := enReg
     timerInner.io.timerInputBundle.prescaler               := prescalerReg

@@ -1,9 +1,9 @@
 package tech.rocksavage.chiselware.timer
 
+import chiseltest.RawTester.verify
 import chiseltest._
 import chiseltest.formal.BoundedCheck
 import chiseltest.simulator._
-import chiseltest.RawTester.verify
 import firrtl2.annotations.Annotation
 import firrtl2.options.TargetDirAnnotation
 import org.scalatest.flatspec.AnyFlatSpec
@@ -19,13 +19,14 @@ class TimerTest extends AnyFlatSpec with ChiselScalatestTester with Matchers {
 
     val verbose  = false
     val numTests = 2
-    val testName = System.getProperty("testName")
+//    val testName: String = System.getProperty("testName")
+    val testName: String = "basic"
     println(s"Argument passed: $testName")
 
     // System properties for flags
-    val enableVcd    = System.getProperty("enableVcd", "true").toBoolean
-    val enableFst    = System.getProperty("enableFst", "false").toBoolean
-    val useVerilator = System.getProperty("useVerilator", "false").toBoolean
+    val enableVcd: Boolean    = System.getProperty("enableVcd", "true").toBoolean
+    val enableFst: Boolean    = System.getProperty("enableFst", "false").toBoolean
+    val useVerilator: Boolean = System.getProperty("useVerilator", "false").toBoolean
 
     val testDir = "out/test"
 
@@ -34,7 +35,7 @@ class TimerTest extends AnyFlatSpec with ChiselScalatestTester with Matchers {
     )
 
     // Constructing the backend annotations based on the flags
-    val backendAnnotations = {
+    val backendAnnotations: Seq[Annotation] = {
         var annos: Seq[Annotation] = Seq() // Initialize with correct type
 
         if (enableVcd) annos = annos :+ chiseltest.simulator.WriteVcdAnnotation
@@ -65,13 +66,21 @@ class TimerTest extends AnyFlatSpec with ChiselScalatestTester with Matchers {
         // Randomize Input Variables
         val dataWidth      = 32
         val addrWidth      = 32
+        val wordWidth      = 8
         val countWidth     = 32
         val prescalerWidth = 32
 
         // Pass in randomly selected values to DUT
         val timerParams =
-            TimerParams(32, 32, 32, 32, coverage = true, verbose = true)
-        val configName = "32_32_32_32"
+            TimerParams(
+              dataWidth = dataWidth,
+              addressWidth = addrWidth,
+              wordWidth = wordWidth,
+              countWidth = countWidth,
+              prescalerWidth = prescalerWidth,
+              coverage = true,
+              verbose = true)
+        val configName = "32_32_8_32_32"
 
         info(s"Data Width = $dataWidth")
         info(s"Address Width = $addrWidth")

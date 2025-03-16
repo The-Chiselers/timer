@@ -3,11 +3,9 @@
 package tech.rocksavage.chiselware.timer
 
 import chisel3._
-import tech.rocksavage.chiselware.addrdecode.AddrDecode
-import tech.rocksavage.chiselware.addrdecode.AddrDecodeError
+import tech.rocksavage.chiselware.addrdecode.{AddrDecode, AddrDecodeError}
 import tech.rocksavage.chiselware.addressable.RegisterMap
-import tech.rocksavage.chiselware.apb.ApbBundle
-import tech.rocksavage.chiselware.apb.ApbParams
+import tech.rocksavage.chiselware.apb.{ApbBundle, ApbParams}
 import tech.rocksavage.chiselware.timer.bundle.TimerOutputBundle
 import tech.rocksavage.chiselware.timer.param.TimerParams
 import tech.rocksavage.test.TestUtils.coverAll
@@ -30,6 +28,9 @@ class Timer(
     /** Address width for the timer */
     val addressWidth = timerParams.addressWidth
 
+    /** Word width for the timer */
+    val wordWidth = timerParams.wordWidth
+
     /** Input/Output bundle for the Timer module */
     val io = IO(new Bundle {
 
@@ -41,7 +42,7 @@ class Timer(
     })
 
     /** RegisterMap to manage the addressable registers */
-    val registerMap = new RegisterMap(dataWidth, addressWidth)
+    val registerMap = new RegisterMap(dataWidth, addressWidth, Some(wordWidth))
 
     /** Enable signal register */
     val en: Bool = RegInit(false.B)
@@ -99,20 +100,22 @@ class Timer(
       verbose = timerParams.verbose,
     )
 
-    // Generate AddrDecode
-    /** Parameters for address decoding */
+    // ---------------------------------------------------------------
+    // APB address decode
+    // ---------------------------------------------------------------
     val addrDecodeParams = registerMap.getAddrDecodeParams
-
-    /** AddrDecode module instance */
-    val addrDecode = Module(new AddrDecode(addrDecodeParams))
-    addrDecode.io.addr     := io.apb.PADDR
-    addrDecode.io.en       := true.B
+    val addrDecode       = Module(new AddrDecode(addrDecodeParams))
+    addrDecode.io.addrRaw  := io.apb.PADDR
+    addrDecode.io.en       := io.apb.PSEL && io.apb.PENABLE
     addrDecode.io.selInput := true.B
-    io.apb.PREADY          := (io.apb.PENABLE && io.apb.PSEL)
-    io.apb.PSLVERR         := addrDecode.io.errorCode === AddrDecodeError.AddressOutOfRange
-    io.apb.PRDATA          := 0.U
 
-    // Control Register Read/Write
+    // ---------------------------------------------------------------
+    // APB read/write interface handling
+    // ---------------------------------------------------------------
+    io.apb.PREADY  := io.apb.PENABLE && io.apb.PSEL
+    io.apb.PSLVERR := addrDecode.io.errorCode === AddrDecodeError.AddressOutOfRange
+    io.apb.PRDATA  := 0.U
+
     when(io.apb.PSEL && io.apb.PENABLE) {
         when(io.apb.PWRITE) {
             for (reg <- registerMap.getRegisters)
@@ -129,7 +132,7 @@ class Timer(
 
     // Instantiate the TimerInner module
     /** TimerInner module instance */
-    val timerInner = Module(new TimerInner(timerParams, formal))
+    val timerInner: TimerInner = Module(new TimerInner(timerParams, formal))
     timerInner.io.timerInputBundle.en                      := en
     timerInner.io.timerInputBundle.setCount                := setCount
     timerInner.io.timerInputBundle.prescaler               := prescaler

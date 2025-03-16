@@ -30,8 +30,7 @@ object TimerBasicTests extends AnyFlatSpec with ChiselScalatestTester {
             registerMap.getAddressOfRegister("pwmCeiling").get
         val setCountValueAddr =
             registerMap.getAddressOfRegister("setCountValue").get
-        val setCountAddr =
-            registerMap.getAddressOfRegister("setCount").get
+        registerMap.getAddressOfRegister("setCount").get
 
         // Write to the prescaler register
         writeAPB(dut.io.apb, prescalerAddr.U, 0.U)
@@ -79,9 +78,8 @@ object TimerBasicTests extends AnyFlatSpec with ChiselScalatestTester {
         val prescalerAddr  = registerMap.getAddressOfRegister("prescaler").get
         val maxCountAddr   = registerMap.getAddressOfRegister("maxCount").get
         val pwmCeilingAddr = registerMap.getAddressOfRegister("pwmCeiling").get
-        val setCountValueAddr =
-            registerMap.getAddressOfRegister("setCountValue").get
-        val setCountAddr = registerMap.getAddressOfRegister("setCount").get
+        registerMap.getAddressOfRegister("setCountValue").get
+        registerMap.getAddressOfRegister("setCount").get
 
         // Configure the timer
         // Set prescaler to 0 (no prescaling)
@@ -130,11 +128,11 @@ object TimerBasicTests extends AnyFlatSpec with ChiselScalatestTester {
 
         // 2 clock cycles for apb write to finish
         var totalCycles    = 0
-        var countValue     = 0
+        
         var prescalerValue = 1
 
-        val initPrescaler   = 1
-        val secondPrescaler = 3
+        
+        
 
         val cyclesToCount10     = 19 // has to account for time for apb write
         val cyclesFromCount10   = 34 // has to account for time for apb write

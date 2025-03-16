@@ -14,25 +14,25 @@ import tech.rocksavage.chiselware.timer.param.TimerParams
 class TimerInputBundle(params: TimerParams) extends Bundle {
 
     /** Enable signal for the timer. When high, the timer is active. */
-    val en = Input(Bool())
+    val en: Bool = Input(Bool())
 
     /** Prescaler value to divide the clock frequency. */
-    val prescaler = Input(UInt(params.prescalerWidth.W))
+    val prescaler: UInt = Input(UInt(params.prescalerWidth.W))
 
     /** Maximum count value before the timer resets. */
-    val maxCount = Input(UInt(params.countWidth.W))
+    val maxCount: UInt = Input(UInt(params.countWidth.W))
 
     /** PWM ceiling value to control the duty cycle of the PWM signal. */
-    val pwmCeiling = Input(UInt(params.countWidth.W))
+    val pwmCeiling: UInt = Input(UInt(params.countWidth.W))
 
     /** Value to set the counter to when `setCount` is asserted. */
-    val setCountValue = Input(UInt(params.countWidth.W))
+    val setCountValue: UInt = Input(UInt(params.countWidth.W))
 
     /** Signal to set the counter to `setCountValue`. */
-    val setCount = Input(Bool())
+    val setCount: Bool = Input(Bool())
 
     /** Signal to enable the interrupt when the counter reaches the maximum count.
       */
-    val maxCountEnableInterrupt = Input(Bool())
+    val maxCountEnableInterrupt: Bool = Input(Bool())
 
 }

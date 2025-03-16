@@ -25,6 +25,7 @@ case class TimerParams(
     // Parameters for addressing
     dataWidth: Int = 32,
     addressWidth: Int = 32,
+    wordWidth: Int = 8,
 
     // Parameters for the counter
     countWidth: Int = 32,
