@@ -42,7 +42,11 @@ class Timer(
     })
 
     /** RegisterMap to manage the addressable registers */
-    val registerMap = new RegisterMap(dataWidth, addressWidth, Some(wordWidth))
+    val registerMap = new RegisterMap(
+      dataWidth,
+      addressWidth,
+      wordWidthOption = Some(wordWidth)
+    )
 
     /** Enable signal register */
     val en: Bool = RegInit(false.B)
