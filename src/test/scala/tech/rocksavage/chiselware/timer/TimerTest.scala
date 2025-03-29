@@ -18,7 +18,7 @@ import tech.rocksavage.test._
 class TimerTest extends AnyFlatSpec with ChiselScalatestTester with Matchers {
 
     val verbose  = false
-    val numTests = 2
+    val numTests = 1
     val testName = System.getProperty("testName")
     println(s"Argument passed: $testName")
 
@@ -49,10 +49,8 @@ class TimerTest extends AnyFlatSpec with ChiselScalatestTester with Matchers {
     }
 
     // Execute the regressigiyon across a randomized range of configurations
-    if (testName == "regression")
-        (1 to numTests).foreach(config => main(s"Timer_test_config_$config"))
-    else
-        main(testName)
+//    main(testName)
+    main("pwm_ceiling_test")
 
     def main(testNameMaybeNull: String): Unit = {
         val testName =

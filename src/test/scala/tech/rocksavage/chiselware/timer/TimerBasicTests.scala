@@ -78,6 +78,8 @@ object TimerBasicTests extends AnyFlatSpec with ChiselScalatestTester {
         val prescalerAddr  = registerMap.getAddressOfRegister("prescaler").get
         val maxCountAddr   = registerMap.getAddressOfRegister("maxCount").get
         val pwmCeilingAddr = registerMap.getAddressOfRegister("pwmCeiling").get
+        val maxCountEnableInterruptAddr =
+            registerMap.getAddressOfRegister("maxCountEnableInterrupt").get
         registerMap.getAddressOfRegister("setCountValue").get
         registerMap.getAddressOfRegister("setCount").get
 
@@ -85,16 +87,18 @@ object TimerBasicTests extends AnyFlatSpec with ChiselScalatestTester {
         // Set prescaler to 0 (no prescaling)
         writeAPB(dut.io.apb, prescalerAddr.U, 0.U)
         // Set maxCount to 10
-        writeAPB(dut.io.apb, maxCountAddr.U, 10.U)
+        writeAPB(dut.io.apb, maxCountAddr.U, 254.U)
         // Set pwmCeiling to 5
         writeAPB(dut.io.apb, pwmCeilingAddr.U, 5.U)
+        // Set maxCountEnableInterrupt to true
+        writeAPB(dut.io.apb, maxCountEnableInterruptAddr.U, 1.U)
         // Enable the timer last
         writeAPB(dut.io.apb, enAddr.U, 1.U)
 
         var prevCount = 0
 
         // Sample at every clock cycle for one period
-        val maxCountValue = 10
+        val maxCountValue = 254
         for (i <- 0 until maxCountValue) {
             dut.clock.step(1)
             val count       = dut.io.timerOutput.count.peekInt().toInt
@@ -106,6 +110,7 @@ object TimerBasicTests extends AnyFlatSpec with ChiselScalatestTester {
               s"At count $count, expected PWM $expectedPwm but got $pwm",
             )
         }
+        dut.clock.step(5)
     }
 
     // Test 2: Change the prescaler halfway through execution and check timing
