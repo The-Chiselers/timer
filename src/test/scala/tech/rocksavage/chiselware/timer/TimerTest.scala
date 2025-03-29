@@ -9,11 +9,10 @@ import firrtl2.options.TargetDirAnnotation
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
 import tech.rocksavage.chiselware.timer.param.TimerParams
-import tech.rocksavage.chiselware.timer.TimerBasicTests
 import tech.rocksavage.test._
 
-/** Highly randomized test suite driven by configuration parameters. Includes
-  * code coverage for all top-level ports. Inspired by the DynamicFifo
+/** Highly randomized test suite driven by configuration parameters. Includes code coverage for all
+  * top-level ports. Inspired by the DynamicFifo
   */
 
 class TimerTest extends AnyFlatSpec with ChiselScalatestTester with Matchers {
@@ -67,8 +66,8 @@ class TimerTest extends AnyFlatSpec with ChiselScalatestTester with Matchers {
         val dataWidth      = 32
         val addrWidth      = 32
         val wordWidth      = 8
-        val countWidth     = 32
-        val prescalerWidth = 32
+        val countWidth     = 8
+        val prescalerWidth = 8
 
         // Pass in randomly selected values to DUT
         val timerParams =
@@ -91,12 +90,11 @@ class TimerTest extends AnyFlatSpec with ChiselScalatestTester with Matchers {
         testName match {
             // Test case for Master Mode Initialization
             case "formal" =>
-                "TimerInner" should "Formally Verify" in {
+                "TimerInner" should "Formally Verify" in
                     verify(
                       new TimerInnerFVHarness(timerParams, true),
-                      Seq(BoundedCheck(40))
+                      Seq(BoundedCheck(40)),
                     )
-                }
             case "pwm_ceiling_test" =>
                 it should "verify PWM ceiling functionality" in {
                     val cov = test(new Timer(timerParams, false))
@@ -108,7 +106,7 @@ class TimerTest extends AnyFlatSpec with ChiselScalatestTester with Matchers {
                       testName,
                       configName,
                       coverage,
-                      covDir
+                      covDir,
                     )
                 }
             case "prescaler_change_test" =>
@@ -117,7 +115,7 @@ class TimerTest extends AnyFlatSpec with ChiselScalatestTester with Matchers {
                         .withAnnotations(backendAnnotations) { dut =>
                             TimerBasicTests.testPrescalerChange(
                               dut,
-                              timerParams
+                              timerParams,
                             )
                         }
                     coverageCollector.collectCoverage(
@@ -125,7 +123,7 @@ class TimerTest extends AnyFlatSpec with ChiselScalatestTester with Matchers {
                       testName,
                       configName,
                       coverage,
-                      covDir
+                      covDir,
                     )
                 }
             case "low_maxcount_dutycycle_test" =>
@@ -134,7 +132,7 @@ class TimerTest extends AnyFlatSpec with ChiselScalatestTester with Matchers {
                         .withAnnotations(backendAnnotations) { dut =>
                             TimerBasicTests.testLowMaxCountDutyCycle(
                               dut,
-                              timerParams
+                              timerParams,
                             )
                         }
                     coverageCollector.collectCoverage(
@@ -142,7 +140,7 @@ class TimerTest extends AnyFlatSpec with ChiselScalatestTester with Matchers {
                       testName,
                       configName,
                       coverage,
-                      covDir
+                      covDir,
                     )
                 }
             case "random_test" =>
@@ -151,7 +149,7 @@ class TimerTest extends AnyFlatSpec with ChiselScalatestTester with Matchers {
                         .withAnnotations(backendAnnotations) { dut =>
                             TimerBasicTests.testRandomMaxCountAndPrescaler(
                               dut,
-                              timerParams
+                              timerParams,
                             )
                         }
                     coverageCollector.collectCoverage(
@@ -159,7 +157,7 @@ class TimerTest extends AnyFlatSpec with ChiselScalatestTester with Matchers {
                       testName,
                       configName,
                       coverage,
-                      covDir
+                      covDir,
                     )
                 }
             case "basic" =>
@@ -167,13 +165,13 @@ class TimerTest extends AnyFlatSpec with ChiselScalatestTester with Matchers {
                     val cov = test(
                       new Timer(
                         timerParams,
-                        false
-                      )
+                        false,
+                      ),
                     )
                         .withAnnotations(backendAnnotations) { dut =>
                             TimerBasicTests.timerBasicTest(
                               dut,
-                              timerParams
+                              timerParams,
                             )
                         }
                     coverageCollector.collectCoverage(
@@ -181,28 +179,25 @@ class TimerTest extends AnyFlatSpec with ChiselScalatestTester with Matchers {
                       testName,
                       configName,
                       coverage,
-                      covDir
+                      covDir,
                     )
                 }
             case _ => allTests(timerParams, configName, covDir, coverage)
         }
-        it should "generate cumulative coverage report" in {
+        it should "generate cumulative coverage report" in
             coverageCollector.saveCumulativeCoverage(coverage, covDir)
-        }
     }
 
     def allTests(
         timerParams: TimerParams,
         configName: String,
         covDir: String,
-        coverage: Boolean
-    ): Unit = {
-        "TimerInner" should "Formally Verify" in {
+        coverage: Boolean): Unit = {
+        "TimerInner" should "Formally Verify" in
             verify(
               new TimerInnerFVHarness(timerParams, true),
-              Seq(BoundedCheck(40))
+              Seq(BoundedCheck(40)),
             )
-        }
 
         it should "verify PWM ceiling functionality" in {
             val testName = "pwm_ceiling_test"
@@ -215,7 +210,7 @@ class TimerTest extends AnyFlatSpec with ChiselScalatestTester with Matchers {
               testName,
               configName,
               coverage,
-              covDir
+              covDir,
             )
         }
 
@@ -230,7 +225,7 @@ class TimerTest extends AnyFlatSpec with ChiselScalatestTester with Matchers {
               testName,
               configName,
               coverage,
-              covDir
+              covDir,
             )
         }
         it should "verify duty cycle with low maxCount over multiple cycles" in {
@@ -244,7 +239,7 @@ class TimerTest extends AnyFlatSpec with ChiselScalatestTester with Matchers {
               testName,
               configName,
               coverage,
-              covDir
+              covDir,
             )
         }
         it should "verify timer with random maxCount and prescaler" in {
@@ -253,7 +248,7 @@ class TimerTest extends AnyFlatSpec with ChiselScalatestTester with Matchers {
                 .withAnnotations(backendAnnotations) { dut =>
                     TimerBasicTests.testRandomMaxCountAndPrescaler(
                       dut,
-                      timerParams
+                      timerParams,
                     )
                 }
             coverageCollector.collectCoverage(
@@ -261,7 +256,7 @@ class TimerTest extends AnyFlatSpec with ChiselScalatestTester with Matchers {
               testName,
               configName,
               coverage,
-              covDir
+              covDir,
             )
         }
         it should "pass a basic test" in {
@@ -271,7 +266,7 @@ class TimerTest extends AnyFlatSpec with ChiselScalatestTester with Matchers {
                 .withAnnotations(backendAnnotations) { dut =>
                     TimerBasicTests.timerBasicTest(
                       dut,
-                      timerParams
+                      timerParams,
                     )
                 }
             coverageCollector.collectCoverage(
@@ -279,7 +274,7 @@ class TimerTest extends AnyFlatSpec with ChiselScalatestTester with Matchers {
               testName,
               configName,
               coverage,
-              covDir
+              covDir,
             )
         }
     }

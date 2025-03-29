@@ -127,12 +127,9 @@ object TimerBasicTests extends AnyFlatSpec with ChiselScalatestTester {
         writeAPB(dut.io.apb, enAddr.U, 1.U)
 
         // 2 clock cycles for apb write to finish
-        var totalCycles    = 0
-        
-        var prescalerValue = 1
+        var totalCycles = 0
 
-        
-        
+        var prescalerValue = 1
 
         val cyclesToCount10     = 19 // has to account for time for apb write
         val cyclesFromCount10   = 34 // has to account for time for apb write
