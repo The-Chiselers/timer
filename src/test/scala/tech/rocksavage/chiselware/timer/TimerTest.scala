@@ -49,8 +49,8 @@ class TimerTest extends AnyFlatSpec with ChiselScalatestTester with Matchers {
     }
 
     // Execute the regressigiyon across a randomized range of configurations
-//    main(testName)
-    main("pwm_ceiling_test")
+    main(testName)
+//    main("pwm_ceiling_test")
 
     def main(testNameMaybeNull: String): Unit = {
         val testName =

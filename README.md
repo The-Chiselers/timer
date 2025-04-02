@@ -1,8 +1,41 @@
-# Timer Module
+# Uart Module
+
+## Dependancies
+
+- Nix Package Manager
+    - Windows: Recommend Using the [NixOS WSL](https://nix-community.github.io/NixOS-WSL/install.html) image
+    - MacOS: [MacOS Nix Package Manager Setup](https://nixos.org/download/#nix-install-macos)
+    - Other Linux Distributions: [Linux Nix Package Manager Setup](https://nixos.org/download/#nix-install-linux)
+
+## Setup
+
+```bash
+git clone [url]
+cd [folder]
+sh dev_shell.sh
+```
+
+## Usage
+
+**Note:** All build artifacts will be generated in the "out" folder
+
+Generate Verilog: `make verilog`
+
+Run Tests: `make test`
+
+Generate Coverage: `make cov`
+
+Run Synthesis: `make synth`
+
+Run STA: `make sta`
 
 ## Overview
 
-The `Timer` module is a configurable hardware timer designed for use in embedded systems and other applications requiring precise timing control. Implemented in Chisel, a hardware design language, the module offers a flexible and scalable solution for managing timers with features such as PWM (Pulse Width Modulation), interrupt generation, and configurable count widths. The module is designed to integrate seamlessly with APB (Advanced Peripheral Bus) interfaces, making it suitable for memory-mapped I/O operations.
+The `Timer` module is a configurable hardware timer designed for use in embedded systems and other applications
+requiring precise timing control. Implemented in Chisel, a hardware design language, the module offers a flexible and
+scalable solution for managing timers with features such as PWM (Pulse Width Modulation), interrupt generation, and
+configurable count widths. The module is designed to integrate seamlessly with APB (Advanced Peripheral Bus) interfaces,
+making it suitable for memory-mapped I/O operations.
 
 ## Features
 
@@ -59,7 +92,8 @@ The results are written to the `./out/sta/$config` directories for each configur
 
 ### Defining Timer Parameters
 
-To configure the timer, create an instance of `TimerParams` with the desired data width, address width, and count width. These parameters define the size of the registers and the range of the timer.
+To configure the timer, create an instance of `TimerParams` with the desired data width, address width, and count width.
+These parameters define the size of the registers and the range of the timer.
 
 ```scala
 val timerParams = TimerParams(
@@ -71,7 +105,8 @@ val timerParams = TimerParams(
 
 ### Instantiating the Timer Module
 
-Instantiate the `Timer` module with the defined parameters. The module will automatically configure the timer registers and handle the timing logic.
+Instantiate the `Timer` module with the defined parameters. The module will automatically configure the timer registers
+and handle the timing logic.
 
 ```scala
 val timer = Module(new Timer(timerParams))
@@ -79,7 +114,8 @@ val timer = Module(new Timer(timerParams))
 
 ### Connecting Inputs and Outputs
 
-Connect the APB interface, timer outputs, and interrupt signals to the `Timer` module. The module will manage the timer logic and generate the appropriate outputs.
+Connect the APB interface, timer outputs, and interrupt signals to the `Timer` module. The module will manage the timer
+logic and generate the appropriate outputs.
 
 ```scala
 timer.io.apb <> io.apb
@@ -102,7 +138,8 @@ These registers can be accessed via the APB interface.
 
 ### Handling Interrupts
 
-The `Timer` module generates an interrupt when the timer reaches its maximum count. The interrupt signal can be used to trigger other actions in your design.
+The `Timer` module generates an interrupt when the timer reaches its maximum count. The interrupt signal can be used to
+trigger other actions in your design.
 
 ```scala
 when(timer.io.interrupt.interrupt === TimerInterruptEnum.MaxReached) {
@@ -112,7 +149,8 @@ when(timer.io.interrupt.interrupt === TimerInterruptEnum.MaxReached) {
 
 ### Formal Verification
 
-Enable formal verification by setting the `formal` parameter to `true` when instantiating the `TimerInner` module. This will add assertions to verify the correctness of the timer logic.
+Enable formal verification by setting the `formal` parameter to `true` when instantiating the `TimerInner` module. This
+will add assertions to verify the correctness of the timer logic.
 
 ```scala
 val timerInner = Module(new TimerInner(timerParams, formal = true))
@@ -153,6 +191,7 @@ class TimerTop(val timerParams: TimerParams) extends Module {
 }
 ```
 
-## Conclusion
+## More Info
 
-The `Timer` module is a versatile and configurable solution for managing timers in Chisel-based hardware designs. With features such as PWM generation, interrupt support, and seamless APB integration, the module is well-suited for a wide range of applications requiring precise timing control. The inclusion of formal verification support ensures the correctness and reliability of the timer logic, making it a robust choice for complex systems.
+- For other modules, check out [our organization](https://github.com/The-Chiselers)
+- For more info about Chisel, see their [documentation](https://www.chisel-lang.org/)
