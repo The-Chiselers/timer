@@ -1,4 +1,4 @@
-# Uart Module
+# Timer Module
 
 ## Dependancies
 
